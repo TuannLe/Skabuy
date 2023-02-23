@@ -2,6 +2,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomNavigator from './BottomNavigator'
 import CategoryScreen from '../screen/CategoryScreen'
+import CartScreen from '../screen/CartScreen'
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -18,8 +19,13 @@ export default function RootNavigator() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="Category"
+                name="CategoryScreen"
                 component={CategoryScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="CartScreen"
+                component={CartScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
