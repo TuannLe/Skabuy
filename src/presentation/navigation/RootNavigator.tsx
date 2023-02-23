@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomNavigator from './BottomNavigator'
 import CategoryScreen from '../screen/CategoryScreen'
 import CartScreen from '../screen/CartScreen'
+import { ROUTER } from '../constants'
+import DrawerNavigator from './DrawerNavigator'
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -14,17 +16,17 @@ export default function RootNavigator() {
             }}
         >
             <Stack.Screen
-                name="Root"
-                component={BottomNavigator}
+                name='Root'
+                component={DrawerNavigator}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="CategoryScreen"
+                name={ROUTER.FAVORITE_TAB}
                 component={CategoryScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="CartScreen"
+                name={ROUTER.CART_TAB}
                 component={CartScreen}
                 options={{ headerShown: false }}
             />

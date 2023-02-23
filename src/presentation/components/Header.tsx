@@ -4,6 +4,7 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/native';
+import { ROUTER } from '../constants'
 
 export default function Header() {
     const [showBar, setShowBar] = useState(false)
@@ -12,7 +13,7 @@ export default function Header() {
         <View style={tw`flex flex-row items-center bg-[#17a2b8] p-3`}>
             <Text style={tw`text-white`}>Logo</Text>
             <TouchableOpacity
-                onPress={() => navigation.navigate('CategoryScreen')}
+                onPress={() => navigation.openDrawer()}
                 style={tw`p-2`}
             >
                 <Ionicons name='menu-outline' style={tw`text-3xl text-white`} />
@@ -28,7 +29,7 @@ export default function Header() {
             </View>
             <TouchableOpacity
                 style={tw`p-2`}
-                onPress={() => navigation.navigate('CartScreen')}
+                onPress={() => navigation.navigate(ROUTER.CART_TAB)}
             >
                 <Feather name='shopping-cart' style={tw`text-2xl text-white`} />
             </TouchableOpacity>
