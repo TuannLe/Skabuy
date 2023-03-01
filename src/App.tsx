@@ -11,12 +11,19 @@ import Navigation from './presentation/navigation'
 import {
   StatusBar,
 } from 'react-native';
+import store, { persistor } from './core/redux/store';
+import { Provider } from 'react-redux';
+import { PersistGate } from "redux-persist/integration/react";
 
 function App(): JSX.Element {
   return (
     <SafeAreaProvider>
       <StatusBar />
-      <Navigation />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Navigation />
+        </PersistGate>
+      </Provider>
     </SafeAreaProvider>
   );
 }

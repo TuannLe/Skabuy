@@ -1,8 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomNavigator from './BottomNavigator'
-import CategoryScreen from '../screen/CategoryScreen'
-import CartScreen from '../screen/CartScreen'
+import { CartScreen, LoginScreen, RegisterScreen, CategoryScreen, VerifyCodeScreen } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
 
@@ -28,6 +27,21 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.CART_TAB}
                 component={CartScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.LOGIN}
+                component={LoginScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.REGISTER}
+                component={RegisterScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.VERIFY_CODE_SCREEN}
+                component={VerifyCodeScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

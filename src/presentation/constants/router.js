@@ -9,4 +9,5 @@ export default {
     FAVORITE_TAB: 'Favorite Tab',
     PROFILE_TAB: 'Profile Tab',
     CART_TAB: 'Cart Tab',
+    VERIFY_CODE_SCREEN: 'Verify Code Screen',
 };
