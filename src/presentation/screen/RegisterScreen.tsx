@@ -4,8 +4,9 @@ import tw from 'twrnc'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { useDispatch, useSelector } from 'react-redux'
+import Mailer from 'react-native-mail';
 import * as ACTIONS from '../../core/redux/actions/auth'
-import { ROUTER } from '../constants'
+import { ROUTER, COLOR } from '../constants'
 
 export default function RegisterScreen({ navigation }: any) {
     const dispatch = useDispatch();
@@ -37,9 +38,52 @@ export default function RegisterScreen({ navigation }: any) {
     };
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     const validateEmail = (email: string) => {
         return emailRegex.test(email);
+    };
+
+    // const sendOTPByEmail = (email: any) => {
+    //     const otp = Math.floor(100000 + Math.random() * 900000);
+    //     const emailBody = `Your OTP is ${otp}.`;
+
+    //     try {
+    //         await Mailer.mail({
+    //             recipients: [email],
+    //             subject: 'OTP Verification',
+    //             body: emailBody,
+    //         });
+    //         return otp;
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+
+    const handleSendOTPClick = () => {
+        const otp = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+
+        // Define the email message
+        const message = {
+            subject: 'Your OTP code',
+            body: `Your OTP code is ${otp}. Please enter this code to continue.`,
+        };
+
+        console.log(message)
+        console.log(otp)
+        // Send the email
+        Mailer.mail(
+            {
+                subject: message.subject,
+                body: message.body,
+                recipients: [user_email],
+            },
+            error => {
+                if (error) {
+                    console.log('Error', 'Failed to send OTP code. Please try again later.');
+                } else {
+                    console.log('Success', 'OTP code sent successfully. Please check your email.');
+                }
+            },
+        );
     };
 
     const handleRegister = () => {
@@ -68,13 +112,12 @@ export default function RegisterScreen({ navigation }: any) {
         else {
             setRegisterWarn(``)
             dispatch(ACTIONS.RegisterStart({ user_email, phoneNumber, fullName, password }))
-
         }
     }
 
     return (
         <View style={tw`flex w-full h-full bg-white pt-16 px-5`}>
-            <Text style={tw`text-4xl font-medium text-[#17a2b8] mb-10`}>Create account</Text>
+            <Text style={tw`text-4xl font-medium text-[${COLOR.PRIMARY}] mb-10`}>Create account</Text>
             <TextInput
                 placeholder='Email...'
                 onChangeText={val => setUserEmail(val)}
@@ -158,19 +201,20 @@ export default function RegisterScreen({ navigation }: any) {
             <TouchableOpacity
                 onPress={() => {
                     handleRegister();
-                    navigation.navigate(ROUTER.VERIFY_CODE_SCREEN, { user_email })
+                    // navigation.navigate(ROUTER.VERIFY_CODE_SCREEN, { user_email })
                 }}
-                style={tw`p-3 bg-[#17a2b8] rounded-lg mt-8`}
+                style={tw`p-3 bg-[${COLOR.PRIMARY}] rounded-lg mt-8`}
             >
                 <Text style={tw`text-center text-white text-xl font-medium`}>REGISTER</Text>
             </TouchableOpacity>
             <View style={tw`flex flex-row items-center justify-center mb-5`}>
                 <Text style={tw`text-base`}>Already have an account?</Text>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate(ROUTER.LOGIN)}
+                    onPress={handleSendOTPClick}
+                    // onPress={() => navigation.navigate(ROUTER.LOGIN)}
                     style={tw`p-1.5`}
                 >
-                    <Text style={tw`text-base text-[#17a2b8] font-medium`}>Login here</Text>
+                    <Text style={tw`text-base text-[${COLOR.PRIMARY}] font-medium`}>Login here</Text>
                 </TouchableOpacity>
             </View>
         </View>

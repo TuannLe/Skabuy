@@ -14,7 +14,7 @@ export const login = async (payload) => {
 
 export const register = async (payload) => {
     try {
-        const res = await AXIOS.post(`${url}/register`, payload)
+        const res = await AXIOS.options(`${url}/register`, payload)
         return res
     } catch (error) {
         return error

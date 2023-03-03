@@ -6,6 +6,7 @@ import LoginScreen from './LoginScreen';
 import ProfileScreen from './ProfileScreen';
 import RegisterScreen from './RegisterScreen';
 import VerifyCodeScreen from './VerifyCodeScreen';
+import AllProductScreen from './AllProductScreen';
 
 export {
     CartScreen,
@@ -15,5 +16,6 @@ export {
     LoginScreen,
     ProfileScreen,
     RegisterScreen,
-    VerifyCodeScreen
+    VerifyCodeScreen,
+    AllProductScreen
 };

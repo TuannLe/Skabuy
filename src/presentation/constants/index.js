@@ -1,2 +1,3 @@
 import ROUTER from './router';
-export { ROUTER };
+import COLOR from './color'
+export { ROUTER, COLOR };

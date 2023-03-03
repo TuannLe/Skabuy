@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { COLOR } from '../constants'
 
 export default function VerifyCodeScreen({ route: { params: { user_email } }, navigation }: any) {
     const firstInput = useRef(null)
@@ -9,11 +10,36 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
     const thirdInput = useRef(null)
     const fourthInput = useRef(null)
     const fifthInput = useRef(null)
+    const [isResendEnabled, setIsResendEnabled] = useState(false);
+    const [resendTimer, setResendTimer] = useState(30);
     const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' })
 
     const handleSendOTP = () => {
         console.log(otp)
     }
+
+    useEffect(() => {
+        let interval: any = null;
+
+        if (resendTimer > 0 && !isResendEnabled) {
+            interval = setInterval(() => {
+                setResendTimer(resendTimer => resendTimer - 1);
+            }, 1000);
+        }
+
+        if (resendTimer === 0 && !isResendEnabled) {
+            setIsResendEnabled(true);
+        }
+
+        return () => clearInterval(interval);
+    }, [isResendEnabled, resendTimer]);
+
+    const handleResendClick = () => {
+        setIsResendEnabled(false);
+        setResendTimer(30);
+
+        // TODO: Make the request to resend the code here
+    };
 
     return (
         <View style={tw`flex w-full h-full px-3`}>
@@ -30,7 +56,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
             <Text style={tw`text-base text-gray-500 my-5`}>Enter the OTP Code from the email just send your at {user_email}</Text>
             <Text style={tw`text-base text-black`}>Did you enter the correct number?</Text>
             <View style={tw`flex flex-row justify-evenly my-8`}>
-                <View style={tw`border border-[#17a2b8] rounded-lg`}>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
                     <TextInput
                         keyboardType='number-pad'
                         maxLength={1}
@@ -42,7 +68,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                         style={tw`p-3 text-center`}
                     />
                 </View>
-                <View style={tw`border border-[#17a2b8] rounded-lg`}>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
                     <TextInput
                         keyboardType='number-pad'
                         maxLength={1}
@@ -54,7 +80,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                         style={tw`p-3 text-center`}
                     />
                 </View>
-                <View style={tw`border border-[#17a2b8] rounded-lg`}>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
                     <TextInput
                         keyboardType='number-pad'
                         maxLength={1}
@@ -66,7 +92,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                         style={tw`p-3 text-center`}
                     />
                 </View>
-                <View style={tw`border border-[#17a2b8] rounded-lg`}>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
                     <TextInput
                         keyboardType='number-pad'
                         maxLength={1}
@@ -78,7 +104,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                         style={tw`p-3 text-center`}
                     />
                 </View>
-                <View style={tw`border border-[#17a2b8] rounded-lg`}>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
                     <TextInput
                         keyboardType='number-pad'
                         maxLength={1}
@@ -93,17 +119,23 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
             </View>
             <View style={tw`flex flex-row items-center mb-5`}>
                 <Text style={tw`text-base`}>Didn't receive email?</Text>
-                <TouchableOpacity
-                    style={tw`p-1.5`}
-                >
-                    <Text style={tw`text-base text-[#17a2b8] font-medium`}>Resend Code</Text>
-                </TouchableOpacity>
+                {isResendEnabled ?
+                    <TouchableOpacity
+                        style={tw`p-1.5`}
+                        onPress={handleResendClick}
+                        disabled={!isResendEnabled}
+                    >
+                        <Text style={tw`text-base text-[${COLOR.PRIMARY}] font-medium`}>Resend Code</Text>
+                    </TouchableOpacity>
+                    :
+                    <Text style={tw`text-base p-1.5 text-black`}>{`Resend code in ${resendTimer} seconds`}</Text>
+                }
             </View>
             <TouchableOpacity
                 onPress={() => {
                     handleSendOTP();
                 }}
-                style={tw`p-3 bg-[#17a2b8] rounded-lg`}
+                style={tw`p-3 bg-[${COLOR.PRIMARY}] rounded-lg`}
             >
                 <Text style={tw`text-center text-white text-xl font-medium`}>VERIFY</Text>
             </TouchableOpacity>

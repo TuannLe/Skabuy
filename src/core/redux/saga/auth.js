@@ -20,7 +20,9 @@ function* registerSaga(action) {
     try {
         console.log('Register running...')
         const res = yield call(apis.register, action.payload)
+        console.log(res)
         if (res) {
+            console.log('Register succeeded')
             yield put(actions.RegisterSuccess(res.data))
         }
     } catch (error) {
@@ -31,7 +33,7 @@ function* registerSaga(action) {
 
 const authSaga = [
     takeLatest(TYPES.LOG_IN_START, fetchLoginSaga),
-    // takeLatest(TYPES.REGISTER_START, registerSaga),
+    takeLatest(TYPES.REGISTER_START, registerSaga),
 ]
 
 export default authSaga
