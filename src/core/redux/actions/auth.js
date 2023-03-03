@@ -24,7 +24,6 @@ export const LoginFailure = (error) => {
 
 // Register
 export const RegisterStart = (payload) => {
-    console.log(payload)
     return {
         type: TYPES.REGISTER_START,
         payload
