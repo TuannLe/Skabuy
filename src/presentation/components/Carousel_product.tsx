@@ -50,14 +50,14 @@ export default function Carousel_product() {
     const Item = ({product_image} : any) => (
         <View style={tw`border border-gray-300 p-8 rounded-xl justify-center`}>
             <Image
-                style={tw`w-50 h-50`}
+                style={tw`w-50 h-60`}
                 source={{uri: product_image}}
             />
         </View>
     );
     
     return (
-        <SafeAreaView style={tw`w-full h-50`}>
+        <SafeAreaView style={tw`w-full h-60 pl-2`}>
             {/* {isLoading ? <ActivityIndicator/> : ( */}
                 <FlatList
                     data={image_product}

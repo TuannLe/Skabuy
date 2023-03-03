@@ -10,6 +10,11 @@ export default function HomeScreen() {
   return (
     <View>
       <Header />
+      <View>
+        <Text style={tw`text-black text-xl font-semibold pl-2`}>
+          Promotional products
+        </Text>
+      </View>
       <Carousel_product />
       <Slider />
     </View>
