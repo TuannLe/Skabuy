@@ -10,8 +10,11 @@ export default function HomeScreen() {
   return (
     <View>
       <Header />
+      <View>
+        <Text style={tw`pl-3 text-lg text-black font-semibold`}>Promotional products</Text>
+      </View>
       <Carousel_product />
-      <Slider />
+      {/* <Slider /> */}
     </View>
   );
 }
