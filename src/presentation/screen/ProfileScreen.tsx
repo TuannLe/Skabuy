@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
-import ItemMovie from '../components/ItemMovie';
 
 import { ROUTER } from '../constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -33,11 +32,6 @@ export default function ProfileScreen() {
             >
                 <Text>Login</Text>
             </TouchableOpacity>
-            <FlatList
-                data={data}
-                renderItem={({ item }) => <Text>Hello</Text>}
-                showsVerticalScrollIndicator={false}
-            />
         </SafeAreaView>
     )
 }
