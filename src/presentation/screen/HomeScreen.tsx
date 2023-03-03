@@ -10,7 +10,7 @@ export default function HomeScreen() {
   return (
     <View>
       <Header />
-      {/* <Carousel_product /> */}
+      <Carousel_product />
       <Slider />
     </View>
   );
