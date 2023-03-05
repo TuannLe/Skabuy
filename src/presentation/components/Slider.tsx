@@ -23,7 +23,7 @@ const HEIGTH = Dimensions.get('window').height;
 export default function Slider() {
 
     return (
-        <View style={tw`flex-1`}>
+        <View style={tw`flex-1 mt-2`}>
             <Carousel
                 loop
                 width={WIDTH}
