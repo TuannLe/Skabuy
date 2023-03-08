@@ -23,19 +23,18 @@ const HEIGTH = Dimensions.get('window').height;
 export default function Slider() {
 
     return (
-        <View style={tw`flex-1 mt-2`}>
+        <View style={tw`flex-1 mt-2 mb-2`}>
             <Carousel
                 loop
                 width={WIDTH}
-                height={WIDTH / 2}
+                height={120}
                 autoPlay={true}
                 data={[...new Array(3).keys()]}
                 scrollAnimationDuration={1500}
-                // onSnapToItem={(index) => console.log('current index:', index)}
                 renderItem={({ index }) => (
                     <View style={tw`flex-1 justify-center`}>
                         <Image
-                            style={{ width: WIDTH, height: HEIGTH * 0.19, marginBottom: 50 }}
+                            style={{ width: WIDTH, height: 120}}
                             source={{ uri: image_banner[index] }}
                         />
 
