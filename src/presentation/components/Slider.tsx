@@ -27,14 +27,14 @@ export default function Slider() {
             <Carousel
                 loop
                 width={WIDTH}
-                height={120}
+                height={HEIGTH * 0.19}
                 autoPlay={true}
                 data={[...new Array(3).keys()]}
                 scrollAnimationDuration={1500}
                 renderItem={({ index }) => (
                     <View style={tw`flex-1 justify-center`}>
                         <Image
-                            style={{ width: WIDTH, height: 120}}
+                            style={{ width: WIDTH, height: HEIGTH * 0.19 }}
                             source={{ uri: image_banner[index] }}
                         />
 
