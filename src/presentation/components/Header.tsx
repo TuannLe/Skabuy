@@ -4,13 +4,13 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/native';
-import { ROUTER } from '../constants'
+import { ROUTER, COLOR } from '../constants'
 
 export default function Header() {
     const [showBar, setShowBar] = useState(false)
     const navigation = useNavigation();
     return (
-        <View style={tw`flex flex-row items-center bg-[#17a2b8] p-3`}>
+        <View style={tw`flex flex-row items-center bg-[${COLOR.PRIMARY}] p-3`}>
             <Text style={tw`text-white`}>Logo</Text>
             <TouchableOpacity
                 onPress={() => navigation.openDrawer()}
