@@ -4,11 +4,11 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { COLOR } from '../constants'
 
-export default function Product_Item({ item: { item } }: any) {
+export default function Product_Item({ item }: any) {
     return (
         <TouchableOpacity style={tw`flex-1 h-60 p-2 border border-gray-100`}>
             <Image
-                source={{ uri: item.imageUrl }}
+                source={{ uri: item.product_image }}
                 style={tw`w-full h-30`}
                 resizeMode={'contain'}
             />
