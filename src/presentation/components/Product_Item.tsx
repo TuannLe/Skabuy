@@ -32,8 +32,6 @@ export default function Product_Item({ item }: any) {
                 ? <Text style={tw`bg-[#b00000] bottom-5 flex text-white flex-col text-sm absolute right-0 pl-1`}>-{item.product_discount}%</Text>
                 : <></>
             }
-=======
-            <Text style={tw`text-base text-[${COLOR.RED}] font-medium`}>Save ${item.product_discount}</Text>
             <View style={tw`flex flex-row items-center`}>
                 <Text style={tw`text-2xl text-[${COLOR.BLACK}] font-bold`}>$0.80</Text>
                 <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through -mt-2 ml-2`}>0.20</Text>
