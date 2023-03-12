@@ -8,6 +8,12 @@ import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import AXIOS from '../../core/api';
 import { ScrollView } from 'react-native-gesture-handler';
+
+const image_banner = [
+  'https://skabuy.com/banners/banner_1.jpg',
+  'https://skabuy.com/banners/banner_2.jpg',
+  'https://skabuy.com/banners/banner_3.jpg'
+]
   
 export default function HomeScreen() {
 
@@ -17,6 +23,15 @@ export default function HomeScreen() {
   const getPromotionalProducts = async () => {
     try {
         const res = await AXIOS.get(`product/promotional`);
+        setPromotional(res.data)
+    } catch (error) {
+        return error;
+    }
+  }  
+  
+  const getProductBySlug = async (slug : any) => {
+    try {
+        const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
         setPromotional(res.data)
     } catch (error) {
         return error;
@@ -46,7 +61,7 @@ export default function HomeScreen() {
         </Text>
       </View>
       <Carousel_product item={promotional}/>
-      <Slider />
+      <Slider item={image_banner}/>
       <View>
         <Text style={tw`text-black text-2xl font-semibold pl-2 text-center`}>
           Categories
