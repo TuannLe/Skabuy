@@ -12,37 +12,30 @@ import Carousel from 'react-native-reanimated-carousel';
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import index from '../navigation';
-const image_banner = [
-    'https://skabuy.com/banners/banner_1.jpg',
-    'https://skabuy.com/banners/banner_2.jpg',
-    'https://skabuy.com/banners/banner_3.jpg'
-]
-const WIDTH = Dimensions.get('window').width;
-const HEIGTH = Dimensions.get('window').height;
 
-export default function Slider() {
+const WIDTH = Dimensions.get('window').width;
+
+export default function Slider({item} : any) {
+
     return (
-        <View style={tw`flex-1 mt-2`}>
+        <View style={tw`flex-1 mt-2 mb-2`}>
             <Carousel
                 loop
                 width={WIDTH}
-                height={HEIGTH * 0.19}
+                height={120}
                 autoPlay={true}
                 data={[...new Array(3).keys()]}
                 scrollAnimationDuration={1500}
                 renderItem={({ index }) => (
-                    <View style={tw`justify-center`}>
+                    <View style={tw`flex-1 justify-center`}>
                         <Image
-                            style={{ width: WIDTH, height: HEIGTH * 0.19 }}
-                            source={{ uri: image_banner[index] }}
+                            style={{ width: WIDTH, height: 120}}
+                            source={{ uri: item[index] }}
                         />
+
                     </View>
                 )}
             />
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-
-})

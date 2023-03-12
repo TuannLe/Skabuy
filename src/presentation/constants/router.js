@@ -10,5 +10,7 @@ export default {
     PROFILE_TAB: 'Profile Tab',
     CART_TAB: 'Cart Tab',
     VERIFY_CODE_SCREEN: 'Verify Code Screen',
-    ALL_PRODUCTS_SCREEN: 'All Product Screen'
+    ALL_PRODUCTS_SCREEN: 'All Product Screen',
+
+    PRODUCT_DETAILS: 'Product Details'
 };
