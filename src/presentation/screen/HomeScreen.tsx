@@ -19,6 +19,7 @@ export default function HomeScreen() {
 
   const [promotional, setPromotional] = useState([]);
   const [topProduct, setTopProduct] = useState([]);
+  const [allCategory, setAllCategory] = useState([]);
 
   const getPromotionalProducts = async () => {
     try {
@@ -28,15 +29,15 @@ export default function HomeScreen() {
         return error;
     }
   }  
-  
-  const getProductBySlug = async (slug : any) => {
+
+  const getAllCategory = async () => {
     try {
-        const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
-        setPromotional(res.data)
+        const res = await AXIOS.get(`category/all`);
+        setAllCategory(res.data.data)
     } catch (error) {
         return error;
     }
-  }
+  }  
 
   const getTopProducts = async () => {
     try {
@@ -50,6 +51,7 @@ export default function HomeScreen() {
   useEffect(() => {
     getPromotionalProducts();
     getTopProducts();
+    getAllCategory();
   }, []);
 
   return (
@@ -62,22 +64,28 @@ export default function HomeScreen() {
       </View>
       <Carousel_product item={promotional}/>
       <Slider item={image_banner}/>
-      <View>
+      <View style={tw`bg-white pt-5`}>
         <Text style={tw`text-black text-2xl font-semibold pl-2 text-center`}>
           Categories
         </Text>
       </View>
       <View style={tw`w-full flex-row flex-wrap p-5 bg-white`}>
 
-        <View style={tw`w-1/3`}>
-          <View style={tw`flex-1 justify-center text-center`}>
-            <Image
-              source={{ uri: "https://skabuy.com/Upload/ImageProduct/product_1673341725259.png" }}
-              style={tw`w-30 h-30`}
-              resizeMode={'contain'}
-            />
-          </View>
-        </View>
+        {allCategory.map((category, index) => {
+              return (
+                <View style={tw`w-1/3 p-2`}>
+                  <View style={tw`flex-1 items-center`}>
+                    <Image
+                      source={{ uri: category.category_image }}
+                      style={tw`w-23 h-23`}
+                      resizeMode={'contain'}
+                    />
+                    <Text style={tw`text-center text-black font-bold`}>{category.category_name}</Text>
+                  </View>
+                </View>
+              );
+            })
+        }
 
       </View>
      

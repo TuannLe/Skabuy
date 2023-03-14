@@ -5,6 +5,7 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ROUTER, COLOR } from '../constants'
 import ProductDetailScreen from '../screen/ProductDetailScreen';
+import { formatNumber } from '../../util/helper';
 
 export default function Product_Item({ item }: any) {
     
@@ -13,7 +14,7 @@ export default function Product_Item({ item }: any) {
     return (
         <TouchableOpacity style={tw`flex-1 w-36 h-57 p-2 border border-gray-100 bg-white`} onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, {slug: item.product_slug})}>
             <Image
-                source={{ uri: "https://skabuy.com/" + item.product_image }}
+                source={{ uri: item.product_image }}
                 style={tw`w-full h-30`}
                 resizeMode={'contain'}
             />
@@ -39,8 +40,16 @@ export default function Product_Item({ item }: any) {
                     : <></>
             }
             <View style={tw`flex flex-row items-center`}>
-                <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>$0.80</Text>
-                <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through -mt-2 ml-2`}>0.20</Text>
+                {
+                    item.product_discount > 0
+                        ? 
+                            <>
+                                <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price - ((item.product_discount/100) * item.product_price))}</Text>
+                                <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through -mt-2 ml-2`}>{formatNumber(item.product_price)}</Text>
+                            </> 
+                        : 
+                            <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price)}</Text>
+                }
             </View>
         </TouchableOpacity>
     )
