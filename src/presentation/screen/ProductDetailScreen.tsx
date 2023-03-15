@@ -18,6 +18,7 @@ const WIDTH = Dimensions.get('window').width;
 export default function ProductDetailScreen({ route }) {
 
     const [Product, setProduct] = useState([]);
+    const [Options, setOptions] = useState([]);
     const { slug, otherParam } = route.params;
     const [formatDolla, setFormatDolla] = useState("");
     
@@ -32,6 +33,9 @@ export default function ProductDetailScreen({ route }) {
             const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
             setProduct(res.data.data)
             setFormatDolla((res.data.data.product_price))
+
+            const res1 = await AXIOS.get(`attribute/id/` + res.data.data.product_id);
+            setOptions(res1.data.data);
         } catch (error) {
             return error;
         }
@@ -39,6 +43,7 @@ export default function ProductDetailScreen({ route }) {
 
     useEffect(() => {
         getProductBySlug();
+        console.log(Options);
     }, []);
 
     return (
@@ -97,6 +102,21 @@ export default function ProductDetailScreen({ route }) {
                             : 
                                 <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
                     }     
+                </View>
+                <View>
+                    <Text style={tw`font-bold`}>Options:</Text>
+
+                    <View style={tw`w-full flex-row flex-wrap active:border-blue-400`}>
+                        {Options.map((option, index) => {
+                            return (
+                                <View style={tw`w-1/2 p-1 active:border-blue-400`}>
+                                    <View style={tw`flex-1 border items-center rounded-md border-slate-300 p-1 active:border-blue-400`}>
+                                        <Text style={tw`font-semibold`}>{option.values}</Text>
+                                    </View>
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
             </View>
         </ScrollView>
