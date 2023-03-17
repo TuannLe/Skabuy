@@ -11,33 +11,31 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { COLOR } from '../constants';
+import { formatNumber } from '../../util/helper';
 
 const WIDTH = Dimensions.get('window').width;
   
 export default function ProductDetailScreen({ route }) {
 
     const [Product, setProduct] = useState([]);
+    const [Options, setOptions] = useState([]);
     const { slug, otherParam } = route.params;
     const [formatDolla, setFormatDolla] = useState("");
     
     const image_product = [
-        "https://skabuy.com" + Product.product_image,
-        "https://skabuy.com" + Product.image_description1,
-        "https://skabuy.com" + Product.image_description2
+        Product.product_image,
+        Product.image_description1,
+        Product.image_description2
     ]
-
-    const formatNumber = (q : any) => {
-        return q.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        })
-    } 
 
     const getProductBySlug = async () => {
         try {
             const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
             setProduct(res.data.data)
-            setFormatDolla(formatNumber(res.data.data.product_price))
+            setFormatDolla((res.data.data.product_price))
+
+            const res1 = await AXIOS.get(`attribute/id/` + res.data.data.product_id);
+            setOptions(res1.data.data);
         } catch (error) {
             return error;
         }
@@ -45,11 +43,11 @@ export default function ProductDetailScreen({ route }) {
 
     useEffect(() => {
         getProductBySlug();
+        console.log(Options);
     }, []);
 
     return (
         <ScrollView>     
-            <Header />
             <View style={tw`flex-1 mt-2 mb-2`}>
                 <Carousel
                     loop
@@ -70,6 +68,18 @@ export default function ProductDetailScreen({ route }) {
                 />
             </View>
             <View style={tw`p-2 bg-white`}>
+                {
+                    Product.product_discount > 0
+                        ?
+                            <>
+                                <View style={tw`bg-red-700 w-30 rounded`}>
+                                    <Text style={tw`font-bold text-white text-center p-0.5`}>Instant Savings</Text>
+                                </View>
+                                <Text style={tw`text-[#dc3545] font-medium`}>{formatNumber((Product.product_discount/100) * formatDolla)} off with Instant Savings</Text>
+                            </>
+                        :
+                            <></>
+                }
                 <Text style={tw`text-xl text-black font-medium`}>{Product.product_name}</Text>
                 <View style={tw`flex flex-row items-center justify-between`}>
                     <View style={tw`flex flex-row items-center`}>
@@ -82,8 +92,31 @@ export default function ProductDetailScreen({ route }) {
                     <Text style={tw`text-base text-[${COLOR.GRAY}]`}>(0)</Text>
                 </View>
                 <View style={tw`flex`}>
-                    <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatDolla}</Text>
-                    <Text style={tw`text-sm text-[${COLOR.GRAY}] -mt-2 ml-2`}>0.20</Text>
+                    {
+                        Product.product_discount > 0
+                            ? 
+                                <View style={tw`flex flex-row`}>
+                                    <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount/100) * formatDolla))}</Text>
+                                    <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through ml-2 font-bold mt-1`}>{formatNumber(formatDolla)}</Text>
+                                </View> 
+                            : 
+                                <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
+                    }     
+                </View>
+                <View>
+                    <Text style={tw`font-bold`}>Options:</Text>
+
+                    <View style={tw`w-full flex-row flex-wrap active:border-blue-400`}>
+                        {Options.map((option, index) => {
+                            return (
+                                <View style={tw`w-1/2 p-1 active:border-blue-400`}>
+                                    <View style={tw`flex-1 border items-center rounded-md border-slate-300 p-1 active:border-blue-400`}>
+                                        <Text style={tw`font-semibold`}>{option.values}</Text>
+                                    </View>
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
             </View>
         </ScrollView>
