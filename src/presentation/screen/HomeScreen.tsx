@@ -24,7 +24,7 @@ export default function HomeScreen() {
   const getPromotionalProducts = async () => {
     try {
         const res = await AXIOS.get(`product/promotional`);
-        setPromotional(res.data)
+        setPromotional(res.data.data)
     } catch (error) {
         return error;
     }

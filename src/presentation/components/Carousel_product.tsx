@@ -31,7 +31,7 @@ export default function Carousel_product( { item } : any) {
         <SafeAreaView style={tw`w-full`}>
             {isLoading ? 
                 <FlatList
-                    data={item.data}
+                    data={item}
                     renderItem={({item}) => <Product_Item item={item}/>}
                     keyExtractor={item => item.product_id}
                     horizontal
