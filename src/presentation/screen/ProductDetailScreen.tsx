@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import Header from '../components/Header'
@@ -18,6 +18,13 @@ import RenderHTML from "react-native-render-html";
 
 const WIDTH = Dimensions.get('window').width;
 
+const image_icon = [
+    'https://skabuy.com/icons/facebook.png',
+    'https://skabuy.com/icons/messenger.png',
+    'https://skabuy.com/icons/pinterest.png',
+    'https://skabuy.com/icons/twitter.png'
+]
+
 export default function ProductDetailScreen({ route }) {
 
     const [Product, setProduct] = useState([]);
@@ -25,6 +32,8 @@ export default function ProductDetailScreen({ route }) {
     const [RelatedProduct, setRelatedProduct] = useState([]);
     const { slug, otherParam } = route.params;
     const [formatDolla, setFormatDolla] = useState("");
+
+    const [quantity, onChangeQuantity] = React.useState(0);
 
     const image_product = [
         Product.product_image,
@@ -126,11 +135,20 @@ export default function ProductDetailScreen({ route }) {
                 <View>
                     <Text style={tw`font-bold`}>Options:</Text>
 
-                    <View style={tw`w-full flex-row flex-wrap active:border-blue-400`}>
+                    <View style={tw`w-full`}>
+                        {/* {Options.map((option, index) => {
+                            return (
+                                <View style={tw`w-1/2 p-1`}>
+                                    <TouchableOpacity
+                                        onPress={() => setColor('green-500')}
+                                        style={tw`flex-1 border items-center rounded-md border-red-300 p-1 bg-${color}`}
+                                    >
+
+                    <View style={tw`w-full flex-row flex-wrap`}>
                         {Options.map((option, index) => {
                             return (
-                                <View style={tw`w-1/2 p-1 active:border-blue-400`}>
-                                    <View style={tw`flex-1 border items-center rounded-md border-slate-300 p-1 active:border-blue-400`}>
+                                <View style={tw`w-1/2 p-1`}>
+                                    <View style={tw`flex-1 border items-center rounded-md border-slate-300 p-1`}>
                                         <Text style={tw`font-semibold`}>{option.values}</Text>
                                     </TouchableOpacity>
                                     <ButtonGroup
@@ -207,3 +225,4 @@ export default function ProductDetailScreen({ route }) {
         </ScrollView>
     );
 }
+
