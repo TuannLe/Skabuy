@@ -14,7 +14,7 @@ const image_banner = [
   'https://skabuy.com/banners/banner_2.jpg',
   'https://skabuy.com/banners/banner_3.jpg'
 ]
-  
+
 export default function HomeScreen() {
 
   const [promotional, setPromotional] = useState([]);
@@ -23,28 +23,28 @@ export default function HomeScreen() {
 
   const getPromotionalProducts = async () => {
     try {
-        const res = await AXIOS.get(`product/promotional`);
-        setPromotional(res.data)
+      const res = await AXIOS.get(`product/promotional`);
+      setPromotional(res.data)
     } catch (error) {
-        return error;
+      return error;
     }
-  }  
+  }
 
   const getAllCategory = async () => {
     try {
-        const res = await AXIOS.get(`category/all`);
-        setAllCategory(res.data.data)
+      const res = await AXIOS.get(`category/all`);
+      setAllCategory(res.data.data)
     } catch (error) {
-        return error;
+      return error;
     }
-  }  
+  }
 
   const getTopProducts = async () => {
     try {
-        const res = await AXIOS.get(`product/top`);
-        setTopProduct(res.data)
+      const res = await AXIOS.get(`product/top`);
+      setTopProduct(res.data)
     } catch (error) {
-        return error;
+      return error;
     }
   }
 
@@ -62,8 +62,8 @@ export default function HomeScreen() {
           Promotional products
         </Text>
       </View>
-      <Carousel_product item={promotional}/>
-      <Slider item={image_banner}/>
+      <Carousel_product item={promotional} />
+      <Slider item={image_banner} />
       <View style={tw`bg-white pt-5`}>
         <Text style={tw`text-black text-2xl font-semibold pl-2 text-center`}>
           Categories
@@ -72,29 +72,29 @@ export default function HomeScreen() {
       <View style={tw`w-full flex-row flex-wrap p-5 bg-white`}>
 
         {allCategory.map((category, index) => {
-              return (
-                <View style={tw`w-1/3 p-2`}>
-                  <View style={tw`flex-1 items-center`}>
-                    <Image
-                      source={{ uri: category.category_image }}
-                      style={tw`w-23 h-23`}
-                      resizeMode={'contain'}
-                    />
-                    <Text style={tw`text-center text-black font-bold`}>{category.category_name}</Text>
-                  </View>
-                </View>
-              );
-            })
+          return (
+            <View style={tw`w-1/3 p-2`}>
+              <View style={tw`flex-1 items-center`}>
+                <Image
+                  source={{ uri: category.category_image }}
+                  style={tw`w-23 h-23`}
+                  resizeMode={'contain'}
+                />
+                <Text style={tw`text-center text-black font-bold`}>{category.category_name}</Text>
+              </View>
+            </View>
+          );
+        })
         }
 
       </View>
-     
+
       <View>
         <Text style={tw`text-black text-xl font-semibold pl-2`}>
           Lasted products
         </Text>
       </View>
-      <Carousel_product item={topProduct}/>
+      <Carousel_product item={topProduct} />
     </ScrollView>
   );
 }
