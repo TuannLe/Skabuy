@@ -5,7 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MyOrder from '../navigation/MyOrder';
 import { ROUTER, COLOR } from '../constants'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
@@ -15,7 +17,7 @@ export default function ProfileScreen() {
         }
     ]
     return (
-        <View style={tw`w-full h-full`}>
+        <SafeAreaView style={tw`flex w-full h-full`}>
             <View style={tw`bg-[${COLOR.PRIMARY}] px-3`}>
                 <View style={tw`flex flex-row items-center justify-end`}>
                     <TouchableOpacity
@@ -56,12 +58,15 @@ export default function ProfileScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style={tw`flex-1`}>
+                <MyOrder />
+            </View>
             <TouchableOpacity
                 onPress={() => navigation.navigate(ROUTER.LOGIN)}
                 style={tw`p-3 bg-red-500 mb-10`}
             >
                 <Text>Login</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
