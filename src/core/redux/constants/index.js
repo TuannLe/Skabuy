@@ -4,5 +4,8 @@ export const INIT_STATE = {
         isLoading: false,
         message: '',
         error: false
+    },
+    cart: {
+        products: [],
     }
 }

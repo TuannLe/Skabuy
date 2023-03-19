@@ -1,21 +1,23 @@
 import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
-import Header from '../components/Header'
-import ToolBar from '../components/ToolBar'
-import Carousel_product from '../components/Carousel_product';
-import Slider from '../components/Slider';
-import { getPromotionalProducts } from '../../core/api/ProductApi';
-import AXIOS from '../../core/api';
 import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ButtonGroup from '../components/ButtonGroup';
-import { COLOR, ROUTER } from '../constants';
-import { formatNumber } from '../../util/helper';
+// import ButtonGroup from '../components/ButtonGroup';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather'
 import RenderHTML from "react-native-render-html";
+import { useDispatch, useSelector } from "react-redux";
+import * as ACT_CART from '../../core/redux/actions/cart'
+import AXIOS from '../../core/api';
+import { COLOR, ROUTER } from '../constants';
+import { formatNumber, discountPrice } from '../../util/helper';
+import Carousel_product from '../components/Carousel_product';
+import Header from '../components/Header'
+import ToolBar from '../components/ToolBar'
+import Slider from '../components/Slider';
+import { getPromotionalProducts } from '../../core/api/ProductApi';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -27,20 +29,26 @@ const image_icon = [
 ]
 
 export default function ProductDetailScreen({ route, navigation }: any) {
-
+    const dispatch = useDispatch()
+    const { slug, otherParam } = route.params;
     const [Product, setProduct] = useState([]);
     const [Options, setOptions] = useState([]);
     const [RelatedProduct, setRelatedProduct] = useState([]);
-    const { slug, otherParam } = route.params;
     const [formatDolla, setFormatDolla] = useState("");
-
-    const [quantity, onChangeQuantity] = React.useState(0);
+    const [selectedCharacteristics, setSelectedCharacteristics] = useState();
+    const [quantity, onChangeQuantity] = useState(0);
+    const [warn, setWarn] = useState('')
 
     const image_product = [
         Product.product_image,
         Product.image_description1,
         Product.image_description2
     ]
+
+    function onSelectCharacteristics(characteristics: any) {
+        setSelectedCharacteristics(characteristics);
+        onChangeQuantity(0);
+    }
 
     const getProductBySlug = async () => {
         try {
@@ -59,7 +67,11 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     }
 
     const handlePlus = () => {
-        onChangeQuantity(quantity + 1)
+        if (selectedCharacteristics != null) {
+            if (quantity < selectedCharacteristics.total) {
+                onChangeQuantity(quantity + 1)
+            }
+        }
     }
 
     const handleMinus = () => {
@@ -72,8 +84,38 @@ export default function ProductDetailScreen({ route, navigation }: any) {
         getProductBySlug();
     }, []);
 
-    const changeColorBorder = () => {
-        console.log('hello')
+    const token = 'hahah'
+
+    const addItemToCart = () => {
+        if (token != undefined && token != null) {
+            if (selectedCharacteristics === undefined) {
+                setWarn("Please select enough product characteristics");
+            } else {
+                setWarn("")
+                const product_current = {
+                    product_id: Product.product_id,
+                    product_image: Product.product_image,
+                    product_name: Product.product_name,
+                    price: Product.product_discount
+                        ? discountPrice(
+                            Product.product_price,
+                            Product.product_discount
+                        )
+                        : Product.product_price,
+                    quantity: quantity,
+                    characteristics: selectedCharacteristics,
+                    totalprice: Product.product_discount
+                        ? discountPrice(
+                            Product.product_price,
+                            Product.product_discount
+                        ) * quantity
+                        : Product.product_price * quantity,
+                };
+                dispatch(ACT_CART.AddItemCart(product_current));
+            }
+        } else {
+            setWarn("You need to be logged in to perform this action");
+        }
     }
 
     return (
@@ -156,53 +198,69 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <Text style={tw`text-xl text-black font-bold`}>Options:</Text>
 
                     <View style={tw`w-full`}>
-                        {/* {Options.map((option, index) => {
-                            return (
-                                <View style={tw`w-1/2 p-1`}>
-                                    <TouchableOpacity
-                                        onPress={() => setColor('green-500')}
-                                        style={tw`flex-1 border items-center rounded-md border-red-300 p-1 bg-${color}`}
-                                    >
-
-                    <View style={tw`w-full flex-row flex-wrap`}>
-                        {Options.map((option, index) => {
-                            return (
-                                <View style={tw`w-1/2 p-1`}>
-                                    <View style={tw`flex-1 border items-center rounded-md border-slate-300 p-1`}>
-                                        <Text style={tw`font-semibold`}>{option.values}</Text>
-                                    </TouchableOpacity>
-                                    <ButtonGroup
-                                        buttons={option.values}
-                                        doSomethingsAfterClick={changeColorBorder}
-                                    />
-                                </View>
-                            );
-                        })} */}
-                        <ButtonGroup
+                        <View style={tw`w-full flex-row flex-wrap`}>
+                            {Options.map((option, index) => {
+                                return (
+                                    <View key={index} style={tw`w-1/2 py-1 pr-2`}>
+                                        <TouchableOpacity
+                                            onPress={() => onSelectCharacteristics(option)}
+                                            style={tw`flex-1 border border-gray-300 items-center rounded-md p-2 ${(selectedCharacteristics != undefined &&
+                                                selectedCharacteristics.values === option.values) ? `border-[${COLOR.PRIMARY}]` : ""}`}
+                                        >
+                                            <Text style={tw`font-semibold`}>{option.values}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                );
+                            })}
+                            {/* <ButtonGroup
                             buttons={Options}
                             doSomethingsAfterClick={changeColorBorder}
-                        />
-                    </View>
-
-                    <View style={tw`box-border flex-row h-10 mt-5 mb-5`}>
-                        <TouchableOpacity onPress={() => handleMinus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
-                            <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
-                        </TouchableOpacity>
-                        <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
-                            <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
+                        /> */}
                         </View>
+                        <View>
+                            <Text style={tw`text-base`}>
+                                {selectedCharacteristics != undefined &&
+                                    `${selectedCharacteristics.total} ${selectedCharacteristics.total > 1 ? "products are" : "product is"
+                                    } available`}
+                            </Text>
+                        </View>
+                        <View style={tw`box-border flex-row h-10 mt-3`}>
+                            <TouchableOpacity
+                                onPress={() => handleMinus()}
+                                style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                            >
+                                <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
+                            </TouchableOpacity>
+                            <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
+                                <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
+                            </View>
 
-                        <TouchableOpacity onPress={() => handlePlus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
-                            <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => handlePlus()}
+                                style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                            >
+                                <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => handleMinus()} style={tw`bg-[#17a2b8] rounded items-center w-32 justify-center ml-5 flex-row`}>
-                            <Ionicons name='cart-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
-                            <Text style={tw`text-white font-medium text-base`}> Add To Cart</Text>
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity
+                                onPress={() => addItemToCart()}
+                                style={tw`bg-[#17a2b8] rounded items-center w-32 justify-center ml-5 flex-row`}
+                            >
+                                <Feather
+                                    name='shopping-cart'
+                                    style={tw`text-lg font-black text-[${COLOR.WHITE}]`}
+                                />
+                                {/* <Ionicons name='cart-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} /> */}
+                                <Text style={tw`text-white font-medium text-base`}> Add To Cart</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {warn ? (
+                            <Text style={tw`text-red-600 text-base mt-2`}>*{warn}</Text>
+                        ) : (
+                            <Text></Text>
+                        )}
 
-                    {/* <View style={tw`flex-row box-border mt-5`}>
+                        {/* <View style={tw`flex-row box-border mt-5`}>
                         <Text style={tw`font-medium`}>Share on: </Text>
                         {image_icon.map((cate, index) => {
                             return (
@@ -215,7 +273,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             );
                         })}
                     </View> */}
-                    {/* 
+                        {/* 
                     <View style={tw`w-full flex-row flex-wrap mt-2 mb-2`}>
                         <View style={tw`w-1/2 p-1`}>
                             <Image
@@ -230,19 +288,19 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             />
                         </View>
                     </View> */}
+                    </View>
                 </View>
-            </View>
-
-            <View style={tw`m-2 rounded`}>
-                <Text style={tw`text-3xl text-black font-medium p-2`}>Related Products</Text>
-                <Carousel_product item={RelatedProduct} />
-            </View>
-            <View style={tw`bg-white mt-5 m-2 rounded p-4`}>
-                <Text style={tw`text-xl text-black font-medium p-2`}>Description</Text>
-                <Text style={tw`border-b border-indigo-500`}></Text>
-                {/* <View style={tw`h-20`}>
+                <View style={tw`mt-5`}>
+                    <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
+                    <Carousel_product item={RelatedProduct} />
+                </View>
+                <View style={tw`mt-5`}>
+                    <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
+                    <Text style={tw`border-b border-indigo-500`}></Text>
+                    {/* <View style={tw`h-20`}>
                 </View> */}
-                <RenderHTML source={{ html: Product.product_description }} />
+                    {/* <RenderHTML source={{ html: Product.product_description }} /> */}
+                </View>
             </View>
         </ScrollView>
     );

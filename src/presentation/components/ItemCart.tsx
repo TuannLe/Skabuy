@@ -5,19 +5,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from '@react-native-community/checkbox';
 import { COLOR } from '../constants';
 
-export default function ItemCart({ price, setSubTotal, subTotal }: any) {
+export default function ItemCart({ data, setSubTotal, subTotal }: any) {
     const [isSelected, setSelection] = useState(false);
     const [quantity, onChangeQuantity] = useState(1);
 
     const handlePlus = () => {
         onChangeQuantity(quantity + 1)
-        setSubTotal(price * (quantity + 1))
+        setSubTotal(data.price * (quantity + 1))
     }
 
     const handleMinus = () => {
         if (quantity > 1) {
             onChangeQuantity(quantity - 1)
-            setSubTotal(price * (quantity - 1))
+            setSubTotal(data.price * (quantity - 1))
         }
         if (quantity === 1) {
             console.log('hr')
@@ -62,22 +62,22 @@ export default function ItemCart({ price, setSubTotal, subTotal }: any) {
                 tintColor="white"
             />
             <Image
-                style={{ width: 120, height: 120 }}
-                source={{ uri: 'https://cafebiz.cafebizcdn.vn/zoom/700_438/162123310254002176/2022/6/18/photo1655524983258-16555249833711967616300.jpg' }}
+                style={{ width: 100, height: 100 }}
+                source={{ uri: data.product_image }}
             />
             <View style={tw`flex-1 px-3`}>
                 <Text
                     style={tw`text-2xl text-black font-medium`}
                     numberOfLines={1}
                 >
-                    Product name
+                    {data.product_name}
                 </Text>
-                <Text style={tw`text-lg`}>Loai</Text>
+                <Text numberOfLines={1} style={tw`text-base`}>{data.characteristics.values}</Text>
                 <View style={tw`flex flex-row items-center`}>
-                    <Text style={tw`text-2xl line-through mr-2`}>60$</Text>
-                    <Text style={tw`text-2xl text-red-600 font-bold`}>{subTotal}$</Text>
+                    <Text style={tw`text-2xl line-through mr-2`}>${data.price}</Text>
+                    <Text style={tw`text-2xl text-red-600 font-bold`}>${data.totalprice}$</Text>
                 </View>
-                <View style={tw`box-border flex-row h-10 mt-3`}>
+                <View style={tw`flex-row h-10 mt-3`}>
                     <TouchableOpacity onPress={() => handleMinus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
                         <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
