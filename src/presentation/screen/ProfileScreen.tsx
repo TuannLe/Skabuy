@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MyOrder from '../navigation/MyOrder';
-import { ROUTER, COLOR } from '../constants'
+import { COLOR } from '../constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
@@ -61,12 +61,6 @@ export default function ProfileScreen() {
             <View style={tw`flex-1`}>
                 <MyOrder />
             </View>
-            <TouchableOpacity
-                onPress={() => navigation.navigate(ROUTER.LOGIN)}
-                style={tw`p-3 bg-red-500 mb-10`}
-            >
-                <Text>Login</Text>
-            </TouchableOpacity>
         </SafeAreaView>
     )
 }

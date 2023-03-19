@@ -8,11 +8,11 @@ import ProductDetailScreen from '../screen/ProductDetailScreen';
 import { formatNumber } from '../../util/helper';
 
 export default function Product_Item({ item }: any) {
-    
+
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity style={tw`flex-1 w-36 h-57 p-2 border border-gray-100 bg-white`} onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, {slug: item.product_slug})}>
+        <TouchableOpacity style={tw`flex-1 w-36 h-full p-2 border mx-1 border-gray-100 bg-white`} onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}>
             <Image
                 source={{ uri: item.product_image }}
                 style={tw`w-full h-30`}
@@ -36,19 +36,19 @@ export default function Product_Item({ item }: any) {
             </View>
             {
                 item.product_discount > 0
-                    ? <Text style={tw`bg-[#b00000] bottom-4 flex text-white flex-col text-sm absolute right-0 pl-1`}>-{item.product_discount}%</Text>
+                    ? <Text style={tw`bg-[#b00000] flex text-white flex-col text-sm absolute right-1 top-1 rounded-sm`}>-{item.product_discount}%</Text>
                     : <></>
             }
-            <View style={tw`flex flex-row items-center`}>
+            <View style={tw`flex`}>
                 {
                     item.product_discount > 0
-                        ? 
-                            <>
-                                <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price - ((item.product_discount/100) * item.product_price))}</Text>
-                                <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through -mt-2 ml-2`}>{formatNumber(item.product_price)}</Text>
-                            </> 
-                        : 
-                            <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price)}</Text>
+                        ?
+                        <>
+                            <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price - ((item.product_discount / 100) * item.product_price))}</Text>
+                            <Text style={tw`text-lg text-red-600 line-through`}>{formatNumber(item.product_price)}</Text>
+                        </>
+                        :
+                        <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(item.product_price)}</Text>
                 }
             </View>
         </TouchableOpacity>

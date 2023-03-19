@@ -11,9 +11,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ButtonGroup from '../components/ButtonGroup';
-import { COLOR } from '../constants';
+import { COLOR, ROUTER } from '../constants';
 import { formatNumber } from '../../util/helper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Feather from 'react-native-vector-icons/Feather'
 import RenderHTML from "react-native-render-html";
 
 const WIDTH = Dimensions.get('window').width;
@@ -25,7 +26,7 @@ const image_icon = [
     'https://skabuy.com/icons/twitter.png'
 ]
 
-export default function ProductDetailScreen({ route }) {
+export default function ProductDetailScreen({ route, navigation }: any) {
 
     const [Product, setProduct] = useState([]);
     const [Options, setOptions] = useState([]);
@@ -77,7 +78,7 @@ export default function ProductDetailScreen({ route }) {
 
     return (
         <ScrollView style={tw`w-full h-full`}>
-            <View style={tw`flex-1 mt-2 mb-2`}>
+            <View style={tw`flex-1`}>
                 <Carousel
                     loop
                     width={WIDTH}
@@ -96,6 +97,25 @@ export default function ProductDetailScreen({ route }) {
                     )}
                 />
             </View>
+            <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={tw`w-12 h-12 rounded-full bg-black opacity-30 absolute top-2 left-2`}
+            >
+            </TouchableOpacity>
+            <FontAwesome
+                name="angle-left"
+                size={36}
+                style={tw`text-white absolute top-3 left-5.5`}
+            />
+            <TouchableOpacity
+                onPress={() => navigation.navigate(ROUTER.CART_TAB)}
+                style={tw`w-12 h-12 rounded-full bg-black opacity-30 absolute top-2 right-2`}
+            >
+            </TouchableOpacity>
+            <Feather
+                name='shopping-cart'
+                style={tw`text-2xl text-white absolute top-4 right-5.5`}
+            />
             <View style={tw`p-2 bg-white`}>
                 {
                     Product.product_discount > 0
@@ -104,36 +124,36 @@ export default function ProductDetailScreen({ route }) {
                             <View style={tw`bg-red-700 w-30 rounded`}>
                                 <Text style={tw`font-bold text-white text-center p-0.5`}>Instant Savings</Text>
                             </View>
-                            <Text style={tw`text-[#dc3545] font-medium`}>{formatNumber((Product.product_discount / 100) * formatDolla)} off with Instant Savings</Text>
+                            <Text style={tw`text-[#dc3545] mt-1 text-xl font-medium`}>{formatNumber((Product.product_discount / 100) * formatDolla)} off with Instant Savings</Text>
                         </>
                         :
                         <></>
                 }
-                <Text style={tw`text-xl text-black font-medium`}>{Product.product_name}</Text>
-                <View style={tw`flex flex-row items-center justify-between`}>
+                <Text style={tw`text-2xl text-black font-medium`}>{Product.product_name}</Text>
+                <View style={tw`flex flex-row items-center`}>
                     <View style={tw`flex flex-row items-center`}>
-                        <Ionicons name='star-sharp' style={tw`text-base text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-base text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-base text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-half-sharp' style={tw`text-base text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-outline' style={tw`text-base text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-half-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-outline' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
                     </View>
-                    <Text style={tw`text-base text-[${COLOR.GRAY}]`}>(0)</Text>
+                    <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
                 </View>
-                <View style={tw`flex`}>
+                <View style={tw`my-3 flex`}>
                     {
                         Product.product_discount > 0
                             ?
                             <View style={tw`flex flex-row`}>
-                                <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
-                                <Text style={tw`text-sm text-[${COLOR.GRAY}] line-through ml-2 font-bold mt-1`}>{formatNumber(formatDolla)}</Text>
+                                <Text style={tw`text-5xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
+                                <Text style={tw`text-3xl text-[${COLOR.GRAY}] line-through ml-2 font-medium mt-1`}>{formatNumber(formatDolla)}</Text>
                             </View>
                             :
-                            <Text style={tw`text-xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
+                            <Text style={tw`text-3xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
                     }
                 </View>
                 <View>
-                    <Text style={tw`font-bold`}>Options:</Text>
+                    <Text style={tw`text-xl text-black font-bold`}>Options:</Text>
 
                     <View style={tw`w-full`}>
                         {/* {Options.map((option, index) => {
@@ -164,12 +184,12 @@ export default function ProductDetailScreen({ route }) {
                         />
                     </View>
 
-                    <View style={tw`box-border flex-row h-10 mt-5`}>
+                    <View style={tw`box-border flex-row h-10 mt-5 mb-5`}>
                         <TouchableOpacity onPress={() => handleMinus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
                             <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                         </TouchableOpacity>
                         <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
-                            <Text style={tw`text-center`}>{quantity}</Text>
+                            <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
                         </View>
 
                         <TouchableOpacity onPress={() => handlePlus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
@@ -182,7 +202,7 @@ export default function ProductDetailScreen({ route }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={tw`flex-row box-border mt-5`}>
+                    {/* <View style={tw`flex-row box-border mt-5`}>
                         <Text style={tw`font-medium`}>Share on: </Text>
                         {image_icon.map((cate, index) => {
                             return (
@@ -194,8 +214,8 @@ export default function ProductDetailScreen({ route }) {
                                 </View>
                             );
                         })}
-                    </View>
-
+                    </View> */}
+                    {/* 
                     <View style={tw`w-full flex-row flex-wrap mt-2 mb-2`}>
                         <View style={tw`w-1/2 p-1`}>
                             <Image
@@ -209,17 +229,19 @@ export default function ProductDetailScreen({ route }) {
                                 style={tw`w-full h-6 p-1`}
                             />
                         </View>
-                    </View>
+                    </View> */}
                 </View>
             </View>
 
             <View style={tw`m-2 rounded`}>
-                <Text style={tw`text-xl text-black font-medium p-2`}>Related Products</Text>
+                <Text style={tw`text-3xl text-black font-medium p-2`}>Related Products</Text>
                 <Carousel_product item={RelatedProduct} />
             </View>
             <View style={tw`bg-white mt-5 m-2 rounded p-4`}>
                 <Text style={tw`text-xl text-black font-medium p-2`}>Description</Text>
                 <Text style={tw`border-b border-indigo-500`}></Text>
+                {/* <View style={tw`h-20`}>
+                </View> */}
                 <RenderHTML source={{ html: Product.product_description }} />
             </View>
         </ScrollView>

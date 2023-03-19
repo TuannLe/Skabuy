@@ -3,21 +3,27 @@ import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import tw from 'twrnc';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { COLOR } from '../constants'
 import { AllOrder, Processing, Delivering, Delivered, Cancelled, Refund } from '../components/MyOrder'
 
 const Tab = createMaterialTopTabNavigator();
 export default function MyOrder() {
     return (
         <Tab.Navigator
+            style={tw`overflow-scroll`}
             screenOptions={{
-                tabBarStyle: tw`h-12`,
-                tabBarIndicatorStyle: tw`bg-pink-500`,
-                tabBarShowLabel: false,
-                tabBarShowIcon: true,
+                tabBarStyle: tw`h-13`,
+                tabBarItemStyle: tw`w-30`,
+                tabBarScrollEnabled: true,
+                tabBarIndicatorStyle: tw`bg-[#17a2b8] h-[3px]`,
+                tabBarShowLabel: true,
+                tabBarLabelStyle: tw`capitalize text-base`,
+                tabBarShowIcon: false,
             }}
         >
             <Tab.Screen
-                name='PostsTab'
+                name='All Orders'
+
                 component={AllOrder}
                 options={{
                     tabBarIcon: (({ focused }) =>
@@ -32,7 +38,7 @@ export default function MyOrder() {
                 }}
             />
             <Tab.Screen
-                name='HeartTab'
+                name='Processing'
                 component={Processing}
                 options={{
                     tabBarIcon: (({ focused }) =>
@@ -48,7 +54,7 @@ export default function MyOrder() {
                 }}
             />
             <Tab.Screen
-                name='PostsHide'
+                name='Delivering'
                 component={Delivering}
                 options={{
                     tabBarIcon: (({ focused }) =>
@@ -63,7 +69,7 @@ export default function MyOrder() {
                 }}
             />
             <Tab.Screen
-                name='PostsHide2'
+                name='Delivered'
                 component={Delivered}
                 options={{
                     tabBarIcon: (({ focused }) =>
@@ -78,7 +84,7 @@ export default function MyOrder() {
                 }}
             />
             <Tab.Screen
-                name='PostsHide3'
+                name='Cancelled'
                 component={Cancelled}
                 options={{
                     tabBarIcon: (({ focused }) =>
@@ -93,7 +99,7 @@ export default function MyOrder() {
                 }}
             />
             <Tab.Screen
-                name='PostsHide4'
+                name='Refund'
                 component={Refund}
                 options={{
                     tabBarIcon: (({ focused }) =>

@@ -15,7 +15,7 @@ import index from '../navigation';
 
 const WIDTH = Dimensions.get('window').width;
 
-export default function Slider({item} : any) {
+export default function Slider({ item }: any) {
 
     return (
         <View style={tw`flex-1 mt-2 mb-2`}>
@@ -29,7 +29,7 @@ export default function Slider({item} : any) {
                 renderItem={({ index }) => (
                     <View style={tw`flex-1 justify-center`}>
                         <Image
-                            style={{ width: WIDTH, height: 120}}
+                            style={{ width: WIDTH, height: 120 }}
                             source={{ uri: item[index] }}
                         />
 
