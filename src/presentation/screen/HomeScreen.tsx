@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import Header from '../components/Header'
@@ -8,11 +8,12 @@ import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import AXIOS from '../../core/api';
 import { ScrollView } from 'react-native-gesture-handler';
+import { COLOR } from '../constants';
 
 const image_banner = [
-  'https://skabuy.com/banners/banner_1.jpg',
-  'https://skabuy.com/banners/banner_2.jpg',
-  'https://skabuy.com/banners/banner_3.jpg'
+  'https://vietadv.vn/wp-content/uploads/2021/08/banner-quang-cao-scaled.jpg',
+  'https://vietadv.vn/wp-content/uploads/2021/08/banner-quang-cao-scaled.jpg',
+  'https://vietadv.vn/wp-content/uploads/2021/08/banner-quang-cao-scaled.jpg'
 ]
 
 export default function HomeScreen() {
@@ -24,7 +25,7 @@ export default function HomeScreen() {
   const getPromotionalProducts = async () => {
     try {
       const res = await AXIOS.get(`product/promotional`);
-      setPromotional(res.data)
+      setPromotional(res.data.data)
     } catch (error) {
       return error;
     }
@@ -42,7 +43,7 @@ export default function HomeScreen() {
   const getTopProducts = async () => {
     try {
       const res = await AXIOS.get(`product/top`);
-      setTopProduct(res.data)
+      setTopProduct(res.data.data)
     } catch (error) {
       return error;
     }
@@ -57,19 +58,24 @@ export default function HomeScreen() {
   return (
     <ScrollView>
       <Header />
-      <View>
-        <Text style={tw`text-black text-xl font-semibold pl-2`}>
+      <Slider item={image_banner} />
+      <View style={tw`flex flex-row justify-between items-center px-2 py-3`}>
+        <Text style={tw`text-black text-2xl font-semibold`}>
           Promotional products
         </Text>
+        <TouchableOpacity
+          style={tw`px-2 py-0.5 bg-[#17a2b8ad] rounded-lg`}
+        >
+          <Text style={tw`text-base text-[${COLOR.WHITE}]`}>View all</Text>
+        </TouchableOpacity>
       </View>
       <Carousel_product item={promotional} />
-      <Slider item={image_banner} />
-      <View style={tw`bg-white pt-5`}>
+      {/* <View style={tw`bg-white pt-5`}>
         <Text style={tw`text-black text-2xl font-semibold pl-2 text-center`}>
           Categories
         </Text>
-      </View>
-      <View style={tw`w-full flex-row flex-wrap p-5 bg-white`}>
+      </View> */}
+      <View style={tw`w-full flex-row flex-wrap mt-3 p-5 bg-white`}>
 
         {allCategory.map((category, index) => {
           return (
@@ -89,12 +95,12 @@ export default function HomeScreen() {
 
       </View>
 
-      <View>
-        <Text style={tw`text-black text-xl font-semibold pl-2`}>
+      <View style={tw``}>
+        <Text style={tw`text-black text-2xl font-semibold py-3`}>
           Lasted products
         </Text>
+        <Carousel_product item={topProduct} />
       </View>
-      <Carousel_product item={topProduct} />
     </ScrollView>
   );
 }

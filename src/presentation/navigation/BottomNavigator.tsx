@@ -4,12 +4,11 @@ import tw from 'twrnc'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Foundation from 'react-native-vector-icons/Foundation'
-import HomeScreen from '../screen/HomeScreen'
-import FavoriteScreen from '../screen/FavoriteScreen'
-import ProfileScreen from '../screen/ProfileScreen'
+import { HomeScreen, FavoriteScreen, ProfileScreen, LoginScreen } from '../screen'
 
 export default function BottomNavigator() {
     const BottomTab = createBottomTabNavigator();
+    const token = 'hhhh'
     return (
         <BottomTab.Navigator>
             <BottomTab.Screen
@@ -46,23 +45,43 @@ export default function BottomNavigator() {
                     )
                 }}
             />
-            <BottomTab.Screen
-                name='ProfileTab'
-                component={ProfileScreen}
-                options={{
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarIcon: (({ focused, color }) =>
-                        <>
-                            {focused ? (
-                                <Ionicons name="ios-person" size={28} color={color} />
-                            ) : (
-                                <Ionicons name="ios-person-outline" size={24} color={color} />
-                            )}
-                        </>
-                    )
-                }}
-            />
+            {token ? (
+                <BottomTab.Screen
+                    name='ProfileTab'
+                    component={ProfileScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                        tabBarIcon: (({ focused, color }) =>
+                            <>
+                                {focused ? (
+                                    <Ionicons name="ios-person" size={28} color={color} />
+                                ) : (
+                                    <Ionicons name="ios-person-outline" size={24} color={color} />
+                                )}
+                            </>
+                        )
+                    }}
+                />
+            ) : (
+                <BottomTab.Screen
+                    name='LoginTab'
+                    component={LoginScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                        tabBarIcon: (({ focused, color }) =>
+                            <>
+                                {focused ? (
+                                    <Ionicons name="ios-person" size={28} color={color} />
+                                ) : (
+                                    <Ionicons name="ios-person-outline" size={24} color={color} />
+                                )}
+                            </>
+                        )
+                    }}
+                />
+            )}
         </BottomTab.Navigator>
     )
 }
