@@ -3,18 +3,19 @@ import * as actions from '../actions/auth'
 import * as apis from '../../api/authAPI'
 import * as TYPES from '../constants/auth'
 
-function* fetchLoginSaga(action) {
-    try {
-        console.log('Fetching login running...')
-        const res = yield call(apis.login, action.payload)
-        if (res.status === 204) {
-            console.log("Login success")
-            yield put(actions.LoginSuccess(res.data))
-        }
-    } catch (error) {
-        yield put(actions.LoginFailure(error))
-    }
-}
+// function* fetchLoginSaga(action) {
+//     try {
+//         console.log('Fetching login running...')
+//         const res = yield call(apis.login, action.payload)
+//         console.log(res.data)
+//         if (res.data.status === 204) {
+//             console.log("Login success")
+//             yield put(actions.LoginSuccess(res.data))
+//         }
+//     } catch (error) {
+//         yield put(actions.LoginFailure(error))
+//     }
+// }
 
 function* registerSaga(action) {
     try {
@@ -32,7 +33,7 @@ function* registerSaga(action) {
 }
 
 const authSaga = [
-    takeLatest(TYPES.LOG_IN_START, fetchLoginSaga),
+    // takeLatest(TYPES.LOG_IN_START, fetchLoginSaga),
     takeLatest(TYPES.REGISTER_START, registerSaga),
 ]
 

@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, ScrollView, TextInput, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
+import * as ACT_CART from '../../core/redux/actions/cart'
 import ItemCart from '../components/ItemCart'
 import { COLOR } from '../constants'
 
@@ -15,7 +16,32 @@ export default function CartScreen({ navigation }: any) {
 
     const [total, setTotal] = useState(subTotal)
     const ArrayProduct = useSelector((state: any) => state.cart.products)
-    console.log(ArrayProduct)
+
+    const showConfirmDialog = () => {
+        return Alert.alert(
+            "Confirm",
+            "Are you sure you want to delete all items?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        dispatch(ACT_CART.RemoveAllCart())
+                        return
+                    }
+                },
+                {
+                    text: "No",
+                    onPress: () => {
+                        return
+                    }
+                }
+            ]
+        )
+    }
+
+    const handleDelete = () => {
+        showConfirmDialog()
+    }
 
     return (
         <View style={tw`relative w-full h-full`}>
@@ -41,6 +67,7 @@ export default function CartScreen({ navigation }: any) {
                 />
                 <TouchableOpacity
                     style={tw`p-3`}
+                    onPress={handleDelete}
                 >
                     <Text style={tw`text-xl text-gray-500 font-medium`}>Delete all</Text>
                 </TouchableOpacity>
@@ -56,7 +83,14 @@ export default function CartScreen({ navigation }: any) {
                     style={tw`mb-78`}
                 />
             ) : (
-                <></>
+                <View style={tw`flex-1 flex justify-center items-center mb-78`}>
+                    <Text style={tw`text-base my-3`}>Your shopping cart is empty</Text>
+                    <TouchableOpacity
+                        style={tw`p-3 bg-[${COLOR.PRIMARY}] rounded-md`}
+                    >
+                        <Text style={tw`text-[${COLOR.WHITE}] text-lg font-medium`}>Go Shopping Now</Text>
+                    </TouchableOpacity>
+                </View>
             )}
             {/* <ScrollView style={tw`mb-78`}>
             

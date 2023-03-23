@@ -3,9 +3,12 @@ import React, { useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from '@react-native-community/checkbox';
+import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
+import * as ACT_CART from '../../core/redux/actions/cart'
 
 export default function ItemCart({ data, setSubTotal, subTotal }: any) {
+    const dispatch = useDispatch()
     const [isSelected, setSelection] = useState(false);
     const [quantity, onChangeQuantity] = useState(1);
 
@@ -32,6 +35,7 @@ export default function ItemCart({ data, setSubTotal, subTotal }: any) {
                 {
                     text: "Yes",
                     onPress: () => {
+                        dispatch(ACT_CART.RemoveItemCart(data.product_id))
                         return
                     }
                 },

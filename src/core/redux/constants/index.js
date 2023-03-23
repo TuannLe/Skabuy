@@ -1,8 +1,8 @@
 export const INIT_STATE = {
     auth: {
         currentUser: {},
+        token: '',
         isLoading: false,
-        message: '',
         error: false
     },
     cart: {

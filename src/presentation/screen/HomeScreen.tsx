@@ -1,13 +1,14 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
+// import { ScrollView } from 'react-native-gesture-handler';
+import { useDispatch, useSelector } from "react-redux";
 import Header from '../components/Header'
 import ToolBar from '../components/ToolBar'
 import Carousel_product from '../components/Carousel_product';
 import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import AXIOS from '../../core/api';
-import { ScrollView } from 'react-native-gesture-handler';
 import { COLOR } from '../constants';
 
 const image_banner = [
@@ -17,7 +18,6 @@ const image_banner = [
 ]
 
 export default function HomeScreen() {
-
   const [promotional, setPromotional] = useState([]);
   const [topProduct, setTopProduct] = useState([]);
   const [allCategory, setAllCategory] = useState([]);

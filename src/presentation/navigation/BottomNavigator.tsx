@@ -4,11 +4,12 @@ import tw from 'twrnc'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Foundation from 'react-native-vector-icons/Foundation'
+import { useDispatch, useSelector } from "react-redux";
 import { HomeScreen, FavoriteScreen, ProfileScreen, LoginScreen } from '../screen'
 
 export default function BottomNavigator() {
     const BottomTab = createBottomTabNavigator();
-    const token = 'hhhh'
+    const token = useSelector((state: any) => state.auth.token)
     return (
         <BottomTab.Navigator>
             <BottomTab.Screen

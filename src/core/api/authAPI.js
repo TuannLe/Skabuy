@@ -4,8 +4,12 @@ const url = '/user'
 
 export const login = async (payload) => {
     try {
-        const res = await AXIOS.options(`${url}/login`, payload)
-        return res
+        const res = await AXIOS.post(`${url}/login`, payload, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
     } catch (error) {
         return error
     }

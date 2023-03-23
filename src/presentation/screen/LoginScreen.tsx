@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../../core/api/authAPI'
 import * as ACTIONS from '../../core/redux/actions/auth'
 import { ROUTER, COLOR } from '../constants'
 
@@ -10,18 +11,65 @@ export default function LoginScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const [user_email, setUserEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [payload, setPayload] = useState({
+        user_email: "",
+        password: "",
+    });
     const [loginWarn, setLoginWarn] = useState('');
+    const [color, setColor] = useState('');
 
     const handleLogin = () => {
-        if (!user_email) {
+        if (!payload.user_email) {
+            setLoginWarn(`Please enter your email`)
+            setColor('yellow')
+        }
+        else if (!payload.password) {
+            setLoginWarn(`Please enter your password`)
+            setColor('red')
+        } else {
+            dispatch(ACTIONS.LoginStart({ user_email: payload.user_email, password: payload.password }))
+        }
+    }
+
+    const onLoginHandler = async () => {
+        if (!payload.user_email) {
+            setColor('red')
             setLoginWarn(`Please enter your email`)
         }
-        else if (!password) {
+        else if (!payload.password) {
+            setColor('red')
             setLoginWarn(`Please enter your password`)
         } else {
-            dispatch(ACTIONS.LoginStart({ user_email, password }))
+            const response = await login(payload);
+            if (
+                response.message === "Invalid account" ||
+                response.message === "Incorrect password"
+            ) {
+                setLoginWarn(response.message);
+            } else {
+                switch (response.data.status) {
+                    case 0:
+                        dispatch(ACTIONS.LoginSuccess({ token: JSON.stringify(response.token), data: response.data }));
+                        setColor('green')
+                        setLoginWarn("Login successful");
+                        // navigate("/");
+                        break;
+                    case 1:
+                        setColor('red')
+                        setLoginWarn("Your account is banded");
+                        break;
+                    case 2:
+                        // dispatch(loginUser(response.data));
+                        // navigate("/account-verification", {
+                        //     state: {
+                        //         user_email: loginInfo.user_email,
+                        //     },
+                        // });
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -32,22 +80,34 @@ export default function LoginScreen() {
             <Text style={tw`text-xl text-black mt-2 mb-24`}>Sign in to your account!</Text>
             <TextInput
                 placeholder='Enter email...'
-                onChangeText={val => setUserEmail(val)}
+                onChangeText={val => {
+                    setPayload((current) => ({
+                        ...current,
+                        user_email: val,
+                    }))
+                }
+                }
                 style={tw`text-base text-black bg-[#f5f5f5] px-3 rounded-lg`}
             />
             <TextInput
                 style={tw`text-base text-black bg-[#f5f5f5] px-3 rounded-lg mt-3`}
                 secureTextEntry={true}
                 placeholder='Enter password...'
-                onChangeText={val => setPassword(val)}
+                onChangeText={val => {
+                    setPayload((current) => ({
+                        ...current,
+                        password: val,
+                    }))
+                }}
             />
             <TouchableOpacity
-                style={tw`p-1 mt-2 mb-5`}
+                style={tw`py-1 mt-2`}
             >
                 <Text style={tw`text-base text-gray-500`}>Forgot your password?</Text>
             </TouchableOpacity>
+            <Text style={tw`text-${color}-600 text-base mb-5`}>{loginWarn}</Text>
             <TouchableOpacity
-                onPress={() => handleLogin()}
+                onPress={() => onLoginHandler()}
                 style={tw`p-3 bg-[${COLOR.PRIMARY}] rounded-lg`}
             >
                 <Text style={tw`text-center text-white text-xl font-medium`}>LOGIN</Text>

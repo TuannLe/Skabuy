@@ -15,7 +15,7 @@ export default function authReducers(state = INIT_STATE.cart, action) {
         case TYPES.REMOVE_ITEM_CART:
             const newArray = [...state.products]
             newArray.splice(newArray.findIndex((item) => {
-                return item.id == action.payload
+                return item.product_id == action.payload
             }), 1)
             return {
                 ...state,
