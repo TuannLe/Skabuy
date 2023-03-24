@@ -12,6 +12,7 @@ import {
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
 import ProductDetailScreen from '../screen/ProductDetailScreen'
+import ProcessScreen from '../screen/ProcessScreen'
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -60,6 +61,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.PRODUCT_DETAILS}
                 component={ProductDetailScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.PROCESS_SCREEN}
+                component={ProcessScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
