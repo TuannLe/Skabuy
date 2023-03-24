@@ -11,6 +11,13 @@ export default function authReducers(state = INIT_STATE.cart, action) {
                 ...state,
                 products: newArrayProduct,
             }
+        // Change quantity
+        case TYPES.ADD_ITEM_CART:
+            newArrayProduct.push(action.payload)
+            return {
+                ...state,
+                products: newArrayProduct,
+            }
         // Remove item to cart
         case TYPES.REMOVE_ITEM_CART:
             const newArray = [...state.products]

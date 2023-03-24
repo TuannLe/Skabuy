@@ -8,6 +8,14 @@ export const AddItemCart = (payload) => {
     }
 }
 
+// change quantity to cart 
+export const ChangeQuantity = (payload) => {
+    return {
+        type: TYPES.CHANGE_QUANTITY,
+        payload
+    }
+}
+
 // Remove item to cart 
 export const RemoveItemCart = (payload) => {
     return {

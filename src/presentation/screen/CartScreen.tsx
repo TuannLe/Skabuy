@@ -13,7 +13,6 @@ export default function CartScreen({ navigation }: any) {
     const price = 50;
     const [isSelected, setSelection] = useState(false);
     const [subTotal, setSubTotal] = useState(price)
-
     const [total, setTotal] = useState(subTotal)
     const ArrayProduct = useSelector((state: any) => state.cart.products)
 
@@ -78,7 +77,7 @@ export default function CartScreen({ navigation }: any) {
                     data={ArrayProduct}
                     keyExtractor={(item, index) => item.product_id}
                     renderItem={({ item }) => {
-                        return <ItemCart data={item} setSubTotal={setSubTotal} subTotal={subTotal} />;
+                        return <ItemCart data={item} />;
                     }}
                     style={tw`mb-78`}
                 />

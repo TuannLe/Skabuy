@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
 import * as ACT_CART from '../../core/redux/actions/cart'
 
-export default function ItemCart({ data, setSubTotal, subTotal }: any) {
+export default function ItemCart({ data }: any) {
     const dispatch = useDispatch()
     const [isSelected, setSelection] = useState(false);
+    const [subTotal, setSubTotal] = useState(0)
     const [quantity, onChangeQuantity] = useState(1);
+    console.log(data)
 
     const handlePlus = () => {
         onChangeQuantity(quantity + 1)
@@ -26,6 +28,21 @@ export default function ItemCart({ data, setSubTotal, subTotal }: any) {
             console.log('hr')
         }
     }
+
+    // const onChangeQuantityHandler = (quantity : any, productID : any) => {
+    //     if (quantity > 0) {
+    //         if (quantity <= 0) return;
+    //         var foundIndex = cart.findIndex(
+    //             (element : any) => element.product_id == productID
+    //         );
+    //         cart[foundIndex].quantity = quantity;
+    //         cart[foundIndex].totalprice =
+    //             cart[foundIndex].quantity * cart[foundIndex].price;
+    //         setCookie(CONSTANTS.cartCookie, JSON.stringify(cart));
+    //         loadCartData();
+    //         loadTotalPayment();
+    //     }
+    // };
 
     const showConfirmDialog = () => {
         return Alert.alert(
