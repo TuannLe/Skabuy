@@ -6,13 +6,15 @@ import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import ItemCart from '../components/ItemCart'
-import { COLOR } from '../constants'
+import { ROUTER, COLOR } from '../constants'
+import { useNavigation } from '@react-navigation/native';
 
 export default function CartScreen({ navigation }: any) {
     const dispatch = useDispatch()
     const price = 50;
     const [isSelected, setSelection] = useState(false);
     const [subTotal, setSubTotal] = useState(price)
+    const navigation1 = useNavigation();
 
     const [total, setTotal] = useState(subTotal)
     const ArrayProduct = useSelector((state: any) => state.cart.products)
@@ -123,6 +125,7 @@ export default function CartScreen({ navigation }: any) {
                     </View>
                     <TouchableOpacity
                         style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                        onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN)}
                     >
                         <Text style={tw`text-white text-xl font-medium text-center `}>Proceed To Checkout</Text>
                     </TouchableOpacity>

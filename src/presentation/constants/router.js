@@ -12,5 +12,6 @@ export default {
     VERIFY_CODE_SCREEN: 'Verify Code Screen',
     ALL_PRODUCTS_SCREEN: 'All Product Screen',
 
-    PRODUCT_DETAILS: 'Product Details'
+    PRODUCT_DETAILS: 'Product Details',
+    PROCESS_SCREEN: 'Process Screen'
 };
