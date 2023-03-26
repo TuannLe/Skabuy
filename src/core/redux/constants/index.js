@@ -7,5 +7,10 @@ export const INIT_STATE = {
     },
     cart: {
         products: [],
+    },
+    product: {
+        productsByCategory: [],
+        isLoading: false,
+        error: false
     }
 }

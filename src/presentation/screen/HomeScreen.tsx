@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 // import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from '@react-navigation/native';
+import * as ACT_PRODUCT from '../../core/redux/actions/product'
 import Header from '../components/Header'
-import ToolBar from '../components/ToolBar'
 import Carousel_product from '../components/Carousel_product';
 import Slider from '../components/Slider';
-import { getPromotionalProducts } from '../../core/api/ProductApi';
 import AXIOS from '../../core/api';
-import { COLOR } from '../constants';
+import { COLOR, ROUTER } from '../constants';
 
 const image_banner = [
   'https://vietadv.vn/wp-content/uploads/2021/08/banner-quang-cao-scaled.jpg',
@@ -18,6 +18,8 @@ const image_banner = [
 ]
 
 export default function HomeScreen() {
+  const dispatch = useDispatch()
+  const navigation = useNavigation();
   const [promotional, setPromotional] = useState([]);
   const [topProduct, setTopProduct] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
@@ -47,6 +49,11 @@ export default function HomeScreen() {
     } catch (error) {
       return error;
     }
+  }
+
+  const handleGetProductByCategory = (IDCategory: any) => {
+    dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
+    navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN)
   }
 
   useEffect(() => {
@@ -80,14 +87,17 @@ export default function HomeScreen() {
         {allCategory.map((category, index) => {
           return (
             <View style={tw`w-1/3 p-2`}>
-              <View style={tw`flex-1 items-center`}>
+              <TouchableOpacity
+                onPress={() => handleGetProductByCategory(category.category_id)}
+                style={tw`flex-1 items-center`}
+              >
                 <Image
                   source={{ uri: category.category_image }}
                   style={tw`w-23 h-23`}
                   resizeMode={'contain'}
                 />
                 <Text style={tw`text-center text-black font-bold`}>{category.category_name}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           );
         })

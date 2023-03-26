@@ -2,83 +2,23 @@ import { View, Text, TouchableOpacity, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import { FlatGrid } from 'react-native-super-grid';
+import { useDispatch, useSelector } from "react-redux";
 import Product_Item from '../components/Product_Item'
 import CategoriesModal from '../modal/CategoriesModal'
 import { COLOR } from '../constants';
 import Header from '../components/Header';
 
 export default function AllProductScreen() {
-    const data = [
-        {
-            product_id: '1',
-            product_name: 'Balo Laptop 14 inch Tucano LUX BKML13',
-            trademark: '',
-            product_slug: '',
-            product_description: '',
-            product_price: '0.8',
-            product_discount: '0.3',
-            product_image: 'https://skabuy.com/Upload/ImageProduct/product_1673273882458.png',
-            image_description1: '',
-            image_description2: ''
-        },
-        {
-            product_id: '2',
-            product_name: 'Balo Laptop 14 inch Tucano LUX BKML13',
-            trademark: '',
-            product_slug: '',
-            product_description: '',
-            product_price: '0.8',
-            product_discount: '0.3',
-            product_image: 'https://skabuy.com/Upload/ImageProduct/product_1673273882458.png',
-            image_description1: '',
-            image_description2: ''
-        },
-        {
-            product_id: '3',
-            product_name: 'Balo Laptop 14 inch Tucano LUX BKML13',
-            trademark: '',
-            product_slug: '',
-            product_description: '',
-            product_price: '0.8',
-            product_discount: '0.3',
-            product_image: 'https://skabuy.com/Upload/ImageProduct/product_1673273882458.png',
-            image_description1: '',
-            image_description2: ''
-        },
-        {
-            product_id: '4',
-            product_name: 'Balo Laptop 14 inch Tucano LUX BKML13',
-            trademark: '',
-            product_slug: '',
-            product_description: '',
-            product_price: '0.8',
-            product_discount: '0.3',
-            product_image: 'https://skabuy.com/Upload/ImageProduct/product_1673273882458.png',
-            image_description1: '',
-            image_description2: ''
-        },
-        {
-            product_id: '5',
-            product_name: 'Balo Laptop 14 inch Tucano LUX BKML13',
-            trademark: '',
-            product_slug: '',
-            product_description: '',
-            product_price: '0.8',
-            product_discount: '0.3',
-            product_image: 'https://skabuy.com/Upload/ImageProduct/product_1673273882458.png',
-            image_description1: '',
-            image_description2: ''
-        },
-    ]
     const [visible, setVisibility] = useState(false)
+    const ArrayProduct = useSelector((state: any) => state.product.productsByCategory)
     const handleVisible = () => {
         setVisibility(!visible)
     }
 
     return (
-        <View style={tw`flex w-full h-full bg-white`}>
+        <View style={tw`flex w-full h-full bg-black`}>
             <Header />
-            <View style={tw`px-3`}>
+            <View style={tw`flex-1 px-3`}>
                 <TouchableOpacity
                     onPress={handleVisible}
                     style={tw`p-2.5 w-24 border border-gray-300 rounded-lg my-5`}
@@ -86,12 +26,12 @@ export default function AllProductScreen() {
                     <Text style={tw`text-xl text-[${COLOR.PRIMARY}] text-center font-medium`}>Filter</Text>
                 </TouchableOpacity>
                 {
-                    data.length
+                    ArrayProduct?.length
                         ? (
                             <FlatList
-                                data={data}
+                                data={ArrayProduct}
                                 numColumns={3}
-                                renderItem={(item) => <Product_Item item={item} />}
+                                renderItem={(item) => <Product_Item item={item.item} />}
                                 keyExtractor={item => item.product_id}
                                 showsHorizontalScrollIndicator={false}
                                 ListFooterComponent={
@@ -130,8 +70,8 @@ export default function AllProductScreen() {
                             // />
                         )
                         : (
-                            <View style={tw`flex justify-center h-full`}>
-                                <Text style={tw`text-base font-medium text-center`}>No products</Text>
+                            <View style={tw`flex-1 justify-center h-full`}>
+                                <Text style={tw`text-lg font-medium text-center`}>No products</Text>
                             </View>
                         )
                 }

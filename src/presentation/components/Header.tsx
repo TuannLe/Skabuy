@@ -7,9 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ROUTER, COLOR } from '../constants'
 
 export default function Header() {
-    const [showBar, setShowBar] = useState(false)
     const navigation = useNavigation();
-    const [selectedValue, setSelectedValue] = useState('java');
 
     return (
         <View style={tw`flex flex-row items-center bg-[${COLOR.PRIMARY}] `}>

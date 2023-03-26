@@ -1,5 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { ROUTER } from '../constants';
 import BottomNavigator from './BottomNavigator';
 import { AllProductScreen, ProfileScreen } from '../screen';
 
@@ -12,9 +13,8 @@ const DrawerNavigator = () => {
                 headerShown: false,
             }}
         >
-            <Drawer.Screen name="Home" component={BottomNavigator} />
-            <Drawer.Screen name="All Product" component={AllProductScreen} />
-            <Drawer.Screen name="Profile" component={ProfileScreen} />
+            <Drawer.Screen name={ROUTER.HOME_TAB} component={BottomNavigator} />
+            <Drawer.Screen name={ROUTER.ALL_PRODUCTS_SCREEN} component={AllProductScreen} />
         </Drawer.Navigator>
     );
 };

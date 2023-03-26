@@ -1,7 +1,7 @@
 import { INIT_STATE } from "../constants";
 import * as TYPES from '../constants/cart'
 
-export default function authReducers(state = INIT_STATE.cart, action) {
+export default function cartReducers(state = INIT_STATE.cart, action) {
     switch (action.type) {
         // Add item to cart
         case TYPES.ADD_ITEM_CART:
@@ -13,7 +13,6 @@ export default function authReducers(state = INIT_STATE.cart, action) {
             }
         // Change quantity
         case TYPES.CHANGE_QUANTITY:
-            console.log('hihih', action.payload)
             const newArrayChange = state.products
             const index = newArrayChange.findIndex(
                 (item) => item.product_id == action.payload.productID

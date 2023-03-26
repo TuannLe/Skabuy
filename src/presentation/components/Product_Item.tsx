@@ -1,18 +1,19 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ROUTER, COLOR } from '../constants'
-import ProductDetailScreen from '../screen/ProductDetailScreen';
 import { formatNumber } from '../../util/helper';
 
 export default function Product_Item({ item }: any) {
-
     const navigation = useNavigation();
+    const WIDTH = Dimensions.get('window').width;
 
     return (
-        <TouchableOpacity style={tw`flex-1 w-36 h-full p-2 border mx-1 border-gray-100 bg-white`} onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}>
+        <TouchableOpacity
+            style={tw`w-[${(WIDTH - 45) / 3}px] h-full p-2 border mx-1 border-gray-100 bg-white`}
+            onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}>
             <Image
                 source={{ uri: item.product_image }}
                 style={tw`w-full h-30`}
