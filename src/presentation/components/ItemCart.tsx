@@ -5,44 +5,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
-import * as ACT_CART from '../../core/redux/actions/cart'
 
-export default function ItemCart({ data }: any) {
+export default function ItemCart({ handleChangeQuantity, data }: any) {
     const dispatch = useDispatch()
     const [isSelected, setSelection] = useState(false);
-    const [subTotal, setSubTotal] = useState(0)
-    const [quantity, onChangeQuantity] = useState(1);
-    console.log(data)
-
-    const handlePlus = () => {
-        onChangeQuantity(quantity + 1)
-        setSubTotal(data.price * (quantity + 1))
-    }
-
-    const handleMinus = () => {
-        if (quantity > 1) {
-            onChangeQuantity(quantity - 1)
-            setSubTotal(data.price * (quantity - 1))
-        }
-        if (quantity === 1) {
-            console.log('hr')
-        }
-    }
-
-    // const onChangeQuantityHandler = (quantity : any, productID : any) => {
-    //     if (quantity > 0) {
-    //         if (quantity <= 0) return;
-    //         var foundIndex = cart.findIndex(
-    //             (element : any) => element.product_id == productID
-    //         );
-    //         cart[foundIndex].quantity = quantity;
-    //         cart[foundIndex].totalprice =
-    //             cart[foundIndex].quantity * cart[foundIndex].price;
-    //         setCookie(CONSTANTS.cartCookie, JSON.stringify(cart));
-    //         loadCartData();
-    //         loadTotalPayment();
-    //     }
-    // };
 
     const showConfirmDialog = () => {
         return Alert.alert(
@@ -99,14 +65,29 @@ export default function ItemCart({ data }: any) {
                     <Text style={tw`text-2xl text-red-600 font-bold`}>${data.totalprice}$</Text>
                 </View>
                 <View style={tw`flex-row h-10 mt-3`}>
-                    <TouchableOpacity onPress={() => handleMinus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
+                    <TouchableOpacity
+                        onPress={() => handleChangeQuantity(
+                            data.quantity - 1,
+                            data.product_id
+                        )}
+                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                    >
                         <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
                     <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
-                        <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
+                        <Text style={tw`text-xl text-black text-center`}>{data.quantity}</Text>
                     </View>
-
-                    <TouchableOpacity onPress={() => handlePlus()} style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!(data.quantity >= data.characteristics.total)) {
+                                handleChangeQuantity(
+                                    data.quantity + 1,
+                                    data.product_id
+                                )
+                            }
+                        }}
+                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                    >
                         <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
                 </View>

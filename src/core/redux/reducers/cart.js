@@ -12,11 +12,17 @@ export default function authReducers(state = INIT_STATE.cart, action) {
                 products: newArrayProduct,
             }
         // Change quantity
-        case TYPES.ADD_ITEM_CART:
-            newArrayProduct.push(action.payload)
+        case TYPES.CHANGE_QUANTITY:
+            console.log('hihih', action.payload)
+            const newArrayChange = state.products
+            const index = newArrayChange.findIndex(
+                (item) => item.product_id == action.payload.productID
+            );
+            newArrayChange[index].quantity = action.payload.quantity;
+            newArrayChange[index].totalprice = newArrayChange[index].quantity * newArrayChange[index].price;
             return {
                 ...state,
-                products: newArrayProduct,
+                products: newArrayChange
             }
         // Remove item to cart
         case TYPES.REMOVE_ITEM_CART:

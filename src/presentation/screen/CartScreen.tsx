@@ -4,18 +4,21 @@ import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from '@react-navigation/native';
+import {
+    discountPrice,
+    calculateTotalPrice,
+} from "../../util/helper";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import ItemCart from '../components/ItemCart'
 import { ROUTER, COLOR } from '../constants'
-import { useNavigation } from '@react-navigation/native';
 
 export default function CartScreen({ navigation }: any) {
     const dispatch = useDispatch()
-    const price = 50;
     const [isSelected, setSelection] = useState(false);
-    const [subTotal, setSubTotal] = useState(price)
+    const [subTotal, setSubTotal] = useState(0)
+    const [total, setTotal] = useState(0)
     const navigation1 = useNavigation();
-    const [total, setTotal] = useState(subTotal)
     const ArrayProduct = useSelector((state: any) => state.cart.products)
 
     const showConfirmDialog = () => {
@@ -39,6 +42,27 @@ export default function CartScreen({ navigation }: any) {
             ]
         )
     }
+
+    const handleChangeQuantity = (quantity: any, productID: any) => {
+        if (quantity > 0) {
+            dispatch(ACT_CART.ChangeQuantity({ quantity, productID }))
+            loadTotalPayment()
+        } else {
+            console.log('hoh')
+        }
+    }
+
+    const loadTotalPayment = () => {
+        setSubTotal(calculateTotalPrice(ArrayProduct));
+    };
+
+    useEffect(() => {
+        setTotal(subTotal);
+    }, [subTotal]);
+
+    useEffect(() => {
+        loadTotalPayment();
+    }, [ArrayProduct]);
 
     const handleDelete = () => {
         showConfirmDialog()
@@ -73,13 +97,13 @@ export default function CartScreen({ navigation }: any) {
                     <Text style={tw`text-xl text-gray-500 font-medium`}>Delete all</Text>
                 </TouchableOpacity>
             </View>
-            {ArrayProduct.length ? (
+            {ArrayProduct?.length ? (
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={ArrayProduct}
                     keyExtractor={(item, index) => item.product_id}
                     renderItem={({ item }) => {
-                        return <ItemCart data={item} />;
+                        return <ItemCart handleChangeQuantity={handleChangeQuantity} data={item} />;
                     }}
                     style={tw`mb-78`}
                 />
@@ -112,7 +136,7 @@ export default function CartScreen({ navigation }: any) {
                     <Text style={tw`text-3xl text-black font-medium mb-3`}>Cart Summary</Text>
                     <View style={tw`flex flex-row items-center justify-between`}>
                         <Text style={tw`text-black text-xl`}>Subtotal</Text>
-                        <Text style={tw`text-black text-xl font-medium`}>$80</Text>
+                        <Text style={tw`text-black text-xl font-medium`}>${subTotal}</Text>
                     </View>
                     <View style={tw`flex flex-row items-center justify-between py-3 border-b border-gray-300`}>
                         <Text style={tw`text-black text-xl`}>Shipping</Text>
