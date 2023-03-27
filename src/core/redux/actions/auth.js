@@ -50,3 +50,25 @@ export const logout = () => {
         type: TYPES.LOGOUT,
     }
 }
+
+// Register
+export const GetUserStart = (payload) => {
+    return {
+        type: TYPES.GET_USER_START,
+        payload
+    }
+}
+
+export const GetUserSuccess = (payload) => {
+    return {
+        type: TYPES.GET_USER_SUCCESS,
+        payload
+    }
+}
+
+export const GetUserFailure = (error) => {
+    return {
+        type: TYPES.GET_USER_FAILURE,
+        error: error
+    }
+}

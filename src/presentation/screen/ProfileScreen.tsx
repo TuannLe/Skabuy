@@ -5,17 +5,24 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from "react-redux";
+import * as ACT_AUTH from '../../core/redux/actions/auth'
 import MyOrder from '../navigation/MyOrder';
 import { COLOR } from '../constants'
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
     const data = [
         {
             'name': 'hahah'
         }
     ]
+    const handleLogout = () => {
+        dispatch(ACT_AUTH.logout())
+    }
+    const infoUser = useSelector((state: any) => state.auth.infoUser)
     return (
         <SafeAreaView style={tw`flex w-full h-full`}>
             <View style={tw`bg-[${COLOR.PRIMARY}] px-3`}>
@@ -31,10 +38,16 @@ export default function ProfileScreen() {
                     >
                         <Feather name='shopping-cart' style={tw`text-2xl text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={handleLogout}
+                        style={tw`p-3`}
+                    >
+                        <Ionicons name='ios-exit-outline' size={28} style={tw`text-[${COLOR.WHITE}]`} />
+                    </TouchableOpacity>
                 </View>
                 <View style={tw`mb-3`}>
-                    <Text style={tw`text-2xl text-[${COLOR.WHITE}] font-bold`}>username</Text>
-                    <Text style={tw`text-xl text-[${COLOR.WHITE}] font-medium`}>Email</Text>
+                    <Text style={tw`text-2xl text-[${COLOR.WHITE}] font-bold`}>{infoUser.user_fullname}</Text>
+                    <Text style={tw`text-xl text-[${COLOR.WHITE}] font-medium`}>{infoUser.user_email}</Text>
                 </View>
             </View>
             <View style={tw`mt-3 bg-white`}>

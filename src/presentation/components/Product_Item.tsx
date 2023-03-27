@@ -12,7 +12,7 @@ export default function Product_Item({ item }: any) {
 
     return (
         <TouchableOpacity
-            style={tw`w-[${(WIDTH - 45) / 3}px] h-full p-2 border mx-1 border-gray-100 bg-white`}
+            style={tw`w-[${(WIDTH - 45) / 3}px] p-2 border mx-1 mt-2 border-gray-100 bg-white`}
             onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}>
             <Image
                 source={{ uri: item.product_image }}

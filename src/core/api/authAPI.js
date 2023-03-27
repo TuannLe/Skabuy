@@ -27,11 +27,7 @@ export const register = async (payload) => {
 
 export const getUser = async (payload) => {
     try {
-        const res = await AXIOS.post(`${url}/getUser`, payload, {
-            headers: {
-                'token': `Bearer ${payload.token}`
-            }
-        })
+        const res = await AXIOS.post(`${url}/getUser`, payload)
         return res
     } catch (error) {
         return error

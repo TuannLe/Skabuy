@@ -5,6 +5,7 @@ import tw from 'twrnc'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from '@react-navigation/native';
 import * as ACT_PRODUCT from '../../core/redux/actions/product'
+import * as ACT_AUTH from '../../core/redux/actions/auth'
 import Header from '../components/Header'
 import Carousel_product from '../components/Carousel_product';
 import Slider from '../components/Slider';
@@ -20,6 +21,7 @@ const image_banner = [
 export default function HomeScreen() {
   const dispatch = useDispatch()
   const navigation = useNavigation();
+  const token = useSelector((state: any) => state.auth.token)
   const [promotional, setPromotional] = useState([]);
   const [topProduct, setTopProduct] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
@@ -55,6 +57,16 @@ export default function HomeScreen() {
     dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
     navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN)
   }
+
+  const getInfoUser = () => {
+    if (token != '') {
+      dispatch(ACT_AUTH.GetUserStart({ token: JSON.parse(token) }))
+    }
+  }
+
+  useEffect(() => {
+    getInfoUser();
+  }, [token])
 
   useEffect(() => {
     getPromotionalProducts();

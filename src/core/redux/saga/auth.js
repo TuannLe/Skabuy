@@ -23,7 +23,7 @@ function* registerSaga(action) {
         const res = yield call(apis.register, action.payload)
         console.log(res)
         if (res) {
-            console.log('Register succeeded')
+            console.log('Register success')
             yield put(actions.RegisterSuccess(res.data))
         }
     } catch (error) {
@@ -32,9 +32,24 @@ function* registerSaga(action) {
     }
 }
 
+function* getUserSaga(action) {
+    try {
+        console.log('running...')
+        const res = yield call(apis.getUser, action.payload)
+        if (res.status === 200) {
+            console.log('get user success')
+            yield put(actions.GetUserSuccess(res.data[0]))
+        }
+    } catch (error) {
+        console.log(error)
+        yield put(actions.GetUserFailure(error))
+    }
+}
+
 const authSaga = [
     // takeLatest(TYPES.LOG_IN_START, fetchLoginSaga),
     takeLatest(TYPES.REGISTER_START, registerSaga),
+    takeLatest(TYPES.GET_USER_START, getUserSaga)
 ]
 
 export default authSaga

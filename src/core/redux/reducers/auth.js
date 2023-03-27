@@ -3,11 +3,7 @@ import * as TYPES from '../constants/auth'
 
 export default function authReducers(state = INIT_STATE.auth, action) {
     switch (action.type) {
-        // case TYPES.LOG_IN_START:
-        //     return {
-        //         ...state,
-        //         isLoading: true,
-        //     }
+        // login
         case TYPES.LOG_IN_SUCCESS:
             return {
                 ...state,
@@ -16,12 +12,7 @@ export default function authReducers(state = INIT_STATE.auth, action) {
                 isLoading: false,
                 error: false
             }
-        // case TYPES.LOG_IN_FAILURE:
-        //     return {
-        //         ...state,
-        //         isLoading: false,
-        //         error: true
-        //     }
+        // register
         case TYPES.REGISTER_START:
             return {
                 ...state,
@@ -41,10 +32,31 @@ export default function authReducers(state = INIT_STATE.auth, action) {
                 isLoading: false,
                 error: true
             }
+        // get user
+        case TYPES.GET_USER_START:
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case TYPES.GET_USER_SUCCESS:
+            return {
+                ...state,
+                infoUser: action.payload,
+                isLoading: false,
+                error: false
+            }
+        case TYPES.GET_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: true
+            }
+        // log out
         case TYPES.LOGOUT:
             return {
                 ...state,
-                currentUser: {}
+                currentUser: {},
+                token: ''
             }
         default:
             return state

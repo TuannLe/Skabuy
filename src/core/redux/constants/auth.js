@@ -8,5 +8,10 @@ export const REGISTER_START = "REGISTER_START"
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS"
 export const REGISTER_FAILURE = "REGISTER_FAILURE"
 
+// get User
+export const GET_USER_START = "GET_USER_START"
+export const GET_USER_SUCCESS = "GET_USER_SUCCESS"
+export const GET_USER_FAILURE = "GET_USER_FAILURE"
+
 // Logout
 export const LOGOUT = "LOGOUT"

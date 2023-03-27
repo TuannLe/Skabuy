@@ -10,7 +10,6 @@ export default function productReducers(state = INIT_STATE.product, action) {
                 isLoading: true,
             }
         case TYPES.GET_PRODUCT_BY_CATEGORY_SUCCESS:
-            console.log(action.payload.data)
             return {
                 ...state,
                 isLoading: false,

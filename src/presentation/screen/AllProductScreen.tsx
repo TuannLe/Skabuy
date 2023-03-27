@@ -16,15 +16,15 @@ export default function AllProductScreen() {
     }
 
     return (
-        <View style={tw`flex w-full h-full bg-black`}>
+        <View style={tw`flex w-full h-full`}>
             <Header />
             <View style={tw`flex-1 px-3`}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={handleVisible}
                     style={tw`p-2.5 w-24 border border-gray-300 rounded-lg my-5`}
                 >
                     <Text style={tw`text-xl text-[${COLOR.PRIMARY}] text-center font-medium`}>Filter</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {
                     ArrayProduct?.length
                         ? (

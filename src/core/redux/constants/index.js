@@ -2,6 +2,7 @@ export const INIT_STATE = {
     auth: {
         currentUser: {},
         token: '',
+        infoUser: {},
         isLoading: false,
         error: false
     },
