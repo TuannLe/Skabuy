@@ -7,10 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import ItemCart from '../components/ItemCart'
 import { COLOR } from '../constants'
 import { Picker } from '@react-native-picker/picker';
+import PhoneInput from 'react-native-phone-input'
 
 export default function ProcessScreen({ navigation }: any) {
 
     const [selectedValue, setSelectedValue] = useState("");
+    const userRedux = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if(userRedux){
+            setSelectedValue(userRedux.currentUser.user_gender)
+        }
+        console.log(userRedux.currentUser)
+      }, []);
 
     return (
         <View style={tw`relative w-full h-full font-sans`}>
@@ -32,16 +41,17 @@ export default function ProcessScreen({ navigation }: any) {
                         <TextInput 
                             style={tw`border rounded border-[#b1becb] p-2 mb-2`}
                             placeholder={"Full name"}
+                            value={userRedux.currentUser.user_fullname}
                         />
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
-                        <View style={tw`border rounded border-[#b1becb] h-12 justify-center mb-2`}>
+                        <View style={tw`border rounded border-[#b1becb] h-11 justify-center mb-2`}>
                             <Picker
                                 selectedValue={selectedValue}
                                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue) }
                             >
                                 <Picker.Item label="-- Gender --"/>
-                                <Picker.Item label="Male" value="Male" />
-                                <Picker.Item label="Female" value="Female" />
+                                <Picker.Item label="Male" value="male" />
+                                <Picker.Item label="Female" value="female" />
                             </Picker>
                         </View>
 
@@ -72,15 +82,19 @@ export default function ProcessScreen({ navigation }: any) {
                         />
 
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Phone Number</Text>
-                        <TextInput 
-                            style={tw`border rounded border-[#b1becb] p-2 mb-2`}
-                            placeholder={"Phone number"}
-                        />
+                        <View style={tw`border rounded border-[#b1becb] h-11 justify-center mb-2 text-black`}>
+                            <PhoneInput
+                                ref={(ref) => { this.phone = ref; }}
+                                onPressFlag={this.onPressFlag}
+                                initialCountry={'us'}
+                                initialValue={userRedux.currentUser.user_phone_number}
+                                textProps={{
+                                    placeholder: 'Enter a phone number...'
+                                }}
+                            />
+                        </View>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>E-mail</Text>
-                        <TextInput 
-                            style={tw`border rounded border-[#b1becb] p-2 mb-30`}
-                            placeholder={"E-mail"}
-                        />
+                        <Text style={tw`border rounded border-[#b1becb] p-3 mb-30 text-base text-black`}>{userRedux.currentUser.user_email}</Text>
                     </View>
                 </View>
             </ScrollView>
