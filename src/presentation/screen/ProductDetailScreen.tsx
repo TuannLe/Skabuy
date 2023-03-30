@@ -84,10 +84,10 @@ export default function ProductDetailScreen({ route, navigation }: any) {
         getProductBySlug();
     }, []);
 
-    const token = 'hahah'
+    const token = useSelector((state: any) => state.auth.token)
 
     const addItemToCart = () => {
-        if (token != undefined && token != null) {
+        if (token != '') {
             if (selectedCharacteristics === undefined) {
                 setWarn("Please select enough product characteristics");
             } else {
@@ -114,6 +114,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 dispatch(ACT_CART.AddItemCart(product_current));
             }
         } else {
+            navigation.navigate(ROUTER.LOGIN)
             setWarn("You need to be logged in to perform this action");
         }
     }
@@ -212,10 +213,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                                     </View>
                                 );
                             })}
-                            {/* <ButtonGroup
-                            buttons={Options}
-                            doSomethingsAfterClick={changeColorBorder}
-                        /> */}
                         </View>
                         <View>
                             <Text style={tw`text-base`}>

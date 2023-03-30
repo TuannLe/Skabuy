@@ -18,19 +18,6 @@ export default function LoginScreen() {
     const [loginWarn, setLoginWarn] = useState('');
     const [color, setColor] = useState('');
 
-    const handleLogin = () => {
-        if (!payload.user_email) {
-            setLoginWarn(`Please enter your email`)
-            setColor('yellow')
-        }
-        else if (!payload.password) {
-            setLoginWarn(`Please enter your password`)
-            setColor('red')
-        } else {
-            dispatch(ACTIONS.LoginStart({ user_email: payload.user_email, password: payload.password }))
-        }
-    }
-
     const onLoginHandler = async () => {
         if (!payload.user_email) {
             setColor('red')
@@ -52,7 +39,7 @@ export default function LoginScreen() {
                         dispatch(ACTIONS.LoginSuccess({ token: JSON.stringify(response.token), data: response.data }));
                         setColor('green')
                         setLoginWarn("Login successful");
-                        // navigate("/");
+                        navigation.navigate(ROUTER.PROFILE_TAB)
                         break;
                     case 1:
                         setColor('red')

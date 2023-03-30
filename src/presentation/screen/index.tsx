@@ -7,6 +7,10 @@ import ProfileScreen from './ProfileScreen';
 import RegisterScreen from './RegisterScreen';
 import VerifyCodeScreen from './VerifyCodeScreen';
 import AllProductScreen from './AllProductScreen';
+import WebViewScreen from './WebViewScreen';
+import ProductDetailScreen from './ProductDetailScreen';
+import ProcessScreen from './ProcessScreen';
+import FilterScreen from './FilterScreen';
 
 export {
     CartScreen,
@@ -17,5 +21,9 @@ export {
     ProfileScreen,
     RegisterScreen,
     VerifyCodeScreen,
-    AllProductScreen
+    AllProductScreen,
+    WebViewScreen,
+    ProductDetailScreen,
+    ProcessScreen,
+    FilterScreen
 };

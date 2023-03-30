@@ -7,12 +7,15 @@ import {
     RegisterScreen,
     CategoryScreen,
     VerifyCodeScreen,
-    AllProductScreen
+    AllProductScreen,
+    ProductDetailScreen,
+    ProcessScreen,
+    WebViewScreen,
+    FilterScreen
+
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
-import ProductDetailScreen from '../screen/ProductDetailScreen'
-import ProcessScreen from '../screen/ProcessScreen'
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -66,6 +69,16 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.PROCESS_SCREEN}
                 component={ProcessScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.WEBVIEW_SCREEN}
+                component={WebViewScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.FILTER_SCREEN}
+                component={FilterScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

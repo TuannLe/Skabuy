@@ -46,8 +46,8 @@ export default function ProfileScreen() {
                     </TouchableOpacity>
                 </View>
                 <View style={tw`mb-3`}>
-                    <Text style={tw`text-2xl text-[${COLOR.WHITE}] font-bold`}>{infoUser.user_fullname}</Text>
-                    <Text style={tw`text-xl text-[${COLOR.WHITE}] font-medium`}>{infoUser.user_email}</Text>
+                    <Text style={tw`text-2xl text-[${COLOR.WHITE}] font-bold`}>{infoUser?.user_fullname}</Text>
+                    <Text style={tw`text-xl text-[${COLOR.WHITE}] font-medium`}>{infoUser?.user_email}</Text>
                 </View>
             </View>
             <View style={tw`mt-3 bg-white`}>

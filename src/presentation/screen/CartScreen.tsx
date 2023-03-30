@@ -8,18 +8,62 @@ import { useNavigation } from '@react-navigation/native';
 import {
     discountPrice,
     calculateTotalPrice,
+    getVoucherStatus
 } from "../../util/helper";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import ItemCart from '../components/ItemCart'
 import { ROUTER, COLOR } from '../constants'
+import { onApplyVoucher } from '../../core/api/cartAPI'
 
 export default function CartScreen({ navigation }: any) {
     const dispatch = useDispatch()
+    const navigation1 = useNavigation();
     const [isSelected, setSelection] = useState(false);
     const [subTotal, setSubTotal] = useState(0)
     const [total, setTotal] = useState(0)
-    const navigation1 = useNavigation();
+    const [warn, setWarn] = useState('')
+    const [voucherCode, setVoucherCode] = useState('');
+    const [voucherInfor, setVoucherInfor] = useState();
+    const [applied, setApplied] = useState(false);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
+
+    const handleChangeQuantity = (quantity: any, productID: any) => {
+        if (quantity > 0) {
+            dispatch(ACT_CART.ChangeQuantity({ quantity, productID }))
+            loadTotalPayment()
+        } else {
+            console.log('hoh')
+        }
+    }
+
+    const onApplyVoucherHandler = async () => {
+        if (applied) {
+            setWarn("You have used one voucher");
+        } else {
+            const response = await onApplyVoucher(voucherCode)
+            setVoucherInfor(response);
+            if (response.status === 3) {
+                setTotal(
+                    discountPrice(subTotal, response.voucher_infor.discount)
+                );
+                setApplied(true);
+            } else {
+                setWarn(getVoucherStatus(response.status));
+            }
+        }
+    };
+
+    const loadTotalPayment = () => {
+        setSubTotal(calculateTotalPrice(ArrayProduct));
+    };
+
+    useEffect(() => {
+        setTotal(subTotal);
+    }, [subTotal]);
+
+    useEffect(() => {
+        loadTotalPayment();
+    }, [ArrayProduct]);
 
     const showConfirmDialog = () => {
         return Alert.alert(
@@ -43,27 +87,6 @@ export default function CartScreen({ navigation }: any) {
         )
     }
 
-    const handleChangeQuantity = (quantity: any, productID: any) => {
-        if (quantity > 0) {
-            dispatch(ACT_CART.ChangeQuantity({ quantity, productID }))
-            loadTotalPayment()
-        } else {
-            console.log('hoh')
-        }
-    }
-
-    const loadTotalPayment = () => {
-        setSubTotal(calculateTotalPrice(ArrayProduct));
-    };
-
-    useEffect(() => {
-        setTotal(subTotal);
-    }, [subTotal]);
-
-    useEffect(() => {
-        loadTotalPayment();
-    }, [ArrayProduct]);
-
     const handleDelete = () => {
         showConfirmDialog()
     }
@@ -77,7 +100,7 @@ export default function CartScreen({ navigation }: any) {
                 >
                     <FontAwesome name="angle-left" style={tw`text-white text-4xl`} />
                 </TouchableOpacity>
-                <Text style={tw`flex-1 text-2xl font-bold text-white text-center`}>Cart</Text>
+                <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Cart</Text>
             </View>
             <View style={tw`flex flex-row items-center justify-between bg-white pl-3 mt-3`}>
                 <CheckBox
@@ -120,18 +143,26 @@ export default function CartScreen({ navigation }: any) {
             {/* <ScrollView style={tw`mb-78`}>
             
             </ScrollView> */}
-            <View style={tw`absolute bg-gray-100 bottom-0 left-0 right-0 h-78`}>
+            <View style={tw`absolute bg-gray-100 bottom-0 left-0 right-0 ${warn ? (`h-83`) : ('h-78')}`}>
                 <View style={tw`flex flex-row my-1`}>
                     <TextInput
                         placeholder="Voucher code..."
                         style={tw`flex-1 p-3 text-lg bg-white`}
+                        value={voucherCode}
+                        onChangeText={val => setVoucherCode(val)}
                     />
                     <TouchableOpacity
+                        onPress={onApplyVoucherHandler}
                         style={tw`p-3 bg-[${COLOR.PRIMARY}]`}
                     >
                         <Text style={tw`text-white text-lg font-medium`}>Apply voucher</Text>
                     </TouchableOpacity>
                 </View>
+                {warn ? (
+                    <Text style={tw`text-base text-red-600 bg-white px-3`}>*{warn}</Text>
+                ) : (
+                    <></>
+                )}
                 <View style={tw`h-full bg-white px-3`}>
                     <Text style={tw`text-3xl text-black font-medium mb-3`}>Cart Summary</Text>
                     <View style={tw`flex flex-row items-center justify-between`}>

@@ -11,6 +11,7 @@ export const INIT_STATE = {
     },
     product: {
         productsByCategory: [],
+        attributes: {},
         isLoading: false,
         error: false
     }

@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
+import * as ACT_CART from '../../core/redux/actions/cart'
 
 export default function ItemCart({ handleChangeQuantity, data }: any) {
     const dispatch = useDispatch()

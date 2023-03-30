@@ -23,3 +23,29 @@ export const getProductByCategory = async (payload) => {
         return error
     }
 }
+
+export const getAttributeByCategory = async (payload) => {
+    try {
+        const res = await AXIOS.get(`${url}/getAttributeByCategoryID/${payload}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res
+    } catch (error) {
+        return error
+    }
+}
+
+export const getProductsWithFilter = async (payload) => {
+    try {
+        const res = await AXIOS.get(`${url}/getProductsWithFilter/${payload}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
+    } catch (error) {
+        return error
+    }
+}

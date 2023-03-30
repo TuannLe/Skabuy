@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { ROUTER } from '../constants';
 import BottomNavigator from './BottomNavigator';
-import { AllProductScreen, ProfileScreen } from '../screen';
+import { AllProductScreen } from '../screen';
 
 const Drawer = createDrawerNavigator();
 

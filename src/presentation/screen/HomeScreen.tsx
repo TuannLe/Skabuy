@@ -55,7 +55,8 @@ export default function HomeScreen() {
 
   const handleGetProductByCategory = (IDCategory: any) => {
     dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
-    navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN)
+    dispatch(ACT_PRODUCT.GetAttributeByCategoryStart(IDCategory))
+    navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN, { IDCategory: IDCategory })
   }
 
   const getInfoUser = () => {

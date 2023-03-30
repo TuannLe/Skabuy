@@ -16,8 +16,22 @@ function* getProductByCategory(action) {
     }
 }
 
+function* getAttributeByCategory(action) {
+    try {
+        console.log('running...')
+        const res = yield call(apis.getAttributeByCategory, action.payload)
+        if (res.status === 200) {
+            console.log("Get attribute by category success")
+            yield put(actions.GetAttributeByCategorySuccess(res.data.data))
+        }
+    } catch (error) {
+        yield put(actions.GetProductByCategoryFailure(error))
+    }
+}
+
 const productSaga = [
     takeLatest(TYPES.GET_PRODUCT_BY_CATEGORY_START, getProductByCategory),
+    takeLatest(TYPES.GET_ATTRIBUTE_BY_CATEGORY_START, getAttributeByCategory),
 ]
 
 export default productSaga

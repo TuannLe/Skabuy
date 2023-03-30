@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Foundation from 'react-native-vector-icons/Foundation'
 import { useDispatch, useSelector } from "react-redux";
 import { HomeScreen, FavoriteScreen, ProfileScreen, LoginScreen } from '../screen'
+import { ROUTER } from '../constants'
 
 export default function BottomNavigator() {
     const BottomTab = createBottomTabNavigator();
@@ -48,7 +49,7 @@ export default function BottomNavigator() {
             />
             {token ? (
                 <BottomTab.Screen
-                    name='ProfileTab'
+                    name={ROUTER.PROFILE_TAB}
                     component={ProfileScreen}
                     options={{
                         headerShown: false,

@@ -20,6 +20,24 @@ export default function productReducers(state = INIT_STATE.product, action) {
                 ...state,
                 error: true
             }
+
+        // Get attribute by category
+        case TYPES.GET_ATTRIBUTE_BY_CATEGORY_START:
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case TYPES.GET_ATTRIBUTE_BY_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                attributes: action.payload
+            }
+        case TYPES.GET_ATTRIBUTE_BY_CATEGORY_FAILURE:
+            return {
+                ...state,
+                error: true
+            }
         default:
             return state
     }

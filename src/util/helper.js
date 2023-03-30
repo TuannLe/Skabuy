@@ -18,3 +18,43 @@ export const calculateTotalPrice = (cart) => {
     }
     return total;
 };
+
+export const getVoucherStatus = (id) => {
+    switch (id) {
+        case 0:
+            return "Invalid voucher";
+        case 1:
+            return "It's not time to use the voucher yet";
+        case 2:
+            return "Expired voucher";
+        case 3:
+            return "Successfully applied voucher";
+        case 4:
+            return "Voucher is out";
+        default:
+            return ""
+            break;
+    }
+};
+
+export const divPriceToArray = (maximum) => {
+    var maximum_price = maximum;
+    const convert_const = Math.pow(10, Math.floor(Math.log10(maximum_price)));
+    maximum_price = Math.round(maximum_price / convert_const) * convert_const;
+    const step = maximum_price / 4;
+    var price_arr = [];
+    for (let index = 0; index <= maximum_price; index += step) {
+        if (index + step >= maximum_price) {
+            price_arr.push({
+                text: `Over $${index}`,
+                data: { min: index, max: 0 },
+            });
+            break;
+        }
+        price_arr.push({
+            text: `$${index} - $${index + step}`,
+            data: { min: index, max: index + step },
+        });
+    }
+    return price_arr;
+};
