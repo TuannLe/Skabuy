@@ -7,30 +7,46 @@ import { Picker } from '@react-native-picker/picker';
 import PhoneInput from 'react-native-phone-input'
 import { ROUTER, COLOR } from '../constants'
 
-export default function ProcessScreen({ navigation }: any) {
+export default function ProcessScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
-    const [user_email, setEmail] = useState('')
-    const [fullName, setFullName] = useState("")
-    const [selectedGender, setSelectedGender] = useState("")
-    const [street, setStreet] = useState("")
-    const [apt, setApt] = useState("")
-    const [city, setCity] = useState("")
-    const [state, setState] = useState("")
-    const [zipCode, setZipCode] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
+    console.log(userRedux)
+    const { subTotal, total } = route.params
+    // const [user_email, setEmail] = useState('')
+    // const [fullName, setFullName] = useState("")
+    // const [selectedGender, setSelectedGender] = useState("")
+    // const [street, setStreet] = useState("")
+    // const [apt, setApt] = useState("")
+    // const [city, setCity] = useState("")
+    // const [state, setState] = useState("")
+    // const [zipCode, setZipCode] = useState("")
+    // const [phoneNumber, setPhoneNumber] = useState("")
 
-    useEffect(() => {
-        if (userRedux) {
-            setEmail(userRedux.user_email)
-            setFullName(userRedux.user_fullname)
-            setSelectedGender(userRedux.user_gender)
-            setStreet(userRedux.user_address)
-            setPhoneNumber(userRedux.user_phone_number)
-        }
-    }, []);
+    const [userInfor, setUserInfor] = useState({
+        user_id: userRedux?.user_id,
+        user_fullname: userRedux?.user_fullname,
+        user_apt: '',
+        user_city: '',
+        user_state: '',
+        user_zipCode: '',
+        user_email: userRedux?.user_email,
+        user_phone_number: userRedux?.user_phone_number,
+        user_address: userRedux?.user_address,
+        user_gender: userRedux?.user_gender,
+        user_date_of_birth: userRedux?.user_date_of_birth,
+    });
+
+    // useEffect(() => {
+    //         if (userRedux) {
+    //             setEmail(userRedux.user_email)
+    //             setFullName(userRedux.user_fullname)
+    //             setSelectedGender(userRedux.user_gender)
+    //             setStreet(userRedux.user_address)
+    //             setPhoneNumber(userRedux.user_phone_number)
+    //         }
+    //     }, []);
 
     const handleCheckout = () => {
-        navigation.navigate(ROUTER.WEBVIEW_SCREEN)
+        navigation.navigate(ROUTER.PAYMENT_DETAIL_SCREEN, { userInfor: userInfor, total: total, subTotal: subTotal })
     }
 
     return (
@@ -54,16 +70,22 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Full name"}
-                                value={fullName}
-                                onChangeText={val => setFullName(val)}
+                                value={userInfor.user_fullname}
+                                onChangeText={(val: any) => setUserInfor((current) => ({
+                                    ...current,
+                                    user_fullname: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
                             <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
                                 <Picker
-                                    selectedValue={selectedGender}
-                                    onValueChange={(itemValue, itemIndex) => setSelectedGender(itemValue)}
+                                    selectedValue={userInfor.user_gender}
+                                    onValueChange={(itemValue, itemIndex) => setUserInfor((current) => ({
+                                        ...current,
+                                        user_gender: itemValue,
+                                    }))}
                                 >
                                     <Picker.Item label="-- Gender --" />
                                     <Picker.Item label="Male" value="male" />
@@ -76,8 +98,11 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Street address"}
-                                value={street}
-                                onChangeText={val => setStreet(val)}
+                                value={userInfor.user_address}
+                                onChangeText={val => setUserInfor((current) => ({
+                                    ...current,
+                                    user_address: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -85,7 +110,11 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Apt., ste., bldg."}
-                                onChangeText={val => setApt(val)}
+                                value={userInfor.user_apt}
+                                onChangeText={val => setUserInfor((current) => ({
+                                    ...current,
+                                    user_apt: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -93,7 +122,11 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"City"}
-                                onChangeText={val => setCity(val)}
+                                value={userInfor.user_city}
+                                onChangeText={val => setUserInfor((current) => ({
+                                    ...current,
+                                    user_city: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -101,7 +134,11 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"State"}
-                                onChangeText={val => setState(val)}
+                                value={userInfor.user_state}
+                                onChangeText={val => setUserInfor((current) => ({
+                                    ...current,
+                                    user_state: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -109,7 +146,11 @@ export default function ProcessScreen({ navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"ZIP code"}
-                                onChangeText={val => setZipCode(val)}
+                                value={userInfor.user_zipCode}
+                                onChangeText={val => setUserInfor((current) => ({
+                                    ...current,
+                                    user_zipCode: val,
+                                }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -119,8 +160,11 @@ export default function ProcessScreen({ navigation }: any) {
                                     ref={(ref) => { this.phone = ref }}
                                     onPressFlag={this.onPressFlag}
                                     initialCountry={'us'}
-                                    initialValue={phoneNumber}
-                                    onChangePhoneNumber={val => setPhoneNumber(val)}
+                                    // initialValue={userInfor.user_phone_number}
+                                    onChangePhoneNumber={val => setUserInfor((current) => ({
+                                        ...current,
+                                        user_phone_number: val,
+                                    }))}
                                     textProps={{
                                         placeholder: 'Enter a phone number...'
                                     }}
@@ -132,7 +176,7 @@ export default function ProcessScreen({ navigation }: any) {
                             <View
                                 style={tw`border border-[#b1becb] px-2 py-3 text-base text-black bg-gray-200 rounded`}
                             >
-                                <Text style={tw`text-base text-black`}>{user_email}</Text>
+                                <Text style={tw`text-base text-black`}>{userInfor.user_email}</Text>
                             </View>
                         </View>
                     </View>

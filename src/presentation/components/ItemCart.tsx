@@ -5,6 +5,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
+import {
+    formatNumber
+} from "../../util/helper";
 import * as ACT_CART from '../../core/redux/actions/cart'
 
 export default function ItemCart({ handleChangeQuantity, data }: any) {
@@ -62,8 +65,8 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                 </Text>
                 <Text numberOfLines={1} style={tw`text-base`}>{data.characteristics.values}</Text>
                 <View style={tw`flex flex-row items-center`}>
-                    <Text style={tw`text-2xl line-through mr-2`}>${data.price}</Text>
-                    <Text style={tw`text-2xl text-red-600 font-bold`}>${data.totalprice}$</Text>
+                    <Text style={tw`text-2xl line-through mr-2`}>{formatNumber(data.price)}</Text>
+                    <Text style={tw`text-2xl text-red-600 font-bold`}>{formatNumber(data.totalprice)}$</Text>
                 </View>
                 <View style={tw`flex-row h-10 mt-3`}>
                     <TouchableOpacity

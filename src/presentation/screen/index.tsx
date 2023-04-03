@@ -11,6 +11,7 @@ import WebViewScreen from './WebViewScreen';
 import ProductDetailScreen from './ProductDetailScreen';
 import ProcessScreen from './ProcessScreen';
 import FilterScreen from './FilterScreen';
+import PaymentDetail from './PaymentDetail';
 
 export {
     CartScreen,
@@ -25,5 +26,6 @@ export {
     WebViewScreen,
     ProductDetailScreen,
     ProcessScreen,
-    FilterScreen
+    FilterScreen,
+    PaymentDetail
 };

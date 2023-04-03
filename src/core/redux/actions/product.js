@@ -43,3 +43,26 @@ export const GetAttributeByCategoryFailure = (payload) => {
         payload
     }
 }
+
+
+// Get attribute by category
+export const getProductsWithFilterStart = (payload) => {
+    return {
+        type: TYPES.GET_PRODUCT_WITH_FILTER_START,
+        payload
+    }
+}
+
+export const getProductsWithFilterSuccess = (payload) => {
+    return {
+        type: TYPES.GET_PRODUCT_WITH_FILTER_SUCCESS,
+        payload
+    }
+}
+
+export const getProductsWithFilterFailure = (payload) => {
+    return {
+        type: TYPES.GET_PRODUCT_WITH_FILTER_FAILURE,
+        payload
+    }
+}

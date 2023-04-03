@@ -15,5 +15,6 @@ export default {
     PRODUCT_DETAILS: 'Product Details',
     PROCESS_SCREEN: 'Process Screen',
     WEBVIEW_SCREEN: 'Web View Screen',
-    FILTER_SCREEN: 'Filter Screen'
+    FILTER_SCREEN: 'Filter Screen',
+    PAYMENT_DETAIL_SCREEN: 'PAYMENT_DETAIL Screen'
 };

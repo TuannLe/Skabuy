@@ -8,7 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import {
     discountPrice,
     calculateTotalPrice,
-    getVoucherStatus
+    getVoucherStatus,
+    formatNumber
 } from "../../util/helper";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import ItemCart from '../components/ItemCart'
@@ -167,7 +168,7 @@ export default function CartScreen({ navigation }: any) {
                     <Text style={tw`text-3xl text-black font-medium mb-3`}>Cart Summary</Text>
                     <View style={tw`flex flex-row items-center justify-between`}>
                         <Text style={tw`text-black text-xl`}>Subtotal</Text>
-                        <Text style={tw`text-black text-xl font-medium`}>${subTotal}</Text>
+                        <Text style={tw`text-black text-xl font-medium`}>{formatNumber(subTotal)}</Text>
                     </View>
                     <View style={tw`flex flex-row items-center justify-between py-3 border-b border-gray-300`}>
                         <Text style={tw`text-black text-xl`}>Shipping</Text>
@@ -175,11 +176,11 @@ export default function CartScreen({ navigation }: any) {
                     </View>
                     <View style={tw`flex flex-row items-center justify-between mt-3`}>
                         <Text style={tw`text-black text-3xl font-medium`}>Total</Text>
-                        <Text style={tw`text-red-600 text-3xl font-medium`}>${total}</Text>
+                        <Text style={tw`text-red-600 text-3xl font-medium`}>{formatNumber(total)}</Text>
                     </View>
                     <TouchableOpacity
                         style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
-                        onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN)}
+                        onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal })}
                     >
                         <Text style={tw`text-white text-xl font-medium text-center `}>Proceed To Checkout</Text>
                     </TouchableOpacity>

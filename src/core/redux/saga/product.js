@@ -29,9 +29,23 @@ function* getAttributeByCategory(action) {
     }
 }
 
+function* getProductsWithFilter(action) {
+    try {
+        console.log('running...')
+        const res = yield call(apis.getProductsWithFilter, action.payload)
+        if (res.status === 200) {
+            console.log("Get product with filter success")
+            yield put(actions.getProductsWithFilterSuccess(res.data.data))
+        }
+    } catch (error) {
+        yield put(actions.getProductsWithFilterFailure(error))
+    }
+}
+
 const productSaga = [
     takeLatest(TYPES.GET_PRODUCT_BY_CATEGORY_START, getProductByCategory),
     takeLatest(TYPES.GET_ATTRIBUTE_BY_CATEGORY_START, getAttributeByCategory),
+    takeLatest(TYPES.GET_PRODUCT_WITH_FILTER_START, getProductsWithFilter),
 ]
 
 export default productSaga
