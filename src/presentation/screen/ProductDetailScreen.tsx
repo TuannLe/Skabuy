@@ -33,6 +33,8 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const { slug, otherParam } = route.params;
     const [Product, setProduct] = useState([]);
     const [Options, setOptions] = useState([]);
+    const [Description, setDescription] = useState("");
+    const [Readmore, setReadmore] = useState(false);
     const [RelatedProduct, setRelatedProduct] = useState([]);
     const [formatDolla, setFormatDolla] = useState("");
     const [selectedCharacteristics, setSelectedCharacteristics] = useState();
@@ -55,6 +57,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
             setProduct(res.data.data)
             setFormatDolla((res.data.data.product_price))
+            setDescription(res.data.data.product_description.slice(3,200) + "...")
 
             const res1 = await AXIOS.get(`attribute/id/` + res.data.data.product_id);
             setOptions(res1.data.data);
@@ -72,6 +75,14 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 onChangeQuantity(quantity + 1)
             }
         }
+    }
+
+    const handleReadmore = () => {
+        setReadmore(true)
+    }
+
+    const handleReadless = () => {
+        setReadmore(false)
     }
 
     const handleMinus = () => {
@@ -296,7 +307,26 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <Text style={tw`border-b border-indigo-500`}></Text>
                     {/* <View style={tw`h-20`}>
                 </View> */}
-                    {/* <RenderHTML source={{ html: Product.product_description }} /> */}
+                {Readmore === false ? (
+                    <View>
+                        <RenderHTML source={{ html: Description }} />
+                        <TouchableOpacity
+                            onPress={() => handleReadmore()}
+                        >
+                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <View>
+                        <RenderHTML source={{ html: Product.product_description }} />
+                        <TouchableOpacity
+                            onPress={() => handleReadless()}
+                        >
+                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+                    
                 </View>
             </View>
         </ScrollView>
