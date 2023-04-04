@@ -77,14 +77,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
         }
     }
 
-    const handleReadmore = () => {
-        setReadmore(true)
-    }
-
-    const handleReadless = () => {
-        setReadmore(false)
-    }
-
     const handleMinus = () => {
         if (quantity > 0) {
             onChangeQuantity(quantity - 1)
@@ -311,7 +303,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <View>
                         <RenderHTML source={{ html: Description }} />
                         <TouchableOpacity
-                            onPress={() => handleReadmore()}
+                            onPress={() => setReadmore(true)}
                         >
                             <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
                         </TouchableOpacity>
@@ -320,7 +312,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <View>
                         <RenderHTML source={{ html: Product.product_description }} />
                         <TouchableOpacity
-                            onPress={() => handleReadless()}
+                            onPress={() => setReadmore(false)}
                         >
                             <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
                         </TouchableOpacity>
