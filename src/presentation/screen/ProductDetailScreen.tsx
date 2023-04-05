@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,6 +18,7 @@ import Header from '../components/Header'
 import ToolBar from '../components/ToolBar'
 import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
+import ItemReviews from '../components/ItemReviews';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -33,6 +34,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const { slug, otherParam } = route.params;
     const [Product, setProduct] = useState([]);
     const [Options, setOptions] = useState([]);
+    const [Comment, setComment] = useState([]);
     const [Description, setDescription] = useState("");
     const [Readmore, setReadmore] = useState(false);
     const [RelatedProduct, setRelatedProduct] = useState([]);
@@ -40,6 +42,9 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const [selectedCharacteristics, setSelectedCharacteristics] = useState();
     const [quantity, onChangeQuantity] = useState(0);
     const [warn, setWarn] = useState('')
+    const [value, onChangeText] = React.useState('');
+    
+    const infoUser = useSelector((state: any) => state.auth.infoUser)
 
     const image_product = [
         Product.product_image,
@@ -64,6 +69,9 @@ export default function ProductDetailScreen({ route, navigation }: any) {
 
             const res2 = await AXIOS.get(`product/related/` + res.data.data.category_id);
             setRelatedProduct(res2.data.data)
+
+            const res_comment = await AXIOS.get(`comment/product/` + res.data.data.product_id);
+            setComment(res_comment.data.data);
         } catch (error) {
             return error;
         }
@@ -290,15 +298,14 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     </View> */}
                     </View>
                 </View>
-                <View style={tw`mt-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
-                    <Carousel_product item={RelatedProduct} />
-                </View>
-                <View style={tw`mt-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
-                    <Text style={tw`border-b border-indigo-500`}></Text>
-                    {/* <View style={tw`h-20`}>
-                </View> */}
+            </View>
+            <View style={tw`mt-5 bg-white p-5`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
+                <Carousel_product item={RelatedProduct} />
+            </View>
+            <View style={tw`mt-5 bg-white p-5`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
+                <Text style={tw`border-b border-indigo-500`}></Text>
                 {Readmore === false ? (
                     <View>
                         <RenderHTML source={{ html: Description }} />
@@ -318,9 +325,41 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         </TouchableOpacity>
                     </View>
                 )}
-                    
-                </View>
             </View>
+            <View style={tw`mt-5 bg-white p-5`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Reviews (500)</Text>
+                <FlatList
+                    data={Comment}
+                    renderItem={({item, index, separators}) => <ItemReviews item={Comment[index]}/>}
+                />
+            </View>
+            {infoUser ?(
+                <View style={tw`mt-5 bg-white p-5`}>
+                    <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
+                    <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
+                    <View style={tw`flex flex-row items-center p-1`}>
+                        <Text style={tw`text-lg`}>Your Rating *: </Text>
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-half-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <Ionicons name='star-outline' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                    </View>
+                    <View style={tw`p-1`}>
+                        <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
+                        <TextInput
+                            editable
+                            multiline
+                            numberOfLines={4}
+                            maxLength={40}
+                            onChangeText={text => onChangeText(text)}
+                            value={value}
+                            style={tw`border border-blue-300`}
+                        />
+                    </View>
+                </View>
+            ) : (<></>)}
+
         </ScrollView>
     );
 }
