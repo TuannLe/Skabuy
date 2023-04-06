@@ -42,7 +42,8 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const [selectedCharacteristics, setSelectedCharacteristics] = useState();
     const [quantity, onChangeQuantity] = useState(0);
     const [warn, setWarn] = useState('')
-    const [value, onChangeText] = React.useState('');
+    const [valueComment, onChangeText] = React.useState('');
+    const [rating, setRating] = useState(5);
     
     const infoUser = useSelector((state: any) => state.auth.infoUser)
 
@@ -88,6 +89,48 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const handleMinus = () => {
         if (quantity > 0) {
             onChangeQuantity(quantity - 1)
+        }
+    }
+
+    function star() {
+        var myloop = [];
+        
+        for (let i = 1; i < 6; i++) {
+            myloop.push(
+                <TouchableOpacity onPress={() => setRating(i)} key={i}>
+                    <Ionicons 
+                        name={`${i <= rating ? "star-sharp" : "star-outline"}`} 
+                        style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
+                    />
+                </TouchableOpacity>
+            );
+        }
+    
+        return (
+            <View style={tw`flex-row`}>
+                {myloop}
+            </View>
+        );
+    }
+
+    const postComment = async () => {
+        try {
+            const postData = {
+                user_id: infoUser.user_id,
+                comment_content: valueComment,
+                comment_star: rating,
+                product_id: Product.product_id,
+            };
+            const res = await AXIOS.post(`comment/create`, postData, {headers:{"Content-Type" : "application/json"}}).then((result) => result.data);
+            if (res.status == "success") {
+                onChangeText("");
+                getProductBySlug();
+                setRating(5)
+            } else {
+                console.log("!regdffggfd23")
+            }
+        } catch (error) {
+            return error;
         }
     }
 
@@ -327,36 +370,38 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 )}
             </View>
             <View style={tw`mt-5 bg-white p-5`}>
-                <Text style={tw`text-3xl text-black font-medium`}>Reviews (500)</Text>
+                <Text style={tw`text-3xl text-black font-medium`}>Reviews {Comment.length}</Text>
                 <FlatList
                     data={Comment}
                     renderItem={({item, index, separators}) => <ItemReviews item={Comment[index]}/>}
                 />
             </View>
             {infoUser ?(
-                <View style={tw`mt-5 bg-white p-5`}>
+                <View style={tw`mt-1 bg-white p-5`}>
                     <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
                     <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
                     <View style={tw`flex flex-row items-center p-1`}>
                         <Text style={tw`text-lg`}>Your Rating *: </Text>
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-half-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-outline' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        {star()}
                     </View>
                     <View style={tw`p-1`}>
                         <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
                         <TextInput
                             editable
-                            multiline
+                            multiline = {true}
                             numberOfLines={4}
                             maxLength={40}
                             onChangeText={text => onChangeText(text)}
-                            value={value}
+                            value={valueComment}
                             style={tw`border border-blue-300`}
                         />
                     </View>
+                    <TouchableOpacity
+                        onPress={() => postComment()}
+                        style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                    >
+                        <Text style={tw`text-white text-xl font-medium text-center`}>Submit</Text>
+                    </TouchableOpacity>
                 </View>
             ) : (<></>)}
 

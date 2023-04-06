@@ -58,3 +58,21 @@ export const divPriceToArray = (maximum) => {
     }
     return price_arr;
 };
+
+export const formatdate = (date) => {
+    var d = new Date(date);
+  
+    return (
+      d.getHours() +
+      ":" +
+      d.getMinutes() +
+      ":" +
+      d.getSeconds() +
+      " " +
+      d.getDate() +
+      "-" +
+      (d.getMonth() + 1) +
+      "-" +
+      d.getFullYear() 
+    );
+  };

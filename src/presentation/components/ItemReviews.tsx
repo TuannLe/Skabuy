@@ -4,13 +4,32 @@ import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ROUTER, COLOR } from '../constants'
-import { formatNumber } from '../../util/helper';
+import { formatNumber, formatdate } from '../../util/helper';
 
 export default function ItemReviews({ item }: any) {
     const navigation = useNavigation();
     const WIDTH = Dimensions.get('window').width;
 
-    console.log(item)
+    function star() {
+        var myloop = [];
+        
+        for (let i = 0; i < 5; i++) {
+            myloop.push(
+                <View key={i}>
+                    <Ionicons 
+                        name={`${i < item.comment_star ? "star-sharp" : "star-outline"}`} 
+                        style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
+                    />
+                </View>
+            );
+        }
+    
+        return (
+            <View style={tw`flex-row`}>
+                {myloop}
+            </View>
+        );
+    }
 
     return (
         <View style={tw`flex-row`}>
@@ -22,13 +41,12 @@ export default function ItemReviews({ item }: any) {
                 />
             </View>
             <View style={tw`p-2`}>
-                <Text style={tw`font-bold`}>Admin - 20/12/2022</Text>
+                <View style={tw`flex-row`}>
+                    <Text style={tw`font-bold`}>{item.user_fullname} -</Text>
+                    <Text style={tw`italic`}> {formatdate(item.created_at)}</Text>
+                </View>
                 <View style={tw`flex flex-row items-center`}>
-                    <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                    <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                    <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                    <Ionicons name='star-half-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                    <Ionicons name='star-outline' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                    {star()}
                 </View>
                 <Text>{item.comment_content}</Text>
             </View>
