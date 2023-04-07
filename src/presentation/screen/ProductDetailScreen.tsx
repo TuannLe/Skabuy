@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -34,11 +34,17 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const { slug, otherParam } = route.params;
     const [Product, setProduct] = useState([]);
     const [Options, setOptions] = useState([]);
+    const [Comment, setComment] = useState([]);
+    const [Description, setDescription] = useState("");
+    const [Readmore, setReadmore] = useState(false);
     const [RelatedProduct, setRelatedProduct] = useState([]);
     const [formatDolla, setFormatDolla] = useState("");
     const [selectedCharacteristics, setSelectedCharacteristics] = useState();
     const [quantity, onChangeQuantity] = useState(0);
     const [warn, setWarn] = useState('')
+    const [valueComment, onChangeText] = React.useState('');
+    const [rating, setRating] = useState(5);
+    const infoUser = useSelector((state: any) => state.auth.infoUser)
 
     const image_product = [
         Product.product_image,
@@ -308,13 +314,64 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
                     <Carousel_product item={RelatedProduct} />
                 </View>
-                <View style={tw`mt-5`}>
+                <View style={tw`mt-5 bg-white p-5`}>
                     <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
                     <Text style={tw`border-b border-indigo-500`}></Text>
-                    {/* <View style={tw`h-20`}>
-                </View> */}
-                    {/* <RenderHTML source={{ html: Product.product_description }} /> */}
+                    {Readmore === false ? (
+                        <View>
+                            <RenderHTML source={{ html: Description }} />
+                            <TouchableOpacity
+                                onPress={() => setReadmore(true)}
+                            >
+                                <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : (
+                        <View>
+                            <RenderHTML source={{ html: Product.product_description }} />
+                            <TouchableOpacity
+                                onPress={() => setReadmore(false)}
+                            >
+                                <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
+                <View style={tw`mt-5 bg-white p-5`}>
+                    <Text style={tw`text-3xl text-black font-medium`}>Reviews {Comment.length}</Text>
+                    <FlatList
+                        data={Comment}
+                        renderItem={({ item, index, separators }) => <ItemReviews item={Comment[index]} />}
+                    />
+                </View>
+                {infoUser ? (
+                    <View style={tw`mt-1 bg-white p-5`}>
+                        <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
+                        <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
+                        <View style={tw`flex flex-row items-center p-1`}>
+                            <Text style={tw`text-lg`}>Your Rating *: </Text>
+                            {star()}
+                        </View>
+                        <View style={tw`p-1`}>
+                            <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
+                            <TextInput
+                                editable
+                                multiline={true}
+                                numberOfLines={4}
+                                maxLength={40}
+                                onChangeText={text => onChangeText(text)}
+                                value={valueComment}
+                                style={tw`border border-blue-300`}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => postComment()}
+                            style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                        >
+                            <Text style={tw`text-white text-xl font-medium text-center`}>Submit</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : (<></>)}
             </View>
         </ScrollView>
     );
