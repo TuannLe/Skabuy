@@ -12,18 +12,18 @@ export default function ItemReviews({ item }: any) {
 
     function star() {
         var myloop = [];
-        
+
         for (let i = 0; i < 5; i++) {
             myloop.push(
                 <View key={i}>
-                    <Ionicons 
-                        name={`${i < item.comment_star ? "star-sharp" : "star-outline"}`} 
+                    <Ionicons
+                        name={`${i < item.comment_star ? "star-sharp" : "star-outline"}`}
                         style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
                     />
                 </View>
             );
         }
-    
+
         return (
             <View style={tw`flex-row`}>
                 {myloop}
@@ -33,7 +33,7 @@ export default function ItemReviews({ item }: any) {
 
     return (
         <View style={tw`flex-row`}>
-            <View style={tw`p-2`}>  
+            <View style={tw`p-2`}>
                 <Image
                     source={{ uri: "https://skabuy.com/static/media/product1.78d63a8ff4e344b53377.jpg" }}
                     style={tw`w-15 h-15`}
