@@ -19,6 +19,7 @@ import Carousel_product from '../components/Carousel_product';
 import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
+import ItemReviews from '../components/ItemReviews';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -55,6 +56,48 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     function onSelectCharacteristics(characteristics: any) {
         setSelectedCharacteristics(characteristics);
         onChangeQuantity(0);
+    }
+
+    function star() {
+        var myloop = [];
+
+        for (let i = 1; i < 6; i++) {
+            myloop.push(
+                <TouchableOpacity onPress={() => setRating(i)} key={i}>
+                    <Ionicons
+                        name={`${i <= rating ? "star-sharp" : "star-outline"}`}
+                        style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
+                    />
+                </TouchableOpacity>
+            );
+        }
+
+        return (
+            <View style={tw`flex-row`}>
+                {myloop}
+            </View>
+        );
+    }
+
+    const postComment = async () => {
+        try {
+            const postData = {
+                user_id: infoUser.user_id,
+                comment_content: valueComment,
+                comment_star: rating,
+                product_id: Product.product_id,
+            };
+            const res = await AXIOS.post(`comment/create`, postData, { headers: { "Content-Type": "application/json" } }).then((result) => result.data);
+            if (res.status == "success") {
+                onChangeText("");
+                getProductBySlug();
+                setRating(5)
+            } else {
+                console.log("!regdffggfd23")
+            }
+        } catch (error) {
+            return error;
+        }
     }
 
     const getProductBySlug = async () => {

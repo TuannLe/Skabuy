@@ -10,6 +10,7 @@ export default function Product_Item({ item, handleVisible, setIdSelected }: any
     const navigation = useNavigation();
     const WIDTH = Dimensions.get('window').width;
 
+
     return (
         <TouchableOpacity
             style={tw`w-[${(WIDTH - 30) / 3}px] p-2 border mx-1 mt-2 border-gray-100 bg-white`}

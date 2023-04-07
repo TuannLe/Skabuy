@@ -68,3 +68,21 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const validateEmail = (email) => {
     return emailRegex.test(email);
 };
+
+export const formatdate = (date) => {
+    var d = new Date(date);
+
+    return (
+        d.getHours() +
+        ":" +
+        d.getMinutes() +
+        ":" +
+        d.getSeconds() +
+        " " +
+        d.getDate() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getFullYear()
+    );
+};
