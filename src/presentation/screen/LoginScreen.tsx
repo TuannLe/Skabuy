@@ -46,12 +46,8 @@ export default function LoginScreen() {
                         setLoginWarn("Your account is banded");
                         break;
                     case 2:
-                        // dispatch(loginUser(response.data));
-                        // navigate("/account-verification", {
-                        //     state: {
-                        //         user_email: loginInfo.user_email,
-                        //     },
-                        // });
+                        dispatch(ACTIONS.LoginSuccess({ token: JSON.stringify(response.token), data: response.data }));
+                        navigation.navigate(ROUTER.VERIFY_CODE_SCREEN, { email: payload.user_email });
                         break;
                     default:
                         break;

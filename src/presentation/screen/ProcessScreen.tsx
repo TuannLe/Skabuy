@@ -9,44 +9,57 @@ import { ROUTER, COLOR } from '../constants'
 
 export default function ProcessScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
-    console.log(userRedux)
     const { subTotal, total } = route.params
-    // const [user_email, setEmail] = useState('')
-    // const [fullName, setFullName] = useState("")
-    // const [selectedGender, setSelectedGender] = useState("")
-    // const [street, setStreet] = useState("")
-    // const [apt, setApt] = useState("")
-    // const [city, setCity] = useState("")
-    // const [state, setState] = useState("")
-    // const [zipCode, setZipCode] = useState("")
-    // const [phoneNumber, setPhoneNumber] = useState("")
 
-    const [userInfor, setUserInfor] = useState({
+    const [userAddress, setUserAddress] = useState(userRedux?.user_address)
+    const [user_apt, setUserApt] = useState('')
+    const [user_city, setUserCity] = useState('')
+    const [user_state, setUserState] = useState('')
+    const [user_zipCode, setUserZipCode] = useState('')
+    const [address, setAddress] = useState('')
+
+    useEffect(() => {
+        setAddress(`${userAddress}, ${user_apt}, ${user_city}, ${user_state}, ${user_zipCode}`)
+    }, [userAddress, user_apt, user_city, user_state, user_zipCode])
+
+    const [checkoutData, setCheckoutData] = useState({
+        // dataProduct: [],
         user_id: userRedux?.user_id,
-        user_fullname: userRedux?.user_fullname,
-        user_apt: '',
-        user_city: '',
-        user_state: '',
-        user_zipCode: '',
-        user_email: userRedux?.user_email,
-        user_phone_number: userRedux?.user_phone_number,
-        user_address: userRedux?.user_address,
+        fullname: userRedux?.user_fullname,
+        email: userRedux?.user_email,
+        phonenumber: userRedux?.user_phone_number,
         user_gender: userRedux?.user_gender,
-        user_date_of_birth: userRedux?.user_date_of_birth,
-    });
+        address: address,
+        total_price: total,
+        method_payment: 0,
+        paymentInfo: null,
+        voucher: null,
+    })
 
-    // useEffect(() => {
-    //         if (userRedux) {
-    //             setEmail(userRedux.user_email)
-    //             setFullName(userRedux.user_fullname)
-    //             setSelectedGender(userRedux.user_gender)
-    //             setStreet(userRedux.user_address)
-    //             setPhoneNumber(userRedux.user_phone_number)
-    //         }
-    //     }, []);
+    const [data, setData] = useState({
+        checkoutData: checkoutData,
+        subtotal: subTotal,
+        totalPayment: total,
+        voucher: null,
+    })
+
+    useEffect(() => {
+        setCheckoutData((current) => ({
+            ...current,
+            address: address,
+        }))
+    }, [address])
+
+    useEffect(() => {
+        setData((current) => ({
+            ...current,
+            checkoutData: checkoutData,
+        }))
+    }, [checkoutData])
+
 
     const handleCheckout = () => {
-        navigation.navigate(ROUTER.PAYMENT_DETAIL_SCREEN, { userInfor: userInfor, total: total, subTotal: subTotal })
+        navigation.navigate(ROUTER.WEBVIEW_SCREEN, { data: data })
     }
 
     return (
@@ -70,10 +83,10 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Full name"}
-                                value={userInfor.user_fullname}
-                                onChangeText={(val: any) => setUserInfor((current) => ({
+                                value={checkoutData.fullname}
+                                onChangeText={(val: any) => setCheckoutData((current) => ({
                                     ...current,
-                                    user_fullname: val,
+                                    fullname: val,
                                 }))}
                             />
                         </View>
@@ -81,8 +94,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
                             <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
                                 <Picker
-                                    selectedValue={userInfor.user_gender}
-                                    onValueChange={(itemValue, itemIndex) => setUserInfor((current) => ({
+                                    selectedValue={checkoutData.user_gender}
+                                    onValueChange={(itemValue, itemIndex) => setCheckoutData((current) => ({
                                         ...current,
                                         user_gender: itemValue,
                                     }))}
@@ -98,11 +111,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Street address"}
-                                value={userInfor.user_address}
-                                onChangeText={val => setUserInfor((current) => ({
-                                    ...current,
-                                    user_address: val,
-                                }))}
+                                value={userAddress}
+                                onChangeText={val => setUserAddress(val)}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -110,11 +120,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"Apt., ste., bldg."}
-                                value={userInfor.user_apt}
-                                onChangeText={val => setUserInfor((current) => ({
-                                    ...current,
-                                    user_apt: val,
-                                }))}
+                                value={user_apt}
+                                onChangeText={val => setUserApt(val)}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -122,11 +129,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"City"}
-                                value={userInfor.user_city}
-                                onChangeText={val => setUserInfor((current) => ({
-                                    ...current,
-                                    user_city: val,
-                                }))}
+                                value={user_city}
+                                onChangeText={val => setUserCity(val)}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -134,11 +138,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"State"}
-                                value={userInfor.user_state}
-                                onChangeText={val => setUserInfor((current) => ({
-                                    ...current,
-                                    user_state: val,
-                                }))}
+                                value={user_state}
+                                onChangeText={val => setUserState(val)}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -146,11 +147,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <TextInput
                                 style={tw`text-base border rounded border-[#b1becb] p-2`}
                                 placeholder={"ZIP code"}
-                                value={userInfor.user_zipCode}
-                                onChangeText={val => setUserInfor((current) => ({
-                                    ...current,
-                                    user_zipCode: val,
-                                }))}
+                                value={user_zipCode}
+                                onChangeText={val => setUserZipCode(val)}
                             />
                         </View>
                         <View style={tw`mb-5`}>
@@ -160,8 +158,8 @@ export default function ProcessScreen({ route, navigation }: any) {
                                     ref={(ref) => { this.phone = ref }}
                                     onPressFlag={this.onPressFlag}
                                     initialCountry={'us'}
-                                    // initialValue={userInfor.user_phone_number}
-                                    onChangePhoneNumber={val => setUserInfor((current) => ({
+                                    // initialValue={checkoutData.user_phone_number}
+                                    onChangePhoneNumber={val => setCheckoutData((current) => ({
                                         ...current,
                                         user_phone_number: val,
                                     }))}
@@ -176,7 +174,7 @@ export default function ProcessScreen({ route, navigation }: any) {
                             <View
                                 style={tw`border border-[#b1becb] px-2 py-3 text-base text-black bg-gray-200 rounded`}
                             >
-                                <Text style={tw`text-base text-black`}>{userInfor.user_email}</Text>
+                                <Text style={tw`text-base text-black`}>{checkoutData.email}</Text>
                             </View>
                         </View>
                     </View>

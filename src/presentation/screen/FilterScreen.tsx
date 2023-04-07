@@ -8,17 +8,16 @@ import { decode as atob, encode as btoa } from 'base-64'
 import { getProductsWithFilter } from '../../core/api/ProductApi'
 import { ROUTER, COLOR } from '../constants'
 import { divPriceToArray } from '../../util/helper'
+import * as ACT_PRODUCT from '../../core/redux/actions/product'
 
 export default function FilterScreen({ route, navigation }: any) {
+    const dispatch = useDispatch()
     const data_attributes = useSelector((state: any) => state.product.attributes)
     const IDCategory = route.params.IDCategory
-    const [productList, setProductList] = useState([]);
     const [selectedAttribute, setSelectedAttribute] = useState({
         category_id: IDCategory,
         attributes: {},
     });
-    const [isSelected, setSelection] = useState(false);
-    const [warn, setWarn] = useState('')
 
     const onSelectAttributeHandler = async (
         attributeID: any,
@@ -51,13 +50,7 @@ export default function FilterScreen({ route, navigation }: any) {
             };
         }
         const encoded = btoa(JSON.stringify(selectedAttribute));
-        console.log(encoded);
-        const response = await getProductsWithFilter(encoded);
-        if (response.status == "error") {
-            setWarn(response.message);
-        } else if (response.status == "success") {
-            setProductList(response.data);
-        }
+        dispatch(ACT_PRODUCT.getProductsWithFilterStart(encoded))
     }
 
     return (
@@ -96,7 +89,9 @@ export default function FilterScreen({ route, navigation }: any) {
                                         style={tw`w-1/2`}
                                     >
                                         <TouchableOpacity
-                                            onPress={() => { onSelectAttributeHandler("price", "price", item.data) }}
+                                            onPress={() => {
+                                                onSelectAttributeHandler("price", "price", item.data)
+                                            }}
                                             style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
                                         >
                                             <Text style={tw`text-base text-black text-center`}>{item.text}</Text>

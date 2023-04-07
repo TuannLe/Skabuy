@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import CheckBox from '@react-native-community/checkbox';
+import { CheckBox } from '@rneui/themed';
 import { useDispatch, useSelector } from "react-redux";
 import { COLOR } from '../constants';
 import {
@@ -12,7 +12,8 @@ import * as ACT_CART from '../../core/redux/actions/cart'
 
 export default function ItemCart({ handleChangeQuantity, data }: any) {
     const dispatch = useDispatch()
-    const [isSelected, setSelection] = useState(false);
+    const [checked, setChecked] = React.useState(true);
+    const toggleCheckbox = () => setChecked(!checked);
 
     const showConfirmDialog = () => {
         return Alert.alert(
@@ -41,16 +42,15 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
     }
 
     return (
-        <View style={tw`w-full bg-white flex flex-row items-center py-3 pl-3 mt-3`}>
+        <View style={tw`w-full bg-white flex flex-row items-center py-3 mt-3`}>
             <CheckBox
-                value={isSelected}
-                onValueChange={setSelection}
-                boxType="circle"
-                style={tw`mr-5`}
-                onFillColor="#fff"
-                onCheckColor="#333"
-                onTintColor="#333"
-                tintColor="white"
+                checked={checked}
+                onPress={toggleCheckbox}
+                iconType="material-community"
+                checkedIcon="checkbox-marked"
+                uncheckedIcon="checkbox-blank-outline"
+                checkedColor="green"
+                size={32}
             />
             <Image
                 style={{ width: 100, height: 100 }}
@@ -68,13 +68,13 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                     <Text style={tw`text-2xl line-through mr-2`}>{formatNumber(data.price)}</Text>
                     <Text style={tw`text-2xl text-red-600 font-bold`}>{formatNumber(data.totalprice)}$</Text>
                 </View>
-                <View style={tw`flex-row h-10 mt-3`}>
+                <View style={tw`flex-row mt-3`}>
                     <TouchableOpacity
                         onPress={() => handleChangeQuantity(
                             data.quantity - 1,
                             data.product_id
                         )}
-                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                        style={tw`bg-[#17a2b8] px-1.5 py-1 rounded items-center justify-center`}
                     >
                         <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
@@ -90,7 +90,7 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                                 )
                             }
                         }}
-                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                        style={tw`bg-[#17a2b8] px-1.5 py-1 rounded items-center justify-center`}
                     >
                         <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>

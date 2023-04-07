@@ -13,5 +13,8 @@ export const GET_USER_START = "GET_USER_START"
 export const GET_USER_SUCCESS = "GET_USER_SUCCESS"
 export const GET_USER_FAILURE = "GET_USER_FAILURE"
 
+export const EDIT_USER_START = "EDIT_USER_START"
+export const EDIT_USER_SUCCESS = "EDIT_USER_SUCCESS"
+export const EDIT_USER_FAILURE = "EDIT_USER_FAILURE"
 // Logout
 export const LOGOUT = "LOGOUT"

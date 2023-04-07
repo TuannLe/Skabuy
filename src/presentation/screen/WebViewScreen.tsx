@@ -4,31 +4,31 @@ import tw from 'twrnc'
 import { WebView } from 'react-native-webview';
 import { useSelector } from "react-redux";
 
-export default function () {
+export default function ({ route }: any) {
     const webViewRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
+    const data = route.params;
 
     const onMessage = (event: any) => {
         console.log(event.nativeEvent.data);
     };
 
-    // window.alert(localStorage.getItem("checkout_data"))`;
     const getCookie = () => {
         const script = `
-        const item = localStorage.getItem('checkout_data');
+        const item = localStorage.getItem('skabuy_cart');
         window.alert(item)`;
         webViewRef.current.injectJavaScript(script);
     }
 
     const setItemScript = `
-        localStorage.setItem("skabuy_cart", JSON.stringify(
-            [{"product_id":79,"product_image":"https://res.cloudinary.com/dwd5gmp97/image/upload/v1678683579/dmw29p4j8oq0fcvycxtr.webp","product_name":"Solartec Outdoor Rectangle Pet Cot","price":74.25,"quantity":1,"characteristics":{"characteristics_hash":"01f46198-5501-420c-b90f-3a0b46d2154d","values":'Size: 24"x18"; Color: Brown',"total":10},"totalprice":74.25}]
-        ));
-        localStorage.setItem("checkout_data", JSON.stringify(
-            {"checkoutData":{"dataProduct":[{"product_id":79,"product_name":"Solartec Outdoor Rectangle Pet Cot","quantity":1,"description":'Size: 24"x18"; Color: Brown',"hash":"01f46198-5501-420c-b90f-3a0b46d2154d","price":74.25}],"user_id":34,"fullname":"Việt Thắng","email":"vthcvn@gmail.com","phonenumber":"0377196605","address":"street, apt, city, state, zip","total_price":74.25,"method_payment":0,"paymentInfo":null,"voucher":null},"subtotal":74.25,"totalPayment":74.25,"voucher":null}
-        ))
+        const myObj = ${JSON.stringify(data.data)};
+        const myObj2 = ${JSON.stringify(ArrayProduct)}
+        localStorage.setItem("skabuy_cart", JSON.stringify(myObj2));
+        localStorage.setItem("checkout_data", JSON.stringify(myObj))
     `;
+
+    console.log(setItemScript)
 
     const handleWebViewNavigationStateChange = (newNavState: any) => {
         webViewRef.current.injectJavaScript(setItemScript);
@@ -46,8 +46,8 @@ export default function () {
         <SafeAreaView style={tw`flex w-full h-full`}>
             <WebView
                 ref={webViewRef}
-                onLoadStart={handleWebViewNavigationStateChange}
-                onLoadEnd={handleWebViewNavigationStateChange}
+                onLoadStart={() => setVisible(true)}
+                onLoadEnd={() => setVisible(false)}
                 onLoad={handleWebViewNavigationStateChange}
                 onMessage={onMessage}
                 javaScriptEnabled={true}

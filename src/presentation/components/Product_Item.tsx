@@ -6,14 +6,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ROUTER, COLOR } from '../constants'
 import { formatNumber } from '../../util/helper';
 
-export default function Product_Item({ item }: any) {
+export default function Product_Item({ item, handleVisible, setIdSelected }: any) {
     const navigation = useNavigation();
     const WIDTH = Dimensions.get('window').width;
 
     return (
         <TouchableOpacity
             style={tw`w-[${(WIDTH - 30) / 3}px] p-2 border mx-1 mt-2 border-gray-100 bg-white`}
-            onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}>
+            onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}
+            onLongPress={() => {
+                handleVisible()
+                setIdSelected(item.product_id)
+            }}
+        >
             <Image
                 source={{ uri: item.product_image }}
                 style={tw`w-full h-30`}

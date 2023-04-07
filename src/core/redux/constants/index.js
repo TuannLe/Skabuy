@@ -11,8 +11,15 @@ export const INIT_STATE = {
     },
     product: {
         productsByCategory: [],
+        productsSearch: [],
         attributes: {},
         isLoading: false,
         error: false
+    },
+    favorite: {
+        favorite: []
+    },
+    user: {
+        orders: [],
     }
 }

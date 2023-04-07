@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -8,21 +8,21 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from "react-redux";
 import * as ACT_AUTH from '../../core/redux/actions/auth'
+import * as ACT_USER from '../../core/redux/actions/user'
 import MyOrder from '../navigation/MyOrder';
-import { COLOR } from '../constants'
+import { ROUTER, COLOR } from '../constants'
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch()
-    const data = [
-        {
-            'name': 'hahah'
-        }
-    ]
     const handleLogout = () => {
         dispatch(ACT_AUTH.logout())
     }
     const infoUser = useSelector((state: any) => state.auth.infoUser)
+
+    useEffect(() => {
+        dispatch(ACT_USER.getOrderStart(infoUser?.user_id))
+    }, [infoUser])
     return (
         <SafeAreaView style={tw`flex w-full h-full`}>
             <View style={tw`bg-[${COLOR.PRIMARY}] px-3`}>
@@ -34,6 +34,7 @@ export default function ProfileScreen() {
                         <Ionicons name='settings-outline' style={tw`text-2xl text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
                     <TouchableOpacity
+                        onPress={() => navigation.navigate(ROUTER.CART_TAB)}
                         style={tw`p-3`}
                     >
                         <Feather name='shopping-cart' style={tw`text-2xl text-[${COLOR.WHITE}]`} />

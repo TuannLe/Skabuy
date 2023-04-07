@@ -51,6 +51,25 @@ export default function authReducers(state = INIT_STATE.auth, action) {
                 isLoading: false,
                 error: true
             }
+        // Edit user
+        case TYPES.EDIT_USER_START:
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case TYPES.EDIT_USER_SUCCESS:
+            return {
+                ...state,
+                infoUser: action.payload,
+                isLoading: false,
+                error: false
+            }
+        case TYPES.EDIT_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: true
+            }
         // log out
         case TYPES.LOGOUT:
             return {

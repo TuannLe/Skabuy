@@ -46,10 +46,26 @@ function* getUserSaga(action) {
     }
 }
 
+function* editUser(action) {
+    try {
+        console.log('Edit user running...')
+        const res = yield call(apis.editUser, action.payload)
+        console.log(res.data)
+        console.log(res.status)
+        if (res.status === 200) {
+            console.log('edit success')
+            yield put(actions.editUserSuccess(res.data))
+        }
+    } catch (error) {
+        yield put(actions.editUserFailure(error))
+    }
+}
+
 const authSaga = [
     // takeLatest(TYPES.LOG_IN_START, fetchLoginSaga),
     takeLatest(TYPES.REGISTER_START, registerSaga),
-    takeLatest(TYPES.GET_USER_START, getUserSaga)
+    takeLatest(TYPES.GET_USER_START, getUserSaga),
+    takeLatest(TYPES.EDIT_USER_START, editUser)
 ]
 
 export default authSaga

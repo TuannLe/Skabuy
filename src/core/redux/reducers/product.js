@@ -38,7 +38,6 @@ export default function productReducers(state = INIT_STATE.product, action) {
                 ...state,
                 error: true
             }
-
         // getProductsWithFilter
         case TYPES.GET_PRODUCT_WITH_FILTER_START:
             return {
@@ -52,6 +51,23 @@ export default function productReducers(state = INIT_STATE.product, action) {
                 productsByCategory: action.payload
             }
         case TYPES.GET_PRODUCT_WITH_FILTER_SUCCESS:
+            return {
+                ...state,
+                error: true
+            }
+        // search product
+        case TYPES.SEARCH_PRODUCTS_START:
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case TYPES.SEARCH_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                productsSearch: action.payload
+            }
+        case TYPES.SEARCH_PRODUCTS_FAILURE:
             return {
                 ...state,
                 error: true

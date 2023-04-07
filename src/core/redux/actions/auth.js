@@ -69,6 +69,27 @@ export const GetUserSuccess = (payload) => {
 export const GetUserFailure = (error) => {
     return {
         type: TYPES.GET_USER_FAILURE,
-        error: error
+        error
+    }
+}
+
+export const editUserStart = (payload) => {
+    return {
+        type: TYPES.EDIT_USER_START,
+        payload
+    }
+}
+
+export const editUserSuccess = (payload) => {
+    return {
+        type: TYPES.EDIT_USER_SUCCESS,
+        payload
+    }
+}
+
+export const editUserFailure = (error) => {
+    return {
+        type: TYPES.EDIT_USER_FAILURE,
+        error
     }
 }

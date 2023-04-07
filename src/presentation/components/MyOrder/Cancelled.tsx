@@ -1,14 +1,25 @@
-import { View, Text, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, FlatList } from 'react-native'
+import React from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import tw from 'twrnc'
+import ItemOrder from './ItemOrder';
+import HeaderOrder from './HeaderOrder';
 
 export default function Cancelled() {
-    const handle = () => {
-
-    }
-    const [number, setnumber] = useState()
+    const data = useSelector((state: any) => state.user.orders)
+    const dataTmp = data.filter((e: any) => e.status == 3)
     return (
-        <View>
-            <Text>Cancelled</Text>
+        <View style={tw`w-full h-full`}>
+            <HeaderOrder />
+            <View>
+                <FlatList
+                    data={dataTmp}
+                    renderItem={(item) => <ItemOrder item={item} />}
+                    keyExtractor={item => item.product_id}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
         </View>
     )
 }

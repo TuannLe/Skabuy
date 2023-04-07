@@ -58,3 +58,13 @@ export const divPriceToArray = (maximum) => {
     }
     return price_arr;
 };
+
+const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+export const validatePassword = (password) => {
+    return passwordRegex.test(password);
+};
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const validateEmail = (email) => {
+    return emailRegex.test(email);
+};

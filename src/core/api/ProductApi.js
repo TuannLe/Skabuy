@@ -49,3 +49,16 @@ export const getProductsWithFilter = async (payload) => {
         return error
     }
 }
+
+export const searchProduct = async (payload) => {
+    try {
+        const res = await AXIOS.get(`${url}/search/${payload}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
+    } catch (error) {
+        return error
+    }
+}

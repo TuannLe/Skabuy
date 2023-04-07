@@ -4,20 +4,21 @@ import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-// import ButtonGroup from '../components/ButtonGroup';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import RenderHTML from "react-native-render-html";
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import AXIOS from '../../core/api';
 import { COLOR, ROUTER } from '../constants';
 import { formatNumber, discountPrice } from '../../util/helper';
 import Carousel_product from '../components/Carousel_product';
-import Header from '../components/Header'
-import ToolBar from '../components/ToolBar'
 import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
+import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -112,11 +113,17 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         : Product.product_price * quantity,
                 };
                 dispatch(ACT_CART.AddItemCart(product_current));
+                navigation.navigate(ROUTER.CART_TAB)
             }
         } else {
             navigation.navigate(ROUTER.LOGIN)
             setWarn("You need to be logged in to perform this action");
         }
+    }
+
+    const handleAddFavorite = () => {
+        console.log('jj')
+        dispatch(ACT_FAVORITE.AddItemFavorite(Product))
     }
 
     return (
@@ -159,6 +166,16 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 name='shopping-cart'
                 style={tw`text-2xl text-white absolute top-4 right-5.5`}
             />
+            <TouchableOpacity
+                onPress={handleAddFavorite}
+                style={tw`w-12 h-12 rounded-full bg-black opacity-30 absolute top-2 right-16`}
+            >
+            </TouchableOpacity>
+            <Ionicons
+                name='heart-outline'
+                size={27}
+                style={tw`text-white absolute top-4.5 right-18.5`}
+            />
             <View style={tw`p-2 bg-white`}>
                 {
                     Product.product_discount > 0
@@ -175,11 +192,11 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 <Text style={tw`text-2xl text-black font-medium`}>{Product.product_name}</Text>
                 <View style={tw`flex flex-row items-center`}>
                     <View style={tw`flex flex-row items-center`}>
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-half-sharp' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <Ionicons name='star-outline' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome5 name='star-half-alt' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <AntDesign name='staro' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
                     </View>
                     <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
                 </View>

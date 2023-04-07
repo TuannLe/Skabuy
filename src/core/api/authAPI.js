@@ -18,8 +18,12 @@ export const login = async (payload) => {
 
 export const register = async (payload) => {
     try {
-        const res = await AXIOS.options(`${url}/register`, payload)
-        return res
+        const res = await AXIOS.options(`${url}/register`, payload, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
     } catch (error) {
         return error
     }
@@ -41,7 +45,7 @@ export const editUser = async (payload) => {
                 'token': `Bearer ${payload.token}`
             }
         })
-        return res
+        return res.data
     } catch (error) {
         return error
     }

@@ -66,3 +66,24 @@ export const getProductsWithFilterFailure = (payload) => {
         payload
     }
 }
+
+export const searchProductStart = (payload) => {
+    return {
+        type: TYPES.SEARCH_PRODUCTS_START,
+        payload
+    }
+}
+
+export const searchProductSuccess = (payload) => {
+    return {
+        type: TYPES.SEARCH_PRODUCTS_SUCCESS,
+        payload
+    }
+}
+
+export const searchProductFailure = (error) => {
+    return {
+        type: TYPES.SEARCH_PRODUCTS_FAILURE,
+        error
+    }
+}
