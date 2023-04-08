@@ -10,16 +10,24 @@ export default function Delivered() {
     const dataTmp = data.filter((e: any) => e.status == 2)
     return (
         <View style={tw`w-full h-full`}>
-            <HeaderOrder />
-            <View>
-                <FlatList
-                    data={dataTmp}
-                    renderItem={(item) => <ItemOrder item={item} />}
-                    keyExtractor={item => item.product_id}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                />
-            </View>
+            {dataTmp.length ? (
+                <>
+                    <HeaderOrder />
+                    <View>
+                        <FlatList
+                            data={dataTmp}
+                            renderItem={(item) => <ItemOrder item={item} />}
+                            keyExtractor={item => item.product_id}
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    </View>
+                </>
+            ) : (
+                <View style={tw`w-full h-full flex justify-center items-center`}>
+                    <Text style={tw`text-base text-black`}>You don't have any orders yet</Text>
+                </View>
+            )}
         </View>
     )
 }

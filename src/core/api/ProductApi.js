@@ -51,6 +51,7 @@ export const getProductsWithFilter = async (payload) => {
 }
 
 export const searchProduct = async (payload) => {
+    console.log(payload)
     try {
         const res = await AXIOS.get(`${url}/search/${payload}`, {
             headers: {

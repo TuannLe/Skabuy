@@ -2,43 +2,71 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { COLOR } from '../constants'
+import { useDispatch, useSelector } from "react-redux";
+import { verifyAccount, generatePin } from '../../core/api/authAPI'
+import { ROUTER, COLOR } from '../constants'
 
-export default function VerifyCodeScreen({ route: { params: { user_email } }, navigation }: any) {
+export default function VerifyCodeScreen({ route: { params: { email } }, navigation }: any) {
     const firstInput = useRef(null)
     const secondInput = useRef(null)
     const thirdInput = useRef(null)
     const fourthInput = useRef(null)
     const fifthInput = useRef(null)
+    const sixthInput = useRef(null)
     const [isResendEnabled, setIsResendEnabled] = useState(false);
     const [resendTimer, setResendTimer] = useState(30);
-    const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '' })
+    const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' })
+    const [payload, setPayload] = useState({
+        user_email: email,
+        pin: '',
+    })
+    const [warn, setWarn] = useState('')
+    const currentUser = useSelector((state: any) => state.auth.currentUser)
 
-    const handleSendOTP = () => {
-        console.log(otp)
+    useEffect(() => {
+        setPayload((current) => ({
+            ...current,
+            pin: `${otp[1]}${otp[2]}${otp[3]}${otp[4]}${otp[5]}${otp[6]}`,
+        }))
+    }, [otp])
+
+    const handleGeneratePin = async () => {
+        await generatePin({ user_email: email });
+    }
+
+    useEffect(() => {
+        handleGeneratePin()
+    }, [])
+
+    const handleVerifyAccount = async () => {
+        const response = await verifyAccount(payload)
+        if (response.status == "success") {
+            if (response.data.affectedRows != 0) {
+                currentUser.status = 0
+                navigation.navigate(ROUTER.HOME_TAB);
+            }
+        } else {
+            setWarn(response.message);
+        }
     }
 
     useEffect(() => {
         let interval: any = null;
-
         if (resendTimer > 0 && !isResendEnabled) {
             interval = setInterval(() => {
                 setResendTimer(resendTimer => resendTimer - 1);
             }, 1000);
         }
-
         if (resendTimer === 0 && !isResendEnabled) {
             setIsResendEnabled(true);
         }
-
         return () => clearInterval(interval);
     }, [isResendEnabled, resendTimer]);
 
     const handleResendClick = () => {
+        handleGeneratePin()
         setIsResendEnabled(false);
         setResendTimer(30);
-
-        // TODO: Make the request to resend the code here
     };
 
     return (
@@ -53,7 +81,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                 <Text style={tw`text-xl font-medium text-black`}>OTP Verification</Text>
             </View>
             <Text style={tw`text-2xl font-medium text-black mt-5`}>Verification</Text>
-            <Text style={tw`text-base text-gray-500 my-5`}>Enter the OTP Code from the email just send your at {user_email}</Text>
+            <Text style={tw`text-base text-gray-500 my-5`}>Enter the OTP Code from the email just send your at {email}</Text>
             <Text style={tw`text-base text-black`}>Did you enter the correct number?</Text>
             <View style={tw`flex flex-row justify-evenly my-8`}>
                 <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
@@ -111,11 +139,28 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
                         ref={fifthInput}
                         onChangeText={text => {
                             setOtp({ ...otp, 5: text })
-                            !text && fourthInput.current.focus();
+                            text ? sixthInput.current.focus() : fourthInput.current.focus()
                         }}
                         style={tw`p-3 text-center`}
                     />
                 </View>
+                <View style={tw`border border-[${COLOR.PRIMARY}] rounded-lg`}>
+                    <TextInput
+                        keyboardType='number-pad'
+                        maxLength={1}
+                        ref={sixthInput}
+                        onChangeText={text => {
+                            setOtp({ ...otp, 6: text })
+                            !text && fifthInput.current.focus();
+                        }}
+                        style={tw`p-3 text-center`}
+                    />
+                </View>
+            </View>
+            <View>
+                {warn ? (
+                    <Text style={tw`text-red-500 text-base`}>{warn}</Text>
+                ) : null}
             </View>
             <View style={tw`flex flex-row items-center mb-5`}>
                 <Text style={tw`text-base`}>Didn't receive email?</Text>
@@ -133,7 +178,7 @@ export default function VerifyCodeScreen({ route: { params: { user_email } }, na
             </View>
             <TouchableOpacity
                 onPress={() => {
-                    handleSendOTP();
+                    handleVerifyAccount();
                 }}
                 style={tw`p-3 bg-[${COLOR.PRIMARY}] rounded-lg`}
             >

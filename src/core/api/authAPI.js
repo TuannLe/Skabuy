@@ -18,7 +18,33 @@ export const login = async (payload) => {
 
 export const register = async (payload) => {
     try {
-        const res = await AXIOS.options(`${url}/register`, payload, {
+        const res = await AXIOS.post(`${url}/register`, payload, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
+    } catch (error) {
+        return error
+    }
+}
+
+export const verifyAccount = async (payload) => {
+    try {
+        const res = await AXIOS.post(`/auth/verify-email`, payload, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
+    } catch (error) {
+        return error
+    }
+}
+
+export const generatePin = async (payload) => {
+    try {
+        const res = await AXIOS.post(`/auth/generate-pin`, payload, {
             headers: {
                 "Content-Type": "application/json"
             }

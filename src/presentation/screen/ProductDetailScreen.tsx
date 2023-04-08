@@ -20,6 +20,7 @@ import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
 import ItemReviews from '../components/ItemReviews';
+import ItemProduct from '../components/ItemProduct'
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -362,7 +363,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                     <Text style={tw`border-b border-indigo-500`}></Text>
                     {Readmore === false ? (
                         <View>
-                            <RenderHTML source={{ html: Description }} />
+                            <RenderHTML contentWidth={WIDTH} source={{ html: Description }} />
                             <TouchableOpacity
                                 onPress={() => setReadmore(true)}
                             >
@@ -371,7 +372,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         </View>
                     ) : (
                         <View>
-                            <RenderHTML source={{ html: Product.product_description }} />
+                            <RenderHTML contentWidth={WIDTH} source={{ html: Product.product_description }} />
                             <TouchableOpacity
                                 onPress={() => setReadmore(false)}
                             >

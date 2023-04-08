@@ -11,6 +11,7 @@ import { ROUTER } from '../constants'
 export default function BottomNavigator() {
     const BottomTab = createBottomTabNavigator();
     const token = useSelector((state: any) => state.auth.token)
+    const infoUser = useSelector((state: any) => state.auth.infoUser)
     return (
         <BottomTab.Navigator>
             <BottomTab.Screen
@@ -47,7 +48,7 @@ export default function BottomNavigator() {
                     )
                 }}
             />
-            {token ? (
+            {token && infoUser ? (
                 <BottomTab.Screen
                     name={ROUTER.PROFILE_TAB}
                     component={ProfileScreen}

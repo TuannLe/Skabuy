@@ -1,7 +1,6 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
-// import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from '@react-navigation/native';
 import * as ACT_PRODUCT from '../../core/redux/actions/product'

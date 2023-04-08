@@ -6,7 +6,15 @@ export default function favoriteReducers(state = INIT_STATE.favorite, action) {
         // Add item to favorite
         case TYPES.ADD_ITEM_FAVORITE:
             const newArrayProduct = state.favorite
-            newArrayProduct.push(action.payload)
+            if (newArrayProduct.length) {
+                if (newArrayProduct.findIndex((item) => {
+                    return item.product_id == action.payload.product_id
+                }) == -1) {
+                    newArrayProduct.push(action.payload)
+                }
+            } else {
+                newArrayProduct.push(action.payload)
+            }
             return {
                 ...state,
                 favorite: newArrayProduct,

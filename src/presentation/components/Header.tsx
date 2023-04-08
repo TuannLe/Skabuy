@@ -4,10 +4,31 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/native';
+import { decode as atob, encode as btoa } from 'base-64'
 import { ROUTER, COLOR } from '../constants'
+import { searchProduct } from '../../core/api/ProductApi'
 
 export default function Header() {
     const navigation = useNavigation();
+    const [search, setSearch] = useState('')
+    const [selectedPrice, setSelectedPrice] = useState([]);
+    const [warn, setWarn] = useState('')
+    const [productList, setProductList] = useState([])
+    const handleSearch = async () => {
+        if (search) {
+            const data = {
+                keyword: search,
+                price: selectedPrice,
+            }
+            const encoded = btoa(JSON.stringify(data));
+            const response = await searchProduct(encoded)
+            if (response.status == "success") {
+                setProductList(response.data);
+            } else {
+                setWarn(response.message);
+            }
+        }
+    }
 
     return (
         <View style={tw`flex flex-row items-center bg-[${COLOR.PRIMARY}] `}>
@@ -19,22 +40,16 @@ export default function Header() {
                     <Ionicons name='menu-outline' size={50} style={tw`text-white`} />
                 </TouchableOpacity>
             </View>
-            {/* <Picker
-                selectedValue={selectedValue}
-                onValueChange={(itemValue: any, itemIndex: any) => setSelectedValue(itemValue)}
-            // style={styles.picker}
-            >
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="javascript" />
-                <Picker.Item label="Python" value="python" />
-                <Picker.Item label="Ruby" value="ruby" />
-            </Picker> */}
             <View style={tw`w-76 flex flex-row items-center rounded-full bg-white px-3 `}>
                 <TextInput
                     placeholder='Search...'
+                    value={search}
+                    onChangeText={(val) => setSearch(val)}
                     style={tw`flex-1 text-base`}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={handleSearch}
+                >
                     <Ionicons name='search' style={tw`text-xl text-gray-400`} />
                 </TouchableOpacity>
             </View>

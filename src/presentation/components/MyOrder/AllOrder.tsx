@@ -9,16 +9,24 @@ export default function AllOrder() {
     const data = useSelector((state: any) => state.user.orders)
     return (
         <View style={tw`w-full h-full`}>
-            <HeaderOrder />
-            <View>
-                <FlatList
-                    data={data}
-                    renderItem={(item) => <ItemOrder item={item} />}
-                    keyExtractor={item => item.product_id}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                />
-            </View>
+            {data.length ? (
+                <>
+                    <HeaderOrder />
+                    <View>
+                        <FlatList
+                            data={data}
+                            renderItem={(item) => <ItemOrder item={item} />}
+                            keyExtractor={item => item.product_id}
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    </View>
+                </>
+            ) : (
+                <View style={tw`w-full h-full flex justify-center items-center`}>
+                    <Text style={tw`text-base text-black`}>You don't have any orders yet</Text>
+                </View>
+            )}
         </View>
     )
 }

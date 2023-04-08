@@ -7,8 +7,6 @@ import { ROUTER, COLOR } from '../constants'
 import { validatePassword, validateEmail } from '../../util/helper'
 
 export default function RegisterScreen({ navigation }: any) {
-    const dispatch = useDispatch();
-
     const [registerInfo, setRegisterInfo] = useState({
         email: "",
         password: "",
@@ -17,6 +15,7 @@ export default function RegisterScreen({ navigation }: any) {
     });
 
     const [registerWarn, setRegisterWarn] = useState('')
+    const [color, setColor] = useState('red-500')
 
     const handleRegister = async () => {
         if (!registerInfo.fullname) {
@@ -39,12 +38,13 @@ export default function RegisterScreen({ navigation }: any) {
         else {
             setRegisterWarn(``)
             const response = await register(registerInfo)
-            console.log(response)
             if (response.status == "success") {
                 setRegisterWarn("Register successfully!");
-                // navigate("/login");
+                setColor('green-500')
+                navigation.navigate(ROUTER.LOGIN)
             } else {
                 setRegisterWarn(response.message);
+                setColor('red-500')
             }
         }
     }
@@ -95,7 +95,7 @@ export default function RegisterScreen({ navigation }: any) {
                 style={tw`text-base text-black bg-[#f5f5f5] px-3 rounded-lg my-3`}
             />
             {registerWarn ? (
-                <Text style={tw`text-red-500 text-sm mt-2`}>{registerWarn}</Text>
+                <Text style={tw`text-${color} text-sm mt-2`}>{registerWarn}</Text>
             ) : (
                 <></>
             )}
