@@ -9,6 +9,7 @@ import { ROUTER, COLOR } from '../constants'
 import DatePicker from 'react-native-date-picker'
 import { formatPostbirddate, formatbirddate, formatdate } from '../../util/helper';
 import AXIOS from '../../core/api';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function EditProfileScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
@@ -158,6 +159,17 @@ export default function EditProfileScreen({ route, navigation }: any) {
                     </View>
                     <View style={tw`mb-5`}>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Street address</Text>
+                        <GooglePlacesAutocomplete
+                            placeholder='Search'
+                            styles={tw`text-base border rounded border-[#b1becb] p-2`}
+                            onPress={(data, details = null) => {
+                                console.log(data, details);
+                            }}
+                            query={{
+                                key: 'AIzaSyA55C2BqefckdRTvvLvya4IOS4ksDnBh9I',
+                                language: 'en',
+                            }}
+                        />
                         <TextInput
                             style={tw`text-base border rounded border-[#b1becb] p-2`}
                             placeholder={"Street address"}
