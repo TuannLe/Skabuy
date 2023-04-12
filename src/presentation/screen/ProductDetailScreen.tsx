@@ -5,7 +5,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Feather from 'react-native-vector-icons/Feather'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import RenderHTML from "react-native-render-html";
@@ -65,10 +64,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
         for (let i = 1; i < 6; i++) {
             myloop.push(
                 <TouchableOpacity onPress={() => setRating(i)} key={i}>
-                    <Ionicons
-                        name={`${i <= rating ? "star-sharp" : "star-outline"}`}
-                        style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
-                    />
+                    <FontAwesome name={`${i <= rating ? "star" : "star-o"}`} style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
                 </TouchableOpacity>
             );
         }
@@ -94,7 +90,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 getProductBySlug();
                 setRating(5)
             } else {
-                console.log("!regdffggfd23")
+                console.log("fail")
             }
         } catch (error) {
             return error;
@@ -106,16 +102,22 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
             setProduct(res.data.data)
             setFormatDolla((res.data.data.product_price))
+            setDescription(res.data.data.product_description.slice(3,150) + "...")
 
             const res1 = await AXIOS.get(`attribute/id/` + res.data.data.product_id);
             setOptions(res1.data.data);
 
             const res2 = await AXIOS.get(`product/related/` + res.data.data.category_id);
-            setRelatedProduct(res2.data.data)
+            setRelatedProduct(res2.data.data);
+
+            const res_comment = await AXIOS.get(`comment/product/` + res.data.data.product_id);
+            setComment(res_comment.data.data);
         } catch (error) {
             return error;
         }
     }
+
+
 
     const handlePlus = () => {
         if (selectedCharacteristics != null) {
@@ -242,11 +244,12 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 <Text style={tw`text-2xl text-black font-medium`}>{Product.product_name}</Text>
                 <View style={tw`flex flex-row items-center`}>
                     <View style={tw`flex flex-row items-center`}>
-                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome5 name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome5 name='star-half-alt' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <AntDesign name='staro' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+
                     </View>
                     <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
                 </View>
@@ -323,100 +326,71 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         ) : (
                             <Text></Text>
                         )}
-
-                        {/* <View style={tw`flex-row box-border mt-5`}>
-                        <Text style={tw`font-medium`}>Share on: </Text>
-                        {image_icon.map((cate, index) => {
-                            return (
-                                <View style={tw`ml-1`}>
-                                    <Image
-                                        source={{ uri: image_icon[index] }}
-                                        style={tw`w-5 h-5`}
-                                    />
-                                </View>
-                            );
-                        })}
-                    </View> */}
-                        {/* 
-                    <View style={tw`w-full flex-row flex-wrap mt-2 mb-2`}>
-                        <View style={tw`w-1/2 p-1`}>
-                            <Image
-                                source={{ uri: "https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" }}
-                                style={tw`w-full h-15 flex-1 p-1`}
-                            />
-                        </View>
-                        <View style={tw`w-1/2 p-1 justify-center`}>
-                            <Image
-                                source={{ uri: "https://static.tildacdn.com/tild6333-3965-4332-b730-663930356132/secure-stripe-paymen.png" }}
-                                style={tw`w-full h-6 p-1`}
-                            />
-                        </View>
-                    </View> */}
                     </View>
                 </View>
-                <View style={tw`mt-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
-                    <Carousel_product item={RelatedProduct} />
-                </View>
-                <View style={tw`mt-5 bg-white p-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
-                    <Text style={tw`border-b border-indigo-500`}></Text>
-                    {Readmore === false ? (
-                        <View>
-                            <RenderHTML contentWidth={WIDTH} source={{ html: Description }} />
-                            <TouchableOpacity
-                                onPress={() => setReadmore(true)}
-                            >
-                                <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ) : (
-                        <View>
-                            <RenderHTML contentWidth={WIDTH} source={{ html: Product.product_description }} />
-                            <TouchableOpacity
-                                onPress={() => setReadmore(false)}
-                            >
-                                <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </View>
-                <View style={tw`mt-5 bg-white p-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Reviews {Comment.length}</Text>
-                    <FlatList
-                        data={Comment}
-                        renderItem={({ item, index, separators }) => <ItemReviews item={Comment[index]} />}
-                    />
-                </View>
-                {infoUser ? (
-                    <View style={tw`mt-1 bg-white p-5`}>
-                        <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
-                        <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
-                        <View style={tw`flex flex-row items-center p-1`}>
-                            <Text style={tw`text-lg`}>Your Rating *: </Text>
-                            {star()}
-                        </View>
-                        <View style={tw`p-1`}>
-                            <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
-                            <TextInput
-                                editable
-                                multiline={true}
-                                numberOfLines={4}
-                                maxLength={40}
-                                onChangeText={text => onChangeText(text)}
-                                value={valueComment}
-                                style={tw`border border-blue-300`}
-                            />
-                        </View>
+            </View>
+            <View style={tw`mt-2`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
+                <Carousel_product item={RelatedProduct} />
+            </View>
+            <View style={tw`mt-2 bg-white p-5`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
+                <Text style={tw`border-b border-indigo-500`}></Text>
+                {Readmore === false ? (
+                    <View>
+                        <RenderHTML contentWidth={WIDTH} source={{ html: Description }} />
                         <TouchableOpacity
-                            onPress={() => postComment()}
-                            style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                            onPress={() => setReadmore(true)}
                         >
-                            <Text style={tw`text-white text-xl font-medium text-center`}>Submit</Text>
+                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
                         </TouchableOpacity>
                     </View>
-                ) : (<></>)}
+                ) : (
+                    <View>
+                        <RenderHTML contentWidth={WIDTH} source={{ html: Product.product_description }} />
+                        <TouchableOpacity
+                            onPress={() => setReadmore(false)}
+                        >
+                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
             </View>
+            <View style={tw`mt-2 bg-white p-5`}>
+                <Text style={tw`text-3xl text-black font-medium`}>Reviews {Comment.length}</Text>
+                <FlatList
+                    data={Comment}
+                    renderItem={({ item, index, separators }) => <ItemReviews item={Comment[index]} />}
+                />
+            </View>
+            {infoUser ? (
+                <View style={tw`mt-1 bg-white p-5`}>
+                    <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
+                    <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
+                    <View style={tw`flex flex-row items-center p-1`}>
+                        <Text style={tw`text-lg`}>Your Rating *: </Text>
+                        {star()}
+                    </View>
+                    <View style={tw`p-1`}>
+                        <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
+                        <TextInput
+                            editable
+                            multiline={true}
+                            numberOfLines={4}
+                            maxLength={40}
+                            onChangeText={text => onChangeText(text)}
+                            value={valueComment}
+                            style={tw`border border-blue-300`}
+                        />
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => postComment()}
+                        style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                    >
+                        <Text style={tw`text-white text-xl font-medium text-center`}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (<></>)}
         </ScrollView>
     );
 }
