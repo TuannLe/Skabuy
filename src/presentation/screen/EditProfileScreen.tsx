@@ -161,7 +161,6 @@ export default function EditProfileScreen({ route, navigation }: any) {
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Street address</Text>
                         <GooglePlacesAutocomplete
                             placeholder='Search'
-                            styles={tw`text-base border rounded border-[#b1becb] p-2`}
                             onPress={(data, details = null) => {
                                 console.log(data, details);
                             }}
@@ -169,13 +168,29 @@ export default function EditProfileScreen({ route, navigation }: any) {
                                 key: 'AIzaSyA55C2BqefckdRTvvLvya4IOS4ksDnBh9I',
                                 language: 'en',
                             }}
+                            styles={{
+                                textInputContainer: {
+                                    width: '100%',
+                                    borderStyle: "solid",
+                                    borderWidth: 1,
+                                    borderColor: "#ced4da",
+                                    borderRadius: 5,
+                                    
+                                },
+                                description: {
+                                  fontWeight: 'bold'
+                                },
+                                predefinedPlacesDescription: {
+                                  color: '#1faadb'
+                                }
+                            }}
                         />
-                        <TextInput
+                        {/* <TextInput
                             style={tw`text-base border rounded border-[#b1becb] p-2`}
                             placeholder={"Street address"}
                             value={userAddress}
                             onChangeText={val => setUserAddress(val)}
-                        />
+                        /> */}
                     </View>
                     <View style={tw`mb-5`}>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Apt., ste., bldg.</Text>
