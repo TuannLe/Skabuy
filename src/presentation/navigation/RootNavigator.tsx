@@ -17,6 +17,7 @@ import {
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
+import EditProfileScreen from '../screen/EditProfileScreen'
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -90,6 +91,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.SEARCH_RESULT_SCREEN}
                 component={SearchResultScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.EDIT_PROFILE_SCREEN}
+                component={EditProfileScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

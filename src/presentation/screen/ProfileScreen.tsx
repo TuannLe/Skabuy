@@ -53,6 +53,7 @@ export default function ProfileScreen() {
             </View>
             <View style={tw`mt-3 bg-white`}>
                 <TouchableOpacity
+                    onPress={() => navigation.navigate(ROUTER.EDIT_PROFILE_SCREEN)}
                     style={tw`flex flex-row items-center p-3 `}
                 >
                     <Ionicons name="ios-person-outline" style={tw`text-3xl text-[${COLOR.BLACK}] mr-1.5`} />

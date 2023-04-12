@@ -5,6 +5,7 @@ import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ROUTER, COLOR } from '../constants'
 import { formatNumber, formatdate } from '../../util/helper';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default function ItemReviews({ item }: any) {
     const navigation = useNavigation();
@@ -16,10 +17,7 @@ export default function ItemReviews({ item }: any) {
         for (let i = 0; i < 5; i++) {
             myloop.push(
                 <View key={i}>
-                    <Ionicons
-                        name={`${i < item.comment_star ? "star-sharp" : "star-outline"}`}
-                        style={tw`text-2xl text-[${COLOR.PRIMARY}]`}
-                    />
+                    <FontAwesome name={`${i < item.comment_star ? "star" : "star-o"}`} style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
                 </View>
             );
         }

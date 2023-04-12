@@ -23,7 +23,6 @@ export default function ProcessScreen({ route, navigation }: any) {
     }, [userAddress, user_apt, user_city, user_state, user_zipCode])
 
     const [checkoutData, setCheckoutData] = useState({
-        // dataProduct: [],
         user_id: userRedux?.user_id,
         fullname: userRedux?.user_fullname,
         email: userRedux?.user_email,

@@ -86,3 +86,27 @@ export const formatdate = (date) => {
         d.getFullYear()
     );
 };
+
+export const formatbirddate = (date) => {
+    var d = new Date(date);
+
+    return (
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        "-" +
+        d.getFullYear()
+    );
+};
+
+export const formatPostbirddate = (date) => {
+    var d = new Date(date);
+
+    return (
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate()
+    );
+};
