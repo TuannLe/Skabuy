@@ -8,6 +8,7 @@ export const INIT_STATE = {
     },
     cart: {
         products: [],
+        productsCheckout: [],
     },
     product: {
         productsByCategory: [],

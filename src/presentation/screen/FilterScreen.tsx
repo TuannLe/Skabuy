@@ -1,5 +1,5 @@
-import { View, Text, Modal, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux";
@@ -18,17 +18,15 @@ export default function FilterScreen({ route, navigation }: any) {
         category_id: IDCategory,
         attributes: {},
     });
-
     const onSelectAttributeHandler = async (
         attributeID: any,
         attributeType: any,
-        attributeValue: any
+        attributeValue: any,
     ) => {
         var attributes = selectedAttribute.attributes;
         const foundAttribute = Object.keys(attributes).find(
             (el) => el == attributeType
         );
-
         if (foundAttribute) {
             var foundValue = attributes[foundAttribute].data.find(
                 (el: any) =>
@@ -113,7 +111,9 @@ export default function FilterScreen({ route, navigation }: any) {
                                         style={tw`w-1/2`}
                                     >
                                         <TouchableOpacity
-                                            onPress={() => { onSelectAttributeHandler("trademark", "trademark", item); }}
+                                            onPress={() => {
+                                                onSelectAttributeHandler("trademark", "trademark", item)
+                                            }}
                                             style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
                                         >
                                             <Text style={tw`text-base text-black text-center`}>{item}</Text>

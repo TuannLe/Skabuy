@@ -12,8 +12,15 @@ import * as ACT_CART from '../../core/redux/actions/cart'
 
 export default function ItemCart({ handleChangeQuantity, data }: any) {
     const dispatch = useDispatch()
-    const [checked, setChecked] = React.useState(true);
-    const toggleCheckbox = () => setChecked(!checked);
+    const [checked, setChecked] = useState(true);
+    const toggleCheckbox = () => {
+        setChecked(!checked)
+        if (!checked) {
+            dispatch(ACT_CART.AddItemCheckout(data))
+        } else (
+            dispatch(ACT_CART.RemoveItemCheckout(data.product_id))
+        )
+    };
 
     const showConfirmDialog = () => {
         return Alert.alert(

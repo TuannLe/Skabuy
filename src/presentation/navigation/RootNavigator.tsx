@@ -12,8 +12,8 @@ import {
     ProcessScreen,
     WebViewScreen,
     FilterScreen,
-    PaymentDetail
-
+    PaymentDetail,
+    SearchResultScreen
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
@@ -85,6 +85,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.PAYMENT_DETAIL_SCREEN}
                 component={PaymentDetail}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.SEARCH_RESULT_SCREEN}
+                component={SearchResultScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

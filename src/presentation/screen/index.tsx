@@ -12,6 +12,7 @@ import ProductDetailScreen from './ProductDetailScreen';
 import ProcessScreen from './ProcessScreen';
 import FilterScreen from './FilterScreen';
 import PaymentDetail from './PaymentDetail';
+import SearchResultScreen from './SearchResultScreen';
 
 export {
     CartScreen,
@@ -27,5 +28,6 @@ export {
     ProductDetailScreen,
     ProcessScreen,
     FilterScreen,
-    PaymentDetail
+    PaymentDetail,
+    SearchResultScreen
 };

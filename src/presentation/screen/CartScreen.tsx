@@ -21,8 +21,7 @@ import { onApplyVoucher } from '../../core/api/cartAPI'
 export default function CartScreen({ navigation }: any) {
     const dispatch = useDispatch()
     const navigation1 = useNavigation();
-    const [checked, setChecked] = React.useState(true);
-    const toggleCheckbox = () => setChecked(!checked);
+    const [checked, setChecked] = useState(false);
     const [subTotal, setSubTotal] = useState(0)
     const [total, setTotal] = useState(0)
     const [warn, setWarn] = useState('')
@@ -30,6 +29,10 @@ export default function CartScreen({ navigation }: any) {
     const [voucherInfor, setVoucherInfor] = useState({});
     const [applied, setApplied] = useState(false);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
+    console.log(ArrayProduct)
+    const ArrayProductCheckout = useSelector((state: any) => state.cart.productsCheckout)
+    console.log(ArrayProductCheckout)
+
 
     const handleChangeQuantity = (quantity: any, productID: any) => {
         if (quantity > 0) {
@@ -38,6 +41,10 @@ export default function CartScreen({ navigation }: any) {
         } else {
             console.log('hoh')
         }
+    }
+
+    const toggleCheckbox = () => {
+        setChecked(!checked)
     }
 
     const onApplyVoucherHandler = async () => {
@@ -69,7 +76,7 @@ export default function CartScreen({ navigation }: any) {
     };
 
     const loadTotalPayment = () => {
-        setSubTotal(calculateTotalPrice(ArrayProduct));
+        setSubTotal(calculateTotalPrice(ArrayProductCheckout));
     };
 
     useEffect(() => {
@@ -78,7 +85,7 @@ export default function CartScreen({ navigation }: any) {
 
     useEffect(() => {
         loadTotalPayment();
-    }, [ArrayProduct]);
+    }, [ArrayProductCheckout]);
 
     const showConfirmDialog = () => {
         return Alert.alert(
@@ -218,10 +225,3 @@ export default function CartScreen({ navigation }: any) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    checkbox: {
-        width: 20,
-        height: 20
-    }
-})

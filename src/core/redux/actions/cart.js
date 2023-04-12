@@ -30,3 +30,20 @@ export const RemoveAllCart = () => {
         type: TYPES.REMOVE_ALL_CART,
     }
 }
+
+// Add item to cart 
+export const AddItemCheckout = (payload) => {
+    return {
+        type: TYPES.ADD_ITEM_CHECKOUT,
+        payload
+    }
+}
+
+// Remove item to cart 
+export const RemoveItemCheckout = (payload) => {
+    return {
+        type: TYPES.REMOVE_ITEM_CHECKOUT,
+        payload
+    }
+}
+

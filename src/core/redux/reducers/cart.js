@@ -39,6 +39,22 @@ export default function cartReducers(state = INIT_STATE.cart, action) {
                 ...state,
                 products: []
             }
+        case TYPES.ADD_ITEM_CHECKOUT:
+            const newArrayCheckout1 = state.productsCheckout
+            newArrayCheckout1.push(action.payload)
+            return {
+                ...state,
+                productsCheckout: newArrayCheckout1,
+            }
+        case TYPES.REMOVE_ITEM_CHECKOUT:
+            const newArrayCheckout2 = [...state.productsCheckout]
+            newArrayCheckout2.splice(newArrayCheckout2.findIndex((item) => {
+                return item.product_id == action.payload
+            }), 1)
+            return {
+                ...state,
+                productsCheckout: newArrayCheckout2
+            }
         default:
             return state
     }
