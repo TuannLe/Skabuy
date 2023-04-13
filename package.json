@@ -28,6 +28,7 @@
     "react-native": "0.71.3",
     "react-native-date-picker": "^4.2.10",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-mail": "^6.1.1",
     "react-native-pager-view": "^6.1.4",
     "react-native-paper": "^5.3.1",
