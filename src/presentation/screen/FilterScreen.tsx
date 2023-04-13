@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux";
-import CheckBox from '@react-native-community/checkbox';
 import { decode as atob, encode as btoa } from 'base-64'
-import { getProductsWithFilter } from '../../core/api/ProductApi'
 import { ROUTER, COLOR } from '../constants'
 import { divPriceToArray } from '../../util/helper'
 import * as ACT_PRODUCT from '../../core/redux/actions/product'
+import { ItemFilter, ItemFilter2, ItemFilter3 } from '../components/Filter';
 
 export default function FilterScreen({ route, navigation }: any) {
     const dispatch = useDispatch()
@@ -18,6 +17,7 @@ export default function FilterScreen({ route, navigation }: any) {
         category_id: IDCategory,
         attributes: {},
     });
+
     const onSelectAttributeHandler = async (
         attributeID: any,
         attributeType: any,
@@ -47,8 +47,16 @@ export default function FilterScreen({ route, navigation }: any) {
                 data: [attributeValue],
             };
         }
+    }
+    const handleApply = () => {
         const encoded = btoa(JSON.stringify(selectedAttribute));
         dispatch(ACT_PRODUCT.getProductsWithFilterStart(encoded))
+        navigation.goBack()
+    }
+
+    const handleReset = () => {
+        dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
+        navigation.goBack()
     }
 
     return (
@@ -62,39 +70,32 @@ export default function FilterScreen({ route, navigation }: any) {
                 </TouchableOpacity>
                 <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Filter</Text>
             </View>
-            <ScrollView style={tw`p-2 bg-white`}>
+            <ScrollView style={tw`w-full p-2 bg-white`}>
                 <View style={tw`mt-3`}>
                     <Text style={tw`text-xl text-black font-medium ml-1`}>Filter by Price</Text>
                     <View style={tw`w-full flex-row flex-wrap`}>
                         {data_attributes.max_price &&
                             divPriceToArray(data_attributes.max_price).map((item, index): any => {
                                 return (
-                                    // <View
-                                    //     style={tw`flex flex-row items-center`}
-                                    //     key={index}
-                                    // >
-                                    //     <CheckBox
-                                    //         id={`trademark-${index}`}
-                                    //         value={isSelected}
-                                    //         onValueChange={setSelection}
-                                    //         boxType="square"
-                                    //         style={tw`mr-2`}
-                                    //     />
-                                    //     <Text>{item.text}</Text>
-                                    // </View>
                                     <View
-                                        key={index}
                                         style={tw`w-1/2`}
+                                        key={index}
                                     >
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                onSelectAttributeHandler("price", "price", item.data)
-                                            }}
-                                            style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
-                                        >
-                                            <Text style={tw`text-base text-black text-center`}>{item.text}</Text>
-                                        </TouchableOpacity>
+                                        <ItemFilter item={item} onSelectAttributeHandler={onSelectAttributeHandler} />
                                     </View>
+                                    // <View
+                                    //     key={index}
+                                    //     style={tw`w-1/2`}
+                                    // >
+                                    //     <TouchableOpacity
+                                    //         onPress={() => {
+                                    //             onSelectAttributeHandler("price", "price", item.data)
+                                    //         }}
+                                    //         style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
+                                    //     >
+                                    //         <Text style={tw`text-base text-black text-center`}>{item.text}</Text>
+                                    //     </TouchableOpacity>
+                                    // </View>
                                 )
                             })
                         }
@@ -107,23 +108,29 @@ export default function FilterScreen({ route, navigation }: any) {
                             data_attributes.trademarks.map((item: any, index: any) => {
                                 return (
                                     <View
-                                        key={index}
                                         style={tw`w-1/2`}
+                                        key={index}
                                     >
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                onSelectAttributeHandler("trademark", "trademark", item)
-                                            }}
-                                            style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
-                                        >
-                                            <Text style={tw`text-base text-black text-center`}>{item}</Text>
-                                        </TouchableOpacity>
+                                        <ItemFilter2 item={item} onSelectAttributeHandler={onSelectAttributeHandler} />
                                     </View>
+                                    // <View
+                                    //     key={index}
+                                    //     style={tw`w-1/2`}
+                                    // >
+                                    //     <TouchableOpacity
+                                    //         onPress={() => {
+                                    //             onSelectAttributeHandler("trademark", "trademark", item)
+                                    //         }}
+                                    //         style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
+                                    //     >
+                                    //         <Text style={tw`text-base text-black text-center`}>{item}</Text>
+                                    //     </TouchableOpacity>
+                                    // </View>
                                 );
                             })}
                     </View>
                 </View>
-                <View>
+                <View style={tw`w-full`}>
                     {data_attributes.attributes &&
                         data_attributes.attributes.map((item: any, index: any) => {
                             return (
@@ -135,23 +142,26 @@ export default function FilterScreen({ route, navigation }: any) {
                                     <View style={tw`w-full flex-row flex-wrap`}>
                                         {item[Object.keys(item)[0]].data.map((attItem: any, attIndex: any) => {
                                             return (
-                                                <View
-                                                    key={attIndex}
-                                                    style={tw`w-1/2`}
-                                                >
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            onSelectAttributeHandler(
-                                                                item[Object.keys(item)[0]].id,
-                                                                Object.keys(item)[0],
-                                                                attItem
-                                                            );
-                                                        }}
-                                                        style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
-                                                    >
-                                                        <Text style={tw`text-base text-black text-center`}>{`${attItem} ${item[Object.keys(item)[0]].unit}`}</Text>
-                                                    </TouchableOpacity>
+                                                <View style={tw`w-1/2 overflow-hidden`}>
+                                                    <ItemFilter3 item={item} attItem={attItem} onSelectAttributeHandler={onSelectAttributeHandler} />
                                                 </View>
+                                                // <View
+                                                //     key={attIndex}
+                                                //     style={tw`w-1/2`}
+                                                // >
+                                                //     <TouchableOpacity
+                                                //         onPress={() => {
+                                                //             onSelectAttributeHandler(
+                                                //                 item[Object.keys(item)[0]].id,
+                                                //                 Object.keys(item)[0],
+                                                //                 attItem
+                                                //             );
+                                                //         }}
+                                                //         style={tw`bg-[#17a2b830] p-2.5 rounded-md m-1`}
+                                                //     >
+                                                //         <Text style={tw`text-base text-black text-center`}>{`${attItem} ${item[Object.keys(item)[0]].unit}`}</Text>
+                                                //     </TouchableOpacity>
+                                                // </View>
                                             );
                                         })}
                                     </View>
@@ -163,11 +173,13 @@ export default function FilterScreen({ route, navigation }: any) {
             </ScrollView>
             <View style={tw`flex flex-row items-center bg-slate-50 p-3`}>
                 <TouchableOpacity
+                    onPress={handleReset}
                     style={tw`flex-1 py-3 border border-[${COLOR.PRIMARY}] rounded mr-1`}
                 >
                     <Text style={tw`text-base text-[${COLOR.PRIMARY}] font-medium text-center`}>Reset</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                    onPress={handleApply}
                     style={tw`flex-1 py-3 bg-[${COLOR.PRIMARY}] rounded ml-1`}
                 >
                     <Text style={tw`text-base text-[${COLOR.WHITE}] font-medium text-center`}>Apply</Text>

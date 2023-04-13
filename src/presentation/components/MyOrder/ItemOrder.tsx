@@ -1,14 +1,20 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
+import { useNavigation } from '@react-navigation/native';
 import {
     formatNumber
 } from "../../../util/helper";
+import { ROUTER } from '../../constants';
 
 export default function ItemOrder({ item: { item } }: any) {
     const date = new Date(item.created_at).toLocaleString();
+    const navigation = useNavigation()
     return (
-        <View style={tw`flex flex-row items-center py-2.5 bg-white border-b border-slate-100`}>
+        <TouchableOpacity
+            onPress={() => navigation.navigate(ROUTER.ORDER_DETAIL_SCREEN, { data: item })}
+            style={tw`flex flex-row items-center py-2.5 bg-white border-b border-slate-100`}
+        >
             <View style={tw`flex-1 px-1`}>
                 <Text numberOfLines={1} style={tw`text-center text-base text-black`}>{item.order_id}</Text>
             </View>
@@ -36,7 +42,6 @@ export default function ItemOrder({ item: { item } }: any) {
             <View style={tw`w-22 px-1`}>
                 <Text numberOfLines={1} style={tw`text-center text-base text-black`}>{formatNumber(item.total_price)}</Text>
             </View>
-
-        </View>
+        </TouchableOpacity>
     )
 }

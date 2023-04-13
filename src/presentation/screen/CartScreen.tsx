@@ -21,7 +21,6 @@ import { onApplyVoucher } from '../../core/api/cartAPI'
 export default function CartScreen({ navigation }: any) {
     const dispatch = useDispatch()
     const navigation1 = useNavigation();
-    const [checked, setChecked] = useState(false);
     const [subTotal, setSubTotal] = useState(0)
     const [total, setTotal] = useState(0)
     const [warn, setWarn] = useState('')
@@ -29,23 +28,12 @@ export default function CartScreen({ navigation }: any) {
     const [voucherInfor, setVoucherInfor] = useState({});
     const [applied, setApplied] = useState(false);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
-    console.log(ArrayProduct)
-    const ArrayProductCheckout = useSelector((state: any) => state.cart.productsCheckout)
-    console.log(ArrayProductCheckout)
+    const [arrayCheckout, setArrayCheckout] = useState([])
 
-
-    const handleChangeQuantity = (quantity: any, productID: any) => {
-        if (quantity > 0) {
-            dispatch(ACT_CART.ChangeQuantity({ quantity, productID }))
-            loadTotalPayment()
-        } else {
-            console.log('hoh')
-        }
-    }
-
-    const toggleCheckbox = () => {
-        setChecked(!checked)
-    }
+    // const [checked, setChecked] = useState(true);
+    // const toggleCheckbox = () => {
+    //     setChecked(!checked)
+    // }
 
     const onApplyVoucherHandler = async () => {
         if (voucherCode) {
@@ -76,16 +64,18 @@ export default function CartScreen({ navigation }: any) {
     };
 
     const loadTotalPayment = () => {
-        setSubTotal(calculateTotalPrice(ArrayProductCheckout));
+        setSubTotal(calculateTotalPrice(arrayCheckout));
     };
 
     useEffect(() => {
         setTotal(subTotal);
     }, [subTotal]);
 
-    useEffect(() => {
-        loadTotalPayment();
-    }, [ArrayProductCheckout]);
+
+
+    // useEffect(() => {
+    //     loadTotalPayment();
+    // }, [arrayCheckout]);
 
     const showConfirmDialog = () => {
         return Alert.alert(
@@ -123,10 +113,16 @@ export default function CartScreen({ navigation }: any) {
                     <FontAwesome name="angle-left" style={tw`text-white text-4xl`} />
                 </TouchableOpacity>
                 <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Cart</Text>
+                {/* <TouchableOpacity
+                    style={tw`absolute top-0 right-0 py-3.5 px-3 `}
+                    onPress={handleDelete}
+                >
+                    <Text style={tw`text-xl text-white font-medium`}>Delete all</Text>
+                </TouchableOpacity> */}
             </View>
             {ArrayProduct?.length ? (
                 <>
-                    <View style={tw`flex flex-row items-center justify-between bg-white mt-3`}>
+                    {/* <View style={tw`flex flex-row items-center justify-between bg-white mt-3`}>
                         <CheckBox
                             checked={checked}
                             onPress={toggleCheckbox}
@@ -143,13 +139,13 @@ export default function CartScreen({ navigation }: any) {
                         >
                             <Text style={tw`text-xl text-gray-500 font-medium`}>Delete all</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={ArrayProduct}
                         keyExtractor={(item, index) => item.product_id}
                         renderItem={({ item }) => {
-                            return <ItemCart handleChangeQuantity={handleChangeQuantity} data={item} />;
+                            return <ItemCart arrayCheckout={arrayCheckout} setArrayCheckout={setArrayCheckout} loadTotalPayment={loadTotalPayment} data={item} />;
                         }}
                         style={tw`${warn ? ('mb-85') : applied ? ('mb-73') : ('mb-79')}`}
                     />
@@ -202,7 +198,7 @@ export default function CartScreen({ navigation }: any) {
                             </View>
                             <TouchableOpacity
                                 style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
-                                onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal })}
+                                onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal, arrayCheckout: arrayCheckout })}
                             >
                                 <Text style={tw`text-white text-xl font-medium text-center `}>Proceed To Checkout</Text>
                             </TouchableOpacity>

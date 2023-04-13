@@ -52,10 +52,10 @@ export default function HomeScreen() {
     }
   }
 
-  const handleGetProductByCategory = (IDCategory: any) => {
+  const handleGetProductByCategory = (IDCategory: any, NameCategory: any) => {
     dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
     dispatch(ACT_PRODUCT.GetAttributeByCategoryStart(IDCategory))
-    navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN, { IDCategory: IDCategory })
+    navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN, { IDCategory: IDCategory, NameCategory: NameCategory })
   }
 
   const getInfoUser = () => {
@@ -100,7 +100,7 @@ export default function HomeScreen() {
           return (
             <View style={tw`w-1/3 p-2`}>
               <TouchableOpacity
-                onPress={() => handleGetProductByCategory(category.category_id)}
+                onPress={() => handleGetProductByCategory(category.category_id, category.category_name)}
                 style={tw`flex-1 items-center`}
               >
                 <Image

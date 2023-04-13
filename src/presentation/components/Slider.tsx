@@ -1,17 +1,11 @@
 import {
     View,
-    Text,
-    SafeAreaView,
-    StyleSheet,
-    ScrollView,
-    StatusBar,
     Dimensions,
     Image
 } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel';
 import React, { useState } from 'react'
 import tw from 'twrnc'
-import index from '../navigation';
 
 const WIDTH = Dimensions.get('window').width;
 

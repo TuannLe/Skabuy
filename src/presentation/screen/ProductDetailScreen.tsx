@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,7 +19,7 @@ import Slider from '../components/Slider';
 import { getPromotionalProducts } from '../../core/api/ProductApi';
 import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
 import ItemReviews from '../components/ItemReviews';
-import ItemProduct from '../components/ItemProduct'
+import ItemProductRelated from '../components/ItemProductRelated'
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -60,7 +60,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
 
     function star() {
         var myloop = [];
-
         for (let i = 1; i < 6; i++) {
             myloop.push(
                 <TouchableOpacity onPress={() => setRating(i)} key={i}>
@@ -102,7 +101,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             const res = await AXIOS.get(`product/get-product-by-slug/` + slug);
             setProduct(res.data.data)
             setFormatDolla((res.data.data.product_price))
-            setDescription(res.data.data.product_description.slice(3,150) + "...")
+            setDescription(res.data.data.product_description.slice(3, 150) + "...")
 
             const res1 = await AXIOS.get(`attribute/id/` + res.data.data.product_id);
             setOptions(res1.data.data);
@@ -121,6 +120,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
 
     const handlePlus = () => {
         if (selectedCharacteristics != null) {
+            setWarn('')
             if (quantity < selectedCharacteristics.total) {
                 onChangeQuantity(quantity + 1)
             }
@@ -140,7 +140,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const token = useSelector((state: any) => state.auth.token)
 
     const addItemToCart = () => {
-        if (token != '') {
+        if (token != '' && infoUser) {
             if (selectedCharacteristics === undefined) {
                 setWarn("Please select enough product characteristics");
             } else {
@@ -174,7 +174,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     }
 
     const handleAddFavorite = () => {
-        console.log('jj')
         dispatch(ACT_FAVORITE.AddItemFavorite(Product))
     }
 
@@ -308,16 +307,20 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             >
                                 <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                             </TouchableOpacity>
-
                             <TouchableOpacity
-                                onPress={() => addItemToCart()}
-                                style={tw`bg-[#17a2b8] rounded items-center w-32 justify-center ml-5 flex-row`}
+                                onPress={() => {
+                                    if (!(selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0)) {
+                                        addItemToCart()
+                                    } else {
+                                        setWarn("Please select enough product characteristics")
+                                    }
+                                }}
+                                style={tw`${selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0 ? 'bg-[#68c2d1bd]' : 'bg-[#17a2b8]'} rounded items-center w-32 justify-center ml-5 flex-row`}
                             >
                                 <Feather
                                     name='shopping-cart'
                                     style={tw`text-lg font-black text-[${COLOR.WHITE}]`}
                                 />
-                                {/* <Ionicons name='cart-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} /> */}
                                 <Text style={tw`text-white font-medium text-base`}> Add To Cart</Text>
                             </TouchableOpacity>
                         </View>
@@ -331,7 +334,15 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             </View>
             <View style={tw`mt-2`}>
                 <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
-                <Carousel_product item={RelatedProduct} />
+                {RelatedProduct.length ? (
+                    <FlatList
+                        data={RelatedProduct}
+                        renderItem={({ item }) => <ItemProductRelated item={item} />}
+                        keyExtractor={item => item.product_id}
+                        horizontal
+                    />
+                ) : null}
+                {/* <Carousel_product item={RelatedProduct} /> */}
             </View>
             <View style={tw`mt-2 bg-white p-5`}>
                 <Text style={tw`text-3xl text-black font-medium`}>Description</Text>

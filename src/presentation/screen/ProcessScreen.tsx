@@ -9,13 +9,13 @@ import { ROUTER, COLOR } from '../constants'
 
 export default function ProcessScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
-    const { subTotal, total } = route.params
+    const { subTotal, total, arrayCheckout } = route.params
 
-    const [userAddress, setUserAddress] = useState(userRedux?.user_address)
-    const [user_apt, setUserApt] = useState('')
-    const [user_city, setUserCity] = useState('')
-    const [user_state, setUserState] = useState('')
-    const [user_zipCode, setUserZipCode] = useState('')
+    const [userAddress, setUserAddress] = useState(userRedux?.user_address.split(/[,]/)[0].trim())
+    const [user_apt, setUserApt] = useState(userRedux?.user_address.split(/[,]/)[1].trim())
+    const [user_city, setUserCity] = useState(userRedux?.user_address.split(/[,]/)[2].trim())
+    const [user_state, setUserState] = useState(userRedux?.user_address.split(/[,]/)[3].trim())
+    const [user_zipCode, setUserZipCode] = useState(userRedux?.user_address.split(/[,]/)[4].trim())
     const [address, setAddress] = useState('')
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function ProcessScreen({ route, navigation }: any) {
 
 
     const handleCheckout = () => {
-        navigation.navigate(ROUTER.WEBVIEW_SCREEN, { data: data })
+        navigation.navigate(ROUTER.WEBVIEW_SCREEN, { data: data, arrayCheckout: arrayCheckout })
     }
 
     return (

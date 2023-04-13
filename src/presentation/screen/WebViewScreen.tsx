@@ -8,7 +8,7 @@ export default function ({ route }: any) {
     const webViewRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
-    const data = route.params;
+    const { data, arrayCheckout } = route.params;
 
     const onMessage = (event: any) => {
         console.log(event.nativeEvent.data);
@@ -22,8 +22,8 @@ export default function ({ route }: any) {
     }
 
     const setItemScript = `
-        const myObj = ${JSON.stringify(data.data)};
-        const myObj2 = ${JSON.stringify(ArrayProduct)}
+        const myObj = ${JSON.stringify(data)};
+        const myObj2 = ${JSON.stringify(arrayCheckout)}
         localStorage.setItem("skabuy_cart", JSON.stringify(myObj2));
         localStorage.setItem("checkout_data", JSON.stringify(myObj))
     `;
@@ -46,20 +46,21 @@ export default function ({ route }: any) {
         <SafeAreaView style={tw`flex w-full h-full`}>
             <WebView
                 ref={webViewRef}
-                onLoadStart={() => setVisible(true)}
-                onLoadEnd={() => setVisible(false)}
+                onEnter={handleWebViewNavigationStateChange}
+                onLoadStart={handleWebViewNavigationStateChange}
+                onLoadEnd={handleWebViewNavigationStateChange}
                 onLoad={handleWebViewNavigationStateChange}
                 onMessage={onMessage}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 source={{ uri: 'https://skabuy.com/process-checkout' }}
             />
-            <TouchableOpacity style={tw`p-3`} onPress={getCookie}>
+            {/* <TouchableOpacity style={tw`p-3`} onPress={getCookie}>
                 <Text>Get cookie</Text>
             </TouchableOpacity>
             {visible ? (
                 <ActivityIndicatorElement />
-            ) : null}
+            ) : null} */}
         </SafeAreaView>
     )
 }

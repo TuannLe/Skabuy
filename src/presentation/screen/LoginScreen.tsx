@@ -39,7 +39,7 @@ export default function LoginScreen() {
                         dispatch(ACTIONS.LoginSuccess({ token: JSON.stringify(response.token), data: response.data }));
                         setColor('green')
                         setLoginWarn("Login successful");
-                        navigation.navigate(ROUTER.PROFILE_TAB)
+                        navigation.navigate(ROUTER.HOME_TAB)
                         break;
                     case 1:
                         setColor('red')

@@ -10,16 +10,25 @@ import {
 } from "../../util/helper";
 import * as ACT_CART from '../../core/redux/actions/cart'
 
-export default function ItemCart({ handleChangeQuantity, data }: any) {
+export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPayment, data }: any) {
     const dispatch = useDispatch()
-    const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(false);
+
     const toggleCheckbox = () => {
         setChecked(!checked)
         if (!checked) {
-            dispatch(ACT_CART.AddItemCheckout(data))
-        } else (
-            dispatch(ACT_CART.RemoveItemCheckout(data.product_id))
-        )
+            let arr = arrayCheckout
+            arr.push(data)
+            setArrayCheckout(arr)
+            loadTotalPayment()
+        } else {
+            let arr = arrayCheckout
+            arr.splice(arr.findIndex((item: any) => {
+                return item.product_id == data.product_id
+            }), 1)
+            setArrayCheckout(arr)
+            loadTotalPayment()
+        }
     };
 
     const showConfirmDialog = () => {
@@ -30,7 +39,7 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        dispatch(ACT_CART.RemoveItemCart(data.product_id))
+                        dispatch(ACT_CART.RemoveItemCart(data))
                         return
                     }
                 },
@@ -46,6 +55,15 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
 
     const handleDeleteItem = () => {
         showConfirmDialog()
+    }
+    const [quantity, setQuantity] = useState(data.quantity)
+    const handleChangeQuantity = (quantity: any, productID: any) => {
+        if (quantity > 0) {
+            dispatch(ACT_CART.ChangeQuantity({ quantity, productID }))
+            loadTotalPayment()
+        } else {
+            showConfirmDialog()
+        }
     }
 
     return (
@@ -77,10 +95,13 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                 </View>
                 <View style={tw`flex-row mt-3`}>
                     <TouchableOpacity
-                        onPress={() => handleChangeQuantity(
-                            data.quantity - 1,
-                            data.product_id
-                        )}
+                        onPress={() => {
+                            setQuantity(quantity - 1)
+                            handleChangeQuantity(
+                                data.quantity - 1,
+                                data.product_id
+                            )
+                        }}
                         style={tw`bg-[#17a2b8] px-1.5 py-1 rounded items-center justify-center`}
                     >
                         <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
@@ -91,6 +112,7 @@ export default function ItemCart({ handleChangeQuantity, data }: any) {
                     <TouchableOpacity
                         onPress={() => {
                             if (!(data.quantity >= data.characteristics.total)) {
+                                setQuantity(quantity + 1)
                                 handleChangeQuantity(
                                     data.quantity + 1,
                                     data.product_id

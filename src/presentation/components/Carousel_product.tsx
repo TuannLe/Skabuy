@@ -13,7 +13,7 @@ import {
 import Carousel from 'react-native-reanimated-carousel';
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
-import Product_Item from './Product_Item';
+import ItemProduct from './ItemProduct';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
@@ -31,7 +31,7 @@ export default function Carousel_product({ item }: any) {
             {isLoading ?
                 <FlatList
                     data={item}
-                    renderItem={({ item }) => <Product_Item item={item} />}
+                    renderItem={({ item }) => <ItemProduct item={item} />}
                     keyExtractor={item => item.product_id}
                     horizontal
                 /> : <ActivityIndicator />

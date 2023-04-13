@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -10,15 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 import * as ACT_AUTH from '../../core/redux/actions/auth'
 import * as ACT_USER from '../../core/redux/actions/user'
 import MyOrder from '../navigation/MyOrder';
+import OrderDetailModal from '../modal/OrderDetailModal';
 import { ROUTER, COLOR } from '../constants'
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch()
+    const infoUser = useSelector((state: any) => state.auth.infoUser)
+
     const handleLogout = () => {
         dispatch(ACT_AUTH.logout())
     }
-    const infoUser = useSelector((state: any) => state.auth.infoUser)
 
     useEffect(() => {
         dispatch(ACT_USER.getOrderStart(infoUser?.user_id))
@@ -27,12 +29,12 @@ export default function ProfileScreen() {
         <SafeAreaView style={tw`flex w-full h-full`}>
             <View style={tw`bg-[${COLOR.PRIMARY}] px-3`}>
                 <View style={tw`flex flex-row items-center justify-end`}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         // onPress={}
                         style={tw`p-3`}
                     >
                         <Ionicons name='settings-outline' style={tw`text-2xl text-[${COLOR.WHITE}]`} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         onPress={() => navigation.navigate(ROUTER.CART_TAB)}
                         style={tw`p-3`}
@@ -61,16 +63,16 @@ export default function ProfileScreen() {
                 </TouchableOpacity>
                 <View style={tw`mx-3 bg-gray-200 h-[1px]`}></View>
                 <View style={tw`flex flex-row items-center justify-between pl-3`}>
-                    <View style={tw`flex flex-row items-center`}>
+                    <View style={tw`flex flex-row items-center h-13`}>
                         <MaterialIcons name='list-alt' style={tw`text-3xl text-[${COLOR.BLACK}] mr-1.5`} />
                         <Text style={tw`text-lg text-[${COLOR.BLACK}] font-medium`}>My orders</Text>
                     </View>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={tw`flex flex-row items-center p-3.5`}
                     >
                         <Text style={tw`text-base text-[${COLOR.GRAY}]`}>History</Text>
                         <Ionicons name='chevron-forward' style={tw`text-xl text-[${COLOR.GRAY}]`} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
             <View style={tw`flex-1`}>

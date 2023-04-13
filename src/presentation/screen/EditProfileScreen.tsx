@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Button  } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -12,7 +12,7 @@ import AXIOS from '../../core/api';
 
 export default function EditProfileScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
-    
+
     const [userAddress, setUserAddress] = useState(userRedux?.user_address.split(/[,]/)[0].trim())
     const [user_apt, setUserApt] = useState(userRedux?.user_address.split(/[,]/)[1].trim())
     const [user_city, setUserCity] = useState(userRedux?.user_address.split(/[,]/)[2].trim())
@@ -49,7 +49,7 @@ export default function EditProfileScreen({ route, navigation }: any) {
         }
     }
 
-    
+
     useEffect(() => {
         setAddress(`${userAddress}, ${user_apt}, ${user_city}, ${user_state}, ${user_zipCode}`)
 
@@ -58,7 +58,7 @@ export default function EditProfileScreen({ route, navigation }: any) {
             user_date_of_birth: formatPostbirddate(date),
             user_address: address,
         }))
-    }, [address,date])
+    }, [address, date])
 
     useEffect(() => {
         console.log(userRedux?.user_address.split(/[,]/))
@@ -77,7 +77,6 @@ export default function EditProfileScreen({ route, navigation }: any) {
             </View>
             <ScrollView>
                 <View style={tw`relative p-2 bg-white`}>
-                    <Text style={tw`text-2xl font-semibold text-black text-center my-2`}>Billing Address</Text>
                     <View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Full Name</Text>
@@ -87,21 +86,21 @@ export default function EditProfileScreen({ route, navigation }: any) {
                                 value={checkoutData.user_fullname}
                                 onChangeText={(val: any) => setCheckoutData((current) => ({
                                     ...current,
-                                    fullname: val,
+                                    user_fullname: val,
                                 }))}
                             />
                         </View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>E-mail</Text>
                             <View
-                                style={tw`border border-[#b1becb] px-2 py-3 text-base text-black bg-gray-200 rounded`}
+                                style={tw`border border-[#b1becb] px-2 py-2.5 text-base text-black bg-gray-200 rounded`}
                             >
                                 <Text style={tw`text-base text-black`}>{checkoutData.user_email}</Text>
                             </View>
                         </View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Phone Number</Text>
-                            <View style={tw`border rounded border-[#b1becb] h-11 justify-center text-black`}>
+                            <View style={tw`border rounded border-[#b1becb] h-11 px-2 justify-center`}>
                                 <PhoneInput
                                     ref={(ref) => { this.phone = ref }}
                                     onPressFlag={this.onPressFlag}
@@ -114,6 +113,7 @@ export default function EditProfileScreen({ route, navigation }: any) {
                                     textProps={{
                                         placeholder: 'Enter a phone number...'
                                     }}
+                                    textStyle={{ fontSize: 16 }}
                                 />
                             </View>
                         </View>
@@ -121,6 +121,7 @@ export default function EditProfileScreen({ route, navigation }: any) {
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
                             <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
                                 <Picker
+                                    style={tw`-mx-2`}
                                     selectedValue={checkoutData.user_gender}
                                     onValueChange={(itemValue, itemIndex) => setCheckoutData((current) => ({
                                         ...current,
@@ -136,9 +137,9 @@ export default function EditProfileScreen({ route, navigation }: any) {
                     </View>
                     <View style={tw`mb-5`}>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Date of birth</Text>
-                        <View style={tw`border rounded border-[#b1becb] h-11 justify-center text-black`}>
-                            <Text 
-                                style={tw`mb-1 text-base font-medium text-slate-800`}
+                        <View style={tw`border rounded border-[#b1becb] h-11 flex justify-center`}>
+                            <Text
+                                style={tw`ml-2 text-base text-black`}
                                 onPress={() => setOpen(true)}
                             >{formatbirddate(date)}</Text>
                             <DatePicker

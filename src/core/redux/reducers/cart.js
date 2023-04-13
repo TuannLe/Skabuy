@@ -6,10 +6,31 @@ export default function cartReducers(state = INIT_STATE.cart, action) {
         // Add item to cart
         case TYPES.ADD_ITEM_CART:
             const newArrayProduct = state.products
-            newArrayProduct.push(action.payload)
+            const productInCart = newArrayProduct.find(
+                (p) =>
+                    p.product_id == action.payload.product_id &&
+                    JSON.stringify(p.characteristics) ==
+                    JSON.stringify(action.payload.characteristics)
+            );
+
+            if (productInCart) {
+                const objIndex = newArrayProduct.findIndex(
+                    (obj) => obj.product_id === action.payload.product_id
+                );
+                if (newArrayProduct[objIndex].quantity === undefined) {
+                    newArrayProduct[objIndex].quantity = action.payload.quantity;
+                } else {
+                    newArrayProduct[objIndex].quantity =
+                        newArrayProduct[objIndex].quantity + action.payload.quantity;
+                    newArrayProduct[objIndex].totalprice =
+                        newArrayProduct[objIndex].quantity * newArrayProduct[objIndex].price;
+                }
+                state.products = [...newArrayProduct];
+            } else {
+                state.products = [...state.products, action.payload];
+            }
             return {
                 ...state,
-                products: newArrayProduct,
             }
         // Change quantity
         case TYPES.CHANGE_QUANTITY:
@@ -26,9 +47,13 @@ export default function cartReducers(state = INIT_STATE.cart, action) {
         // Remove item to cart
         case TYPES.REMOVE_ITEM_CART:
             const newArray = [...state.products]
-            newArray.splice(newArray.findIndex((item) => {
-                return item.product_id == action.payload
-            }), 1)
+            const objIndex = newArray.findIndex(
+                (obj) =>
+                    obj.product_id == action.payload.product_id &&
+                    JSON.stringify(obj.characteristics) ==
+                    JSON.stringify(action.payload.characteristics)
+            );
+            newArray.splice(objIndex, 1);
             return {
                 ...state,
                 products: newArray

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { decode as atob, encode as btoa } from 'base-64'
 import { useSelector } from "react-redux";
 import { ROUTER, COLOR } from '../constants'
@@ -39,7 +39,7 @@ export default function Header() {
         <View style={tw`flex flex-row items-center bg-[${COLOR.PRIMARY}] `}>
             <View style={tw`flex-1 justify-center items-center`}>
                 <TouchableOpacity
-                    onPress={() => navigation.openDrawer()}
+                    onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
                     style={tw`p-2 `}
                 >
                     <Ionicons name='menu-outline' size={50} style={tw`text-white`} />

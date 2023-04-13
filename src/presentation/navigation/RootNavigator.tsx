@@ -13,7 +13,8 @@ import {
     WebViewScreen,
     FilterScreen,
     PaymentDetail,
-    SearchResultScreen
+    SearchResultScreen,
+    OrderDetailScreen
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
@@ -96,6 +97,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.EDIT_PROFILE_SCREEN}
                 component={EditProfileScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.ORDER_DETAIL_SCREEN}
+                component={OrderDetailScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
