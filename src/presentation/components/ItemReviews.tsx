@@ -40,8 +40,8 @@ export default function ItemReviews({ item }: any) {
             </View>
             <View style={tw`p-2`}>
                 <View style={tw`flex-row`}>
-                    <Text style={tw`font-bold`}>{item.user_fullname} -</Text>
-                    <Text style={tw`italic`}> {formatdate(item.created_at)}</Text>
+                    <Text style={tw`text-base text-black font-medium`}>{item.user_fullname} -</Text>
+                    <Text style={tw`text-base italic`}> {formatdate(item.created_at)}</Text>
                 </View>
                 <View style={tw`flex flex-row items-center`}>
                     {star()}

@@ -11,7 +11,7 @@ export default function ItemProduct({ item }: any) {
     const { height, width } = useWindowDimensions();
     return (
         <TouchableOpacity
-            style={tw`w-[${(width - 30) / 3}px] p-2 border mx-1 mt-2 border-gray-100 bg-white`}
+            style={tw`w-[${(width - 30) / 3}px] p-2 border mx-1 border-gray-100 bg-white`}
             onPress={() => navigation.navigate(ROUTER.PRODUCT_DETAILS, { slug: item.product_slug })}
         >
             <Image

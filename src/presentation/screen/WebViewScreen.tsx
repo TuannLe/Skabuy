@@ -3,10 +3,12 @@ import React, { useRef, useState } from 'react'
 import tw from 'twrnc'
 import { WebView } from 'react-native-webview';
 import { useSelector } from "react-redux";
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { ROUTER, COLOR } from '../constants'
 
-export default function ({ route }: any) {
+export default function ({ route, navigation }: any) {
     const webViewRef = useRef(null);
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(true);
     const ArrayProduct = useSelector((state: any) => state.cart.products)
     const { data, arrayCheckout } = route.params;
 
@@ -28,8 +30,6 @@ export default function ({ route }: any) {
         localStorage.setItem("checkout_data", JSON.stringify(myObj))
     `;
 
-    console.log(setItemScript)
-
     const handleWebViewNavigationStateChange = (newNavState: any) => {
         webViewRef.current.injectJavaScript(setItemScript);
     }
@@ -43,12 +43,21 @@ export default function ({ route }: any) {
     }
 
     return (
-        <SafeAreaView style={tw`flex w-full h-full`}>
+        <SafeAreaView style={tw`w-full h-full`}>
+            <View style={tw`flex flex-row items-center z-10 absolute top-0 right-0 left-0 h-15 bg-[${COLOR.PRIMARY}]`}>
+                <TouchableOpacity
+                    style={tw`absolute top-0 left-0 py-2 pl-4 pr-8`}
+                    onPress={() => navigation.goBack()}
+                >
+                    <FontAwesome name="angle-left" style={tw`text-white text-4xl`} />
+                </TouchableOpacity>
+                <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Checkout</Text>
+            </View>
             <WebView
                 ref={webViewRef}
                 onEnter={handleWebViewNavigationStateChange}
                 onLoadStart={handleWebViewNavigationStateChange}
-                onLoadEnd={handleWebViewNavigationStateChange}
+                onLoadEnd={() => setVisible(false)}
                 onLoad={handleWebViewNavigationStateChange}
                 onMessage={onMessage}
                 javaScriptEnabled={true}
@@ -57,10 +66,10 @@ export default function ({ route }: any) {
             />
             {/* <TouchableOpacity style={tw`p-3`} onPress={getCookie}>
                 <Text>Get cookie</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {visible ? (
                 <ActivityIndicatorElement />
-            ) : null} */}
+            ) : null}
         </SafeAreaView>
     )
 }

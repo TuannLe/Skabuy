@@ -11,6 +11,24 @@ export const getPromotionalProducts = async () => {
     }
 }
 
+export const getSuperSaleItems = async (payload) => {
+    try {
+        const res = await AXIOS.get(`/product/sale/30/0/${payload}`)
+        return res.data
+    } catch (error) {
+        return error;
+    }
+}
+
+export const getSuperSaleAll = async (payload) => {
+    try {
+        const res = await AXIOS.get(`/product/sale/30/1/${payload}`)
+        return res.data
+    } catch (error) {
+        return error;
+    }
+}
+
 export const getProductByCategory = async (payload) => {
     try {
         const res = await AXIOS.get(`${url}/getProductsByCategoryID/${payload}`, {
@@ -51,7 +69,6 @@ export const getProductsWithFilter = async (payload) => {
 }
 
 export const searchProduct = async (payload) => {
-    console.log(payload)
     try {
         const res = await AXIOS.get(`${url}/search/${payload}`, {
             headers: {

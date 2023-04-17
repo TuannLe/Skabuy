@@ -12,7 +12,7 @@ export default function AllOrder() {
             {data.length ? (
                 <>
                     <HeaderOrder />
-                    <View>
+                    <View style={tw``}>
                         <FlatList
                             data={data}
                             renderItem={(item) => <ItemOrder item={item} />}

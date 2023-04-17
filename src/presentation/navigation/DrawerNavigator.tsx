@@ -44,9 +44,8 @@ const DrawerNavigator = () => {
 
     const CustomDrawer = (props: any) => {
         return (
-            <View style={tw`flex-1`}>
-                <View style={tw`p-2.5`}>
-                    {/* <TouchableOpacity
+            <View style={tw`w-full flex-1 px-2`}>
+                {/* <TouchableOpacity
                         onPress={() => {
                             navigation.navigate(ROUTER.HOME_TAB)
                         }}
@@ -59,31 +58,31 @@ const DrawerNavigator = () => {
                         />
                         <Text style={tw`text-black font-bold`}>Home</Text>
                     </TouchableOpacity> */}
-                    {
-                        allCategory.length ? (
-                            <FlatList
-                                data={allCategory}
-                                renderItem={({ item }) =>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            navigation.dispatch(DrawerActions.toggleDrawer())
-                                            handleGetProductByCategory(item.category_id, item.category_name)
-                                        }}
-                                        style={tw`flex flex-row items-center p-2`}
-                                    >
-                                        <Image
-                                            source={{ uri: item.category_image }}
-                                            style={tw`w-8 h-8 mr-3`}
-                                            resizeMode={'contain'}
-                                        />
-                                        <Text style={tw`text-black font-bold`}>{item.category_name}</Text>
-                                    </TouchableOpacity>
-                                }
-                                keyExtractor={item => item.category_id}
-                            />
-                        ) : null
-                    }
-                </View>
+                <Text style={tw`text-2xl text-center text-black font-medium mt-2`}>Categories</Text>
+                {
+                    allCategory.length ? (
+                        <FlatList
+                            data={allCategory}
+                            renderItem={({ item }) =>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.dispatch(DrawerActions.toggleDrawer())
+                                        handleGetProductByCategory(item.category_id, item.category_name)
+                                    }}
+                                    style={tw`flex flex-row items-center py-2`}
+                                >
+                                    <Image
+                                        source={{ uri: item.category_image }}
+                                        style={tw`w-8 h-8 mr-2`}
+                                        resizeMode={'contain'}
+                                    />
+                                    <Text numberOfLines={1} style={tw`text-black text-base`}>{item.category_name}</Text>
+                                </TouchableOpacity>
+                            }
+                            keyExtractor={item => item.category_id}
+                        />
+                    ) : null
+                }
                 {/* <DrawerContentScrollView>
                 <DrawerItemList {...props} />
             </DrawerContentScrollView> */}

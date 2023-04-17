@@ -7,7 +7,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { ROUTER, COLOR } from '../constants'
 import Product_Item from '../components/Product_Item'
 import FilterModal from '../modal/FilterModal'
-import Header from '../components/Header';
 
 export default function AllProductScreen({ route, navigation }: any) {
     const { IDCategory, NameCategory } = route.params
@@ -19,7 +18,6 @@ export default function AllProductScreen({ route, navigation }: any) {
 
     return (
         <View style={tw`flex w-full h-full`}>
-            {/* <Header /> */}
             <View style={tw`relative flex flex-row border-b border-gray-200 bg-[${COLOR.PRIMARY}] p-3`}>
                 <TouchableOpacity
                     style={tw`absolute top-0 left-0 py-2 pl-4 pr-8`}

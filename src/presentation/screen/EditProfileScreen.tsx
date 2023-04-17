@@ -162,9 +162,10 @@ export default function EditProfileScreen({ route, navigation }: any) {
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Street address</Text>
                         <GooglePlacesAutocomplete
                             placeholder='Search'
-                            onPress={(data, details = null) => {
-                                console.log(data, details);
+                            onPress={(data, details) => {
+                                console.log(data);
                             }}
+                            disableScroll={true}
                             query={{
                                 key: 'AIzaSyA55C2BqefckdRTvvLvya4IOS4ksDnBh9I',
                                 language: 'en',
@@ -176,13 +177,12 @@ export default function EditProfileScreen({ route, navigation }: any) {
                                     borderWidth: 1,
                                     borderColor: "#ced4da",
                                     borderRadius: 5,
-                                    
                                 },
                                 description: {
-                                  fontWeight: 'bold'
+                                    fontWeight: 'bold'
                                 },
                                 predefinedPlacesDescription: {
-                                  color: '#1faadb'
+                                    color: '#1faadb'
                                 }
                             }}
                         />

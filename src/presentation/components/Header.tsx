@@ -24,11 +24,14 @@ export default function Header() {
                 keyword: search,
                 price: selectedPrice,
             }
-            setSearch('')
             const encoded = btoa(JSON.stringify(data));
             const response = await searchProduct(encoded)
             if (response.status == "success") {
-                navigation.navigate(ROUTER.SEARCH_RESULT_SCREEN, { productList: response.data, keyword: data.keyword })
+                setSearch('')
+                let maxProduct = response.data.reduce((max: any, el: any) =>
+                    max.product_price > el.product_price ? max : el
+                );
+                navigation.navigate(ROUTER.SEARCH_RESULT_SCREEN, { productList: response.data, keyword: data.keyword, maxPrice: maxProduct.product_price })
             } else {
                 setWarn(response.message);
             }
@@ -40,9 +43,9 @@ export default function Header() {
             <View style={tw`flex-1 justify-center items-center`}>
                 <TouchableOpacity
                     onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-                    style={tw`p-2 `}
+                    style={tw`p-1.5 `}
                 >
-                    <Ionicons name='menu-outline' size={50} style={tw`text-white`} />
+                    <Ionicons name='menu-outline' size={40} style={tw`text-white`} />
                 </TouchableOpacity>
             </View>
             <View style={tw`w-76 flex flex-row items-center rounded-full bg-white px-3 `}>
@@ -50,7 +53,7 @@ export default function Header() {
                     placeholder='Search...'
                     value={search}
                     onChangeText={(val) => setSearch(val)}
-                    style={tw`flex-1 text-base`}
+                    style={tw`flex-1 text-base py-1.5`}
                 />
                 <TouchableOpacity
                     onPress={handleSearch}
@@ -61,19 +64,19 @@ export default function Header() {
             {token && infoUser ? (
                 <View style={tw`flex-1 justify-center items-center`}>
                     <TouchableOpacity
-                        style={tw`p-2`}
+                        style={tw`p-1.5`}
                         onPress={() => navigation.navigate(ROUTER.CART_TAB)}
                     >
-                        <Feather name='shopping-cart' style={tw`text-4xl text-white`} />
+                        <Feather name='shopping-cart' style={tw`text-3xl text-white`} />
                     </TouchableOpacity>
                 </View>
             ) : (
                 <View style={tw`flex-1 justify-center items-center`}>
                     <TouchableOpacity
-                        style={tw`p-2`}
+                        style={tw`p-1.5`}
                         onPress={() => navigation.navigate(ROUTER.LOGIN)}
                     >
-                        <Feather name="user" style={tw`text-4xl text-white`} />
+                        <Feather name="user" style={tw`text-3xl text-white`} />
                     </TouchableOpacity>
                 </View>
             )}

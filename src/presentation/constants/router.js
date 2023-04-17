@@ -16,6 +16,7 @@ export default {
     PROCESS_SCREEN: 'Process Screen',
     WEBVIEW_SCREEN: 'Web View Screen',
     FILTER_SCREEN: 'Filter Screen',
+    FILTER__SEARCH_SCREEN: 'Filter Search Screen',
     PAYMENT_DETAIL_SCREEN: 'PAYMENT_DETAIL Screen',
     SEARCH_RESULT_SCREEN: 'SEARCH_RESULT_SCREEN',
     EDIT_PROFILE_SCREEN: 'EDIT PROFILE SCREEN',

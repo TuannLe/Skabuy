@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
@@ -19,12 +19,35 @@ export default function ProfileScreen() {
     const infoUser = useSelector((state: any) => state.auth.infoUser)
 
     const handleLogout = () => {
-        dispatch(ACT_AUTH.logout())
+        showConfirmDialog()
     }
 
     useEffect(() => {
         dispatch(ACT_USER.getOrderStart(infoUser?.user_id))
     }, [infoUser])
+
+    const showConfirmDialog = () => {
+        return Alert.alert(
+            "Confirm",
+            "Are you sure you want to log out?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        dispatch(ACT_AUTH.logout())
+                        return
+                    }
+                },
+                {
+                    text: "No",
+                    onPress: () => {
+                        return
+                    }
+                }
+            ]
+        )
+    }
+
     return (
         <SafeAreaView style={tw`flex w-full h-full`}>
             <View style={tw`bg-[${COLOR.PRIMARY}] px-3`}>
@@ -53,7 +76,7 @@ export default function ProfileScreen() {
                     <Text style={tw`text-xl text-[${COLOR.WHITE}] font-medium`}>{infoUser?.user_email}</Text>
                 </View>
             </View>
-            <View style={tw`mt-3 bg-white`}>
+            <View style={tw` bg-white`}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate(ROUTER.EDIT_PROFILE_SCREEN)}
                     style={tw`flex flex-row items-center p-3 `}

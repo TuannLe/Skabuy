@@ -7,6 +7,7 @@ import { ROUTER } from '../constants';
 import Product_Item from '../components/Product_Item'
 import DeleteFavoriteItem from '../modal/DeleteFavoriteItem';
 import { useIsFocused } from '@react-navigation/native'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function FavoriteScreen() {
     const dispatch = useDispatch()

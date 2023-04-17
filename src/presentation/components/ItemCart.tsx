@@ -67,7 +67,7 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
     }
 
     return (
-        <View style={tw`w-full bg-white flex flex-row items-center py-3 mt-3`}>
+        <View style={tw`w-full bg-white flex flex-row items-center pt-1 pb-3 mt-1.5`}>
             <CheckBox
                 checked={checked}
                 onPress={toggleCheckbox}
@@ -78,20 +78,20 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
                 size={32}
             />
             <Image
-                style={{ width: 100, height: 100 }}
+                style={{ width: 80, height: 80 }}
                 source={{ uri: data.product_image }}
             />
             <View style={tw`flex-1 px-3`}>
                 <Text
-                    style={tw`text-2xl text-black font-medium`}
+                    style={tw`text-xl text-black font-medium`}
                     numberOfLines={1}
                 >
                     {data.product_name}
                 </Text>
-                <Text numberOfLines={1} style={tw`text-base`}>{data.characteristics.values}</Text>
+                <Text numberOfLines={1} style={tw``}>{data.characteristics.values}</Text>
                 <View style={tw`flex flex-row items-center`}>
-                    <Text style={tw`text-2xl line-through mr-2`}>{formatNumber(data.price)}</Text>
-                    <Text style={tw`text-2xl text-red-600 font-bold`}>{formatNumber(data.totalprice)}$</Text>
+                    <Text style={tw`text-xl line-through mr-2`}>{formatNumber(data.price)}</Text>
+                    <Text style={tw`text-xl text-red-600 font-bold`}>{formatNumber(data.totalprice)}$</Text>
                 </View>
                 <View style={tw`flex-row mt-3`}>
                     <TouchableOpacity
@@ -102,7 +102,7 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
                                 data.product_id
                             )
                         }}
-                        style={tw`bg-[#17a2b8] px-1.5 py-1 rounded items-center justify-center`}
+                        style={tw`bg-[#17a2b8] px-1 py-0.5 rounded items-center justify-center`}
                     >
                         <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
@@ -119,7 +119,7 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
                                 )
                             }
                         }}
-                        style={tw`bg-[#17a2b8] px-1.5 py-1 rounded items-center justify-center`}
+                        style={tw`bg-[#17a2b8] px-1 py-0.5 rounded items-center justify-center`}
                     >
                         <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
                     </TouchableOpacity>
@@ -129,7 +129,7 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
                 style={tw`p-3`}
                 onPress={() => handleDeleteItem()}
             >
-                <Ionicons name='trash-outline' style={tw`text-red-500 text-3xl`} />
+                <Ionicons name='trash-outline' style={tw`text-red-500 text-2xl`} />
                 {/* <Text style={tw`text-red-500 text-xl font-medium`}>Delete</Text> */}
             </TouchableOpacity>
         </View>

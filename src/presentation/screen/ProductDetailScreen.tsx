@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList, Button } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -6,20 +6,16 @@ import Carousel from 'react-native-reanimated-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather'
-import AntDesign from 'react-native-vector-icons/AntDesign'
 import RenderHTML from "react-native-render-html";
-import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
 import * as ACT_CART from '../../core/redux/actions/cart'
 import AXIOS from '../../core/api';
 import { COLOR, ROUTER } from '../constants';
 import { formatNumber, discountPrice } from '../../util/helper';
-import Carousel_product from '../components/Carousel_product';
-import Slider from '../components/Slider';
-import { getPromotionalProducts } from '../../core/api/ProductApi';
 import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
 import ItemReviews from '../components/ItemReviews';
 import ItemProductRelated from '../components/ItemProductRelated'
+import SkeletonProductDetail from '../components/skeleton/SkeletonProductDetail';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -33,7 +29,7 @@ const image_icon = [
 export default function ProductDetailScreen({ route, navigation }: any) {
     const dispatch = useDispatch()
     const { slug, otherParam } = route.params;
-    const [Product, setProduct] = useState([]);
+    const [Product, setProduct] = useState({});
     const [Options, setOptions] = useState([]);
     const [Comment, setComment] = useState([]);
     const [Description, setDescription] = useState("");
@@ -183,17 +179,17 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 <Carousel
                     loop
                     width={WIDTH}
-                    height={300}
+                    height={320}
                     autoPlay={true}
                     data={[...new Array(3).keys()]}
                     scrollAnimationDuration={1500}
                     renderItem={({ index }) => (
                         <View style={tw`flex-1 justify-center`}>
                             <Image
-                                style={{ width: WIDTH, height: 300 }}
+                                style={{ width: WIDTH, height: 320 }}
                                 source={{ uri: image_product[index] }}
+                                resizeMode='stretch'
                             />
-
                         </View>
                     )}
                 />
@@ -227,113 +223,117 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 size={27}
                 style={tw`text-white absolute top-4.5 right-18.5`}
             />
-            <View style={tw`p-2 bg-white`}>
-                {
-                    Product.product_discount > 0
-                        ?
-                        <>
-                            <View style={tw`bg-red-700 w-30 rounded`}>
-                                <Text style={tw`font-bold text-white text-center p-0.5`}>Instant Savings</Text>
-                            </View>
-                            <Text style={tw`text-[#dc3545] mt-1 text-xl font-medium`}>{formatNumber((Product.product_discount / 100) * formatDolla)} off with Instant Savings</Text>
-                        </>
-                        :
-                        <></>
-                }
-                <Text style={tw`text-2xl text-black font-medium`}>{Product.product_name}</Text>
-                <View style={tw`flex flex-row items-center`}>
-                    <View style={tw`flex flex-row items-center`}>
-                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-                        <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
-
-                    </View>
-                    <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
-                </View>
-                <View style={tw`my-3 flex`}>
-                    {
-                        Product.product_discount > 0
-                            ?
-                            <View style={tw`flex flex-row`}>
-                                <Text style={tw`text-5xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
-                                <Text style={tw`text-3xl text-[${COLOR.GRAY}] line-through ml-2 font-medium mt-1`}>{formatNumber(formatDolla)}</Text>
-                            </View>
-                            :
-                            <Text style={tw`text-3xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
-                    }
-                </View>
-                <View>
-                    <Text style={tw`text-xl text-black font-bold`}>Options:</Text>
-
-                    <View style={tw`w-full`}>
-                        <View style={tw`w-full flex-row flex-wrap`}>
-                            {Options.map((option, index) => {
-                                return (
-                                    <View key={index} style={tw`w-1/2 py-1 pr-2`}>
-                                        <TouchableOpacity
-                                            onPress={() => onSelectCharacteristics(option)}
-                                            style={tw`flex-1 border border-gray-300 items-center rounded-md p-2 ${(selectedCharacteristics != undefined &&
-                                                selectedCharacteristics.values === option.values) ? `border-[${COLOR.PRIMARY}]` : ""}`}
-                                        >
-                                            <Text style={tw`font-semibold`}>{option.values}</Text>
-                                        </TouchableOpacity>
+            {
+                Product.product_discount != null ? (
+                    <View style={tw`p-2 bg-white`}>
+                        {
+                            Product.product_discount > 0
+                                ?
+                                <>
+                                    <View style={tw`bg-red-700 w-30 rounded`}>
+                                        <Text style={tw`font-bold text-white text-center p-0.5`}>Instant Savings</Text>
                                     </View>
-                                );
-                            })}
+                                    <Text style={tw`text-[#dc3545] mt-1 text-xl font-medium`}>{formatNumber((Product.product_discount / 100) * formatDolla)} off with Instant Savings</Text>
+                                </>
+                                :
+                                <></>
+                        }
+                        <Text style={tw`text-2xl text-black font-medium`}>{Product.product_name}</Text>
+                        <View style={tw`flex flex-row items-center`}>
+                            <View style={tw`flex flex-row items-center`}>
+                                <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                                <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                                <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                                <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                                <FontAwesome name='star' style={tw`text-2xl text-[${COLOR.PRIMARY}]`} />
+                            </View>
+                            <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
+                        </View>
+                        <View style={tw`my-3 flex`}>
+                            {
+                                Product.product_discount > 0
+                                    ?
+                                    <View style={tw`flex flex-row`}>
+                                        <Text style={tw`text-5xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
+                                        <Text style={tw`text-3xl text-[${COLOR.GRAY}] line-through ml-2 font-medium mt-1`}>{formatNumber(formatDolla)}</Text>
+                                    </View>
+                                    :
+                                    <Text style={tw`text-3xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
+                            }
                         </View>
                         <View>
-                            <Text style={tw`text-base`}>
-                                {selectedCharacteristics != undefined &&
-                                    `${selectedCharacteristics.total} ${selectedCharacteristics.total > 1 ? "products are" : "product is"
-                                    } available`}
-                            </Text>
-                        </View>
-                        <View style={tw`box-border flex-row h-10 mt-3`}>
-                            <TouchableOpacity
-                                onPress={() => handleMinus()}
-                                style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
-                            >
-                                <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
-                            </TouchableOpacity>
-                            <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
-                                <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
+                            <Text style={tw`text-xl text-black font-bold`}>Options:</Text>
+                            <View style={tw`w-full`}>
+                                <View style={tw`w-full flex-row flex-wrap`}>
+                                    {Options.map((option, index) => {
+                                        return (
+                                            <View key={index} style={tw`w-1/2 py-1 pr-2`}>
+                                                <TouchableOpacity
+                                                    onPress={() => onSelectCharacteristics(option)}
+                                                    style={tw`flex-1 border border-gray-300 items-center rounded-md p-2 ${(selectedCharacteristics != undefined &&
+                                                        selectedCharacteristics.values === option.values) ? `border-[${COLOR.PRIMARY}]` : ""}`}
+                                                >
+                                                    <Text style={tw`font-semibold`}>{option.values}</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        );
+                                    })}
+                                </View>
+                                <View>
+                                    <Text style={tw`text-base`}>
+                                        {selectedCharacteristics != undefined &&
+                                            `${selectedCharacteristics.total} ${selectedCharacteristics.total > 1 ? "products are" : "product is"
+                                            } available`}
+                                    </Text>
+                                </View>
+                                <View style={tw`box-border flex-row h-10 mt-3`}>
+                                    <TouchableOpacity
+                                        onPress={() => handleMinus()}
+                                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                                    >
+                                        <Ionicons name='remove-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
+                                    </TouchableOpacity>
+                                    <View style={tw`bg-[#F5F5F5] w-12 justify-center`}>
+                                        <Text style={tw`text-xl text-black text-center`}>{quantity}</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        onPress={() => handlePlus()}
+                                        style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
+                                    >
+                                        <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            if (!(selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0)) {
+                                                addItemToCart()
+                                            } else {
+                                                setWarn("Please select enough product characteristics")
+                                            }
+                                        }}
+                                        style={tw`${selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0 ? 'bg-[#68c2d1bd]' : 'bg-[#17a2b8]'} rounded items-center w-32 justify-center ml-5 flex-row`}
+                                    >
+                                        <Feather
+                                            name='shopping-cart'
+                                            style={tw`text-lg font-black text-[${COLOR.WHITE}]`}
+                                        />
+                                        <Text style={tw`text-white font-medium text-base`}> Add To Cart</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {warn ? (
+                                    <Text style={tw`text-red-600 text-base mt-2`}>*{warn}</Text>
+                                ) : (
+                                    <Text></Text>
+                                )}
                             </View>
-
-                            <TouchableOpacity
-                                onPress={() => handlePlus()}
-                                style={tw`bg-[#17a2b8] rounded items-center w-10 justify-center`}
-                            >
-                                <Ionicons name='add-outline' style={tw`text-xl font-black text-[${COLOR.WHITE}]`} />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (!(selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0)) {
-                                        addItemToCart()
-                                    } else {
-                                        setWarn("Please select enough product characteristics")
-                                    }
-                                }}
-                                style={tw`${selectedCharacteristics == undefined || selectedCharacteristics.total == 0 || quantity == 0 ? 'bg-[#68c2d1bd]' : 'bg-[#17a2b8]'} rounded items-center w-32 justify-center ml-5 flex-row`}
-                            >
-                                <Feather
-                                    name='shopping-cart'
-                                    style={tw`text-lg font-black text-[${COLOR.WHITE}]`}
-                                />
-                                <Text style={tw`text-white font-medium text-base`}> Add To Cart</Text>
-                            </TouchableOpacity>
                         </View>
-                        {warn ? (
-                            <Text style={tw`text-red-600 text-base mt-2`}>*{warn}</Text>
-                        ) : (
-                            <Text></Text>
-                        )}
                     </View>
-                </View>
-            </View>
-            <View style={tw`mt-2`}>
-                <Text style={tw`text-3xl text-black font-medium`}>Related Products</Text>
+
+                ) : (
+                    <SkeletonProductDetail />
+                )
+            }
+            <View style={tw`mt-2 px-3`}>
+                <Text style={tw`text-2xl text-black font-medium`}>Related Products</Text>
                 {RelatedProduct.length ? (
                     <FlatList
                         data={RelatedProduct}
@@ -344,46 +344,46 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 ) : null}
                 {/* <Carousel_product item={RelatedProduct} /> */}
             </View>
-            <View style={tw`mt-2 bg-white p-5`}>
-                <Text style={tw`text-3xl text-black font-medium`}>Description</Text>
-                <Text style={tw`border-b border-indigo-500`}></Text>
+            <View style={tw`mt-2 bg-white p-3`}>
+                <Text style={tw`text-2xl text-black font-medium`}>Description</Text>
+                <Text style={tw`border-b mb-3 border-[${COLOR.PRIMARY}]`}></Text>
                 {Readmore === false ? (
                     <View>
-                        <RenderHTML contentWidth={WIDTH} source={{ html: Description }} />
+                        <RenderHTML baseStyle={tw`text-base`} contentWidth={WIDTH} source={{ html: Description }} />
                         <TouchableOpacity
                             onPress={() => setReadmore(true)}
                         >
-                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read more</Text>
+                            <Text style={tw`text-[${COLOR.PRIMARY}] font-bold text-center text-base`}>Read more</Text>
                         </TouchableOpacity>
                     </View>
                 ) : (
                     <View>
-                        <RenderHTML contentWidth={WIDTH} source={{ html: Product.product_description }} />
+                        <RenderHTML baseStyle={tw`text-base`} contentWidth={WIDTH} source={{ html: Product.product_description }} />
                         <TouchableOpacity
                             onPress={() => setReadmore(false)}
                         >
-                            <Text style={tw`text-[#0067a0] font-bold text-center text-base`}>Read less</Text>
+                            <Text style={tw`text-[${COLOR.PRIMARY}] font-bold text-center text-base`}>Read less</Text>
                         </TouchableOpacity>
                     </View>
                 )}
             </View>
-            <View style={tw`mt-2 bg-white p-5`}>
-                <Text style={tw`text-3xl text-black font-medium`}>Reviews {Comment.length}</Text>
+            <View style={tw`mt-2 bg-white p-3`}>
+                <Text style={tw`text-2xl text-black font-medium mb-2`}>Reviews {`(${Comment.length})`}</Text>
                 <FlatList
                     data={Comment}
                     renderItem={({ item, index, separators }) => <ItemReviews item={Comment[index]} />}
                 />
             </View>
             {infoUser ? (
-                <View style={tw`mt-1 bg-white p-5`}>
-                    <Text style={tw`text-3xl text-black font-medium`}>Leave a review</Text>
-                    <Text style={tw`text-lg p-1`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
-                    <View style={tw`flex flex-row items-center p-1`}>
-                        <Text style={tw`text-lg`}>Your Rating *: </Text>
+                <View style={tw`mt-1 bg-white p-3`}>
+                    <Text style={tw`text-2xl text-black font-medium mb-2`}>Leave a review</Text>
+                    <Text style={tw`text-base`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
+                    <View style={tw`flex flex-row items-center`}>
+                        <Text style={tw`text-base`}>Your Rating *: </Text>
                         {star()}
                     </View>
-                    <View style={tw`p-1`}>
-                        <Text style={tw`text-lg mb-1`}>Your Reviews *: </Text>
+                    <View>
+                        <Text style={tw`text-base mb-1`}>Your Reviews *: </Text>
                         <TextInput
                             editable
                             multiline={true}

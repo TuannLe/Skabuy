@@ -91,8 +91,9 @@ export default function ProcessScreen({ route, navigation }: any) {
                         </View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
-                            <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
+                            <View style={tw`border rounded border-[#b1becb] h-11.5 justify-center`}>
                                 <Picker
+                                    style={tw`-mx-2`}
                                     selectedValue={checkoutData.user_gender}
                                     onValueChange={(itemValue, itemIndex) => setCheckoutData((current) => ({
                                         ...current,
@@ -152,7 +153,7 @@ export default function ProcessScreen({ route, navigation }: any) {
                         </View>
                         <View style={tw`mb-5`}>
                             <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Phone Number</Text>
-                            <View style={tw`border rounded border-[#b1becb] h-11 justify-center text-black`}>
+                            <View style={tw`border rounded border-[#b1becb] h-11.5 justify-center px-2`}>
                                 <PhoneInput
                                     ref={(ref) => { this.phone = ref }}
                                     onPressFlag={this.onPressFlag}
@@ -165,6 +166,7 @@ export default function ProcessScreen({ route, navigation }: any) {
                                     textProps={{
                                         placeholder: 'Enter a phone number...'
                                     }}
+                                    textStyle={{ fontSize: 16 }}
                                 />
                             </View>
                         </View>

@@ -14,11 +14,13 @@ import {
     FilterScreen,
     PaymentDetail,
     SearchResultScreen,
-    OrderDetailScreen
+    OrderDetailScreen,
+    FilterSearchScreen,
+    EditProfileScreen
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
-import EditProfileScreen from '../screen/EditProfileScreen'
+
 
 export default function RootNavigator() {
     const Stack = createNativeStackNavigator()
@@ -102,6 +104,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.ORDER_DETAIL_SCREEN}
                 component={OrderDetailScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.FILTER__SEARCH_SCREEN}
+                component={FilterSearchScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

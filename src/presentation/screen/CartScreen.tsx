@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity, Alert, TextInput, FlatList, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput, StyleSheet, FlatList, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-// import CheckBox from '@react-native-community/checkbox';
 import { CheckBox } from '@rneui/themed';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from '@react-navigation/native';
@@ -198,7 +197,14 @@ export default function CartScreen({ navigation }: any) {
                             </View>
                             <TouchableOpacity
                                 style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
-                                onPress={() => navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal, arrayCheckout: arrayCheckout })}
+                                onPress={() => {
+                                    if (arrayCheckout.length) {
+                                        navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal, arrayCheckout: arrayCheckout })
+                                    }
+                                    // else {
+                                    //     setWarn('Please select item you want checkout')
+                                    // }
+                                }}
                             >
                                 <Text style={tw`text-white text-xl font-medium text-center `}>Proceed To Checkout</Text>
                             </TouchableOpacity>
@@ -221,3 +227,11 @@ export default function CartScreen({ navigation }: any) {
         </View>
     )
 }
+const styles = StyleSheet.create({
+    button: {
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginVertical: 10,
+    },
+});

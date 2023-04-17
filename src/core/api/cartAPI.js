@@ -27,3 +27,16 @@ export const getOrder = async (payload) => {
         return error
     }
 }
+
+export const getOrderDetail = async (payload) => {
+    try {
+        const res = await AXIOS.get(`${url}/${payload}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return res.data
+    } catch (error) {
+        return error
+    }
+}

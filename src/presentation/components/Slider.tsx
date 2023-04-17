@@ -12,7 +12,7 @@ const WIDTH = Dimensions.get('window').width;
 export default function Slider({ item }: any) {
 
     return (
-        <View style={tw`flex-1 mt-2 mb-2`}>
+        <View style={tw`flex-1`}>
             <Carousel
                 loop
                 width={WIDTH}
@@ -25,8 +25,8 @@ export default function Slider({ item }: any) {
                         <Image
                             style={{ width: WIDTH, height: 120 }}
                             source={{ uri: item[index] }}
+                            resizeMode='cover'
                         />
-
                     </View>
                 )}
             />
