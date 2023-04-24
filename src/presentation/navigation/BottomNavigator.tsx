@@ -23,7 +23,7 @@ export default function BottomNavigator() {
                     tabBarIcon: (({ focused, color }) =>
                         <>
                             {focused ? (
-                                <Foundation name="home" size={28} color={color} />
+                                <Foundation name="home" size={28} color={"#17a2b8"} />
                             ) : (
                                 <Octicons name="home" size={23} color={color} />
                             )}
@@ -40,7 +40,7 @@ export default function BottomNavigator() {
                     tabBarIcon: (({ focused, color }) =>
                         <>
                             {focused ? (
-                                <Ionicons name="ios-heart-sharp" size={26} color={color} />
+                                <Ionicons name="ios-heart-sharp" size={26} color={"#17a2b8"} />
                             ) : (
                                 <Ionicons name="ios-heart-outline" size={26} color={color} />
                             )}
@@ -58,7 +58,7 @@ export default function BottomNavigator() {
                         tabBarIcon: (({ focused, color }) =>
                             <>
                                 {focused ? (
-                                    <Ionicons name="ios-person" size={28} color={color} />
+                                    <Ionicons name="ios-person" size={28} color={"#17a2b8"} />
                                 ) : (
                                     <Ionicons name="ios-person-outline" size={24} color={color} />
                                 )}
@@ -76,7 +76,7 @@ export default function BottomNavigator() {
                         tabBarIcon: (({ focused, color }) =>
                             <>
                                 {focused ? (
-                                    <Ionicons name="ios-person" size={28} color={color} />
+                                    <Ionicons name="ios-person" size={28} color={"#17a2b8"} />
                                 ) : (
                                     <Ionicons name="ios-person-outline" size={24} color={color} />
                                 )}

@@ -7,7 +7,7 @@ import {
     RegisterScreen,
     CategoryScreen,
     VerifyCodeScreen,
-    AllProductScreen,
+    ProductByCategoryScreen,
     ProductDetailScreen,
     ProcessScreen,
     WebViewScreen,
@@ -16,7 +16,9 @@ import {
     SearchResultScreen,
     OrderDetailScreen,
     FilterSearchScreen,
-    EditProfileScreen
+    EditProfileScreen,
+    AllProductScreen,
+    FilterAllScreen
 } from '../screen'
 import { ROUTER } from '../constants'
 import DrawerNavigator from './DrawerNavigator'
@@ -62,6 +64,11 @@ export default function RootNavigator() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
+                name={ROUTER.PRODUCTS_BY_CATEGORY_SCREEN}
+                component={ProductByCategoryScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
                 name={ROUTER.ALL_PRODUCTS_SCREEN}
                 component={AllProductScreen}
                 options={{ headerShown: false }}
@@ -84,6 +91,11 @@ export default function RootNavigator() {
             <Stack.Screen
                 name={ROUTER.FILTER_SCREEN}
                 component={FilterScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={ROUTER.FILTER_ALL_SCREEN}
+                component={FilterAllScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen

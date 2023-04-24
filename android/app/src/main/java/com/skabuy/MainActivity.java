@@ -5,6 +5,9 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
+import org.devio.rn.splashscreen.SplashScreen;
+import android.os.Bundle;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -12,6 +15,12 @@ public class MainActivity extends ReactActivity {
    * used to schedule
    * rendering of the component.
    */
+  @Override
+  protected void onCreate(Bundle saveInstanceState) {
+    SplashScreen.show(this);
+    super.onCreate(saveInstanceState);
+  }
+
   @Override
   protected String getMainComponentName() {
     return "Skabuy";

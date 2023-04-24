@@ -67,7 +67,7 @@ export default function ItemCart({ arrayCheckout, setArrayCheckout, loadTotalPay
     }
 
     return (
-        <View style={tw`w-full bg-white flex flex-row items-center pt-1 pb-3 mt-1.5`}>
+        <View style={tw`w-full bg-white flex flex-row items-center pb-2 mt-1.5`}>
             <CheckBox
                 checked={checked}
                 onPress={toggleCheckbox}

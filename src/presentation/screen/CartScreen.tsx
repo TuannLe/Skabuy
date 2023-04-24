@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, TextInput, StyleSheet, FlatList, Button } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput, ToastAndroid, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -103,7 +103,7 @@ export default function CartScreen({ navigation }: any) {
     }
 
     return (
-        <View style={tw`relative w-full h-full`}>
+        <View style={tw`w-full h-full`}>
             <View style={tw`relative flex flex-row border-b border-gray-200 bg-[${COLOR.PRIMARY}] p-3`}>
                 <TouchableOpacity
                     style={tw`absolute top-0 left-0 py-2 pl-4 pr-8`}
@@ -141,25 +141,25 @@ export default function CartScreen({ navigation }: any) {
                     </View> */}
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={ArrayProduct}
+                        data={ArrayProduct.reverse()}
                         keyExtractor={(item, index) => item.product_id}
                         renderItem={({ item }) => {
                             return <ItemCart arrayCheckout={arrayCheckout} setArrayCheckout={setArrayCheckout} loadTotalPayment={loadTotalPayment} data={item} />;
                         }}
-                        style={tw`${warn ? ('mb-85') : applied ? ('mb-73') : ('mb-79')}`}
+                        style={tw`${warn ? (`mb-73`) : applied ? ('mb-62.5') : ('mb-67')}`}
                     />
-                    <View style={tw`absolute bg-gray-100 bottom-0 left-0 right-0 ${warn ? (`h-85`) : applied ? ('h-73') : ('h-79')}`}>
+                    <View style={tw`absolute bg-gray-100 bottom-0 left-0 right-0 ${warn ? (`h-73`) : applied ? ('h-62.5') : ('h-67')}`}>
                         {!applied && (
                             <View style={tw`flex flex-row my-1`}>
                                 <TextInput
                                     placeholder="Voucher code..."
-                                    style={tw`flex-1 p-3 text-lg bg-white`}
+                                    style={tw`flex-1 px-3 py-2 text-lg bg-white`}
                                     value={voucherCode}
                                     onChangeText={val => setVoucherCode(val)}
                                 />
                                 <TouchableOpacity
                                     onPress={onApplyVoucherHandler}
-                                    style={tw`p-3 bg-[${COLOR.PRIMARY}]`}
+                                    style={tw`px-3 py-2 ${voucherCode ? `bg-[${COLOR.PRIMARY}]` : `bg-[#68c2d1bd]`}`}
                                 >
                                     <Text style={tw`text-white text-lg font-medium`}>Apply voucher</Text>
                                 </TouchableOpacity>
@@ -171,18 +171,18 @@ export default function CartScreen({ navigation }: any) {
                             <></>
                         )}
                         <View style={tw`h-full bg-white px-3`}>
-                            <Text style={tw`text-3xl text-black font-medium mb-3`}>Cart Summary</Text>
-                            <View style={tw`flex flex-row items-center justify-between`}>
-                                <Text style={tw`text-black text-xl`}>Subtotal</Text>
-                                <Text style={tw`text-black text-xl font-medium`}>{formatNumber(subTotal)}</Text>
+                            <Text style={tw`text-2xl text-black font-medium`}>Cart Summary</Text>
+                            <View style={tw`flex flex-row items-center justify-between -mb-2.5`}>
+                                <Text style={tw`text-black text-lg`}>Subtotal</Text>
+                                <Text style={tw`text-black text-lg font-medium`}>{formatNumber(subTotal)}</Text>
                             </View>
                             <View style={tw`flex flex-row items-center justify-between py-3`}>
-                                <Text style={tw`text-black text-xl`}>Shipping</Text>
-                                <Text style={tw`text-black text-xl font-medium`}>$0</Text>
+                                <Text style={tw`text-black text-lg`}>Shipping</Text>
+                                <Text style={tw`text-black text-lg font-medium`}>$0</Text>
                             </View>
                             {applied && (
-                                <View style={tw`flex flex-row items-center justify-between`}>
-                                    <Text style={tw`text-black text-xl`}>{`Voucher ${voucherInfor?.voucher_infor?.code_sale}: ${voucherInfor.voucher_infor.discount}% off sale`}</Text>
+                                <View style={tw`flex flex-row items-center justify-between -mt-2.5 mb-2`}>
+                                    <Text style={tw`text-black text-lg`}>{`Voucher ${voucherInfor?.voucher_infor?.code_sale}: ${voucherInfor.voucher_infor.discount}% off sale`}</Text>
                                     <TouchableOpacity
                                         style={tw`px-1.5 py-0.5 bg-red-600 rounded-lg`}
                                         onPress={onCancelApplyVoucher}
@@ -191,19 +191,18 @@ export default function CartScreen({ navigation }: any) {
                                     </TouchableOpacity>
                                 </View>
                             )}
-                            <View style={tw`flex flex-row items-center justify-between pt-2 mt-3 border-t border-gray-300`}>
-                                <Text style={tw`text-black text-3xl font-medium`}>Total</Text>
-                                <Text style={tw`text-red-600 text-3xl font-medium`}>{formatNumber(total)}</Text>
+                            <View style={tw`flex flex-row items-center justify-between pt-2 border-t border-gray-300`}>
+                                <Text style={tw`text-black text-2xl font-medium`}>Total</Text>
+                                <Text style={tw`text-red-600 text-2xl font-medium`}>{formatNumber(total)}</Text>
                             </View>
                             <TouchableOpacity
-                                style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                                style={tw`p-3 ${arrayCheckout.length ? `bg-[${COLOR.PRIMARY}]` : `bg-[#68c2d1bd]`} my-3 rounded-md`}
                                 onPress={() => {
                                     if (arrayCheckout.length) {
                                         navigation1.navigate(ROUTER.PROCESS_SCREEN, { total: total, subTotal: subTotal, arrayCheckout: arrayCheckout })
+                                    } else {
+                                        ToastAndroid.show('Please select item you want checkout', ToastAndroid.SHORT);
                                     }
-                                    // else {
-                                    //     setWarn('Please select item you want checkout')
-                                    // }
                                 }}
                             >
                                 <Text style={tw`text-white text-xl font-medium text-center `}>Proceed To Checkout</Text>
@@ -227,11 +226,3 @@ export default function CartScreen({ navigation }: any) {
         </View>
     )
 }
-const styles = StyleSheet.create({
-    button: {
-        borderRadius: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginVertical: 10,
-    },
-});

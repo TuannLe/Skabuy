@@ -12,7 +12,7 @@ export default function ItemOrder({ item: { item } }: any) {
     const date = new Date(item.created_at).toLocaleString();
     const navigation = useNavigation()
     const handleGetOrderDetail = async (orderId: any) => {
-        const response = await getOrderDetail(orderId)
+        const response = await getOrderDetail("order_47b993cc-7a25-4e82-9437-9bba3a53c9bc")
         if (response.status === 'success') {
             navigation.navigate(ROUTER.ORDER_DETAIL_SCREEN, { data: item, detail: response.data })
         }

@@ -2,12 +2,12 @@ import { View, Text, FlatList, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import { useDispatch, useSelector } from "react-redux";
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useIsFocused } from '@react-navigation/native'
 import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
-import { ROUTER } from '../constants';
 import Product_Item from '../components/Product_Item'
 import DeleteFavoriteItem from '../modal/DeleteFavoriteItem';
-import { useIsFocused } from '@react-navigation/native'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { ROUTER, COLOR } from '../constants'
 
 export default function FavoriteScreen() {
     const dispatch = useDispatch()
@@ -49,14 +49,21 @@ export default function FavoriteScreen() {
 
     return (
         <View style={tw`w-full h-full`}>
-            <View style={tw`flex flex-row items-center pl-3 justify-between`}>
+            {/* <View style={tw`flex flex-row items-center pl-3 justify-between`}>
                 <Text style={tw`text-2xl text-black font-medium`}>Favorite</Text>
-                <TouchableOpacity
-                    style={tw`p-3`}
-                    onPress={handleDelete}
-                >
-                    <Text style={tw`text-lg text-red-500 font-medium`}>Delete all</Text>
-                </TouchableOpacity>
+            </View> */}
+            <View style={tw`relative flex flex-row border-b border-gray-200 bg-[${COLOR.PRIMARY}] p-3`}>
+                <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Favorite</Text>
+                {
+                    data?.length ? (
+                        <TouchableOpacity
+                            style={tw`absolute top-0 right-0 py-3.5 px-3`}
+                            onPress={handleDelete}
+                        >
+                            <Ionicons name='trash-outline' style={tw`text-red-600 text-2xl`} />
+                        </TouchableOpacity>
+                    ) : null
+                }
             </View>
             <View style={tw`px-2.5 mb-13`}>
                 {
@@ -76,7 +83,7 @@ export default function FavoriteScreen() {
                             />
                         )
                         : (
-                            <View style={tw`flex-1 justify-center h-full`}>
+                            <View style={tw`w-full justify-center h-full`}>
                                 <Text style={tw`text-lg font-medium text-center`}>You don't have favorite item</Text>
                             </View>
                         )

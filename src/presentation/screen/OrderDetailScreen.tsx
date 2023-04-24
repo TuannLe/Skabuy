@@ -31,10 +31,10 @@ export default function OrderDetailScreen({ route, navigation }: any) {
                             <Text style={tw`text-lg text-black w-40 font-medium`}>Address:</Text>
                             <Text style={tw`text-lg text-black flex-1`}>{data.address}</Text>
                         </View>
-                        <View style={tw`flex flex-row mt-2`}>
+                        {/* <View style={tw`flex flex-row mt-2`}>
                             <Text style={tw`text-lg text-black w-40 font-medium`}>Message:</Text>
                             <Text style={tw`text-lg text-black flex-1`}></Text>
-                        </View>
+                        </View> */}
                         <View style={tw`flex flex-row mt-2`}>
                             <Text style={tw`text-lg text-black w-40 font-medium`}>Payment method:</Text>
                             <Text style={tw`text-lg text-black flex-1`}>

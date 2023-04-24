@@ -1,8 +1,9 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import Toast from 'react-native-root-toast';
 import { login } from '../../core/api/authAPI'
 import * as ACTIONS from '../../core/redux/actions/auth'
 import { ROUTER, COLOR } from '../constants'
@@ -38,7 +39,7 @@ export default function LoginScreen() {
                     case 0:
                         dispatch(ACTIONS.LoginSuccess({ token: JSON.stringify(response.token), data: response.data }));
                         setColor('green')
-                        setLoginWarn("Login successful");
+                        handleShowToast()
                         navigation.navigate(ROUTER.HOME_TAB)
                         break;
                     case 1:
@@ -55,6 +56,20 @@ export default function LoginScreen() {
             }
         }
     }
+
+    const handleShowToast = () => {
+        Toast.show('Login successful!', {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.BOTTOM,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+            backgroundColor: '#1bb93f',
+            textColor: 'white'
+        });
+    }
+
 
     return (
         <View style={tw`flex w-full h-full pt-16 bg-white px-5`}>
@@ -85,6 +100,7 @@ export default function LoginScreen() {
             />
             <TouchableOpacity
                 style={tw`py-1 mt-2`}
+                onPress={handleShowToast}
             >
                 <Text style={tw`text-base text-gray-500`}>Forgot your password?</Text>
             </TouchableOpacity>

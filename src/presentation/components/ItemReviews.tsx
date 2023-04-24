@@ -8,9 +8,6 @@ import { formatNumber, formatdate } from '../../util/helper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default function ItemReviews({ item }: any) {
-    const navigation = useNavigation();
-    const WIDTH = Dimensions.get('window').width;
-
     function star() {
         var myloop = [];
 
@@ -46,7 +43,7 @@ export default function ItemReviews({ item }: any) {
                 <View style={tw`flex flex-row items-center`}>
                     {star()}
                 </View>
-                <Text>{item.comment_content}</Text>
+                <Text style={tw`text-base`}>{item.comment_content}</Text>
             </View>
         </View>
     )

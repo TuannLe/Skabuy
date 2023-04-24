@@ -1,18 +1,21 @@
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Button } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, TextInput, ToastAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'twrnc'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from "react-redux";
 import { Picker } from '@react-native-picker/picker';
 import PhoneInput from 'react-native-phone-input'
-import { ROUTER, COLOR } from '../constants'
 import DatePicker from 'react-native-date-picker'
 import { formatPostbirddate, formatbirddate, formatdate } from '../../util/helper';
-import AXIOS from '../../core/api';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { ROUTER, COLOR } from '../constants'
+import AXIOS from '../../core/api';
+import * as ACT_AUTH from '../../core/redux/actions/auth'
 
 export default function EditProfileScreen({ route, navigation }: any) {
     const userRedux = useSelector((state: any) => state.auth.infoUser);
+    const token = useSelector((state: any) => state.auth.token)
+    const dispatch = useDispatch()
 
     const [userAddress, setUserAddress] = useState(userRedux?.user_address.split(/[,]/)[0].trim())
     const [user_apt, setUserApt] = useState(userRedux?.user_address.split(/[,]/)[1].trim())
@@ -24,6 +27,28 @@ export default function EditProfileScreen({ route, navigation }: any) {
     const [date, setDate] = useState(new Date(userRedux?.user_date_of_birth))
     const [open, setOpen] = useState(false)
 
+    useEffect(() => {
+        setAddress(`${userAddress}, ${user_apt}, ${user_city}, ${user_state}, ${user_zipCode}`)
+        setCheckoutData((current) => ({
+            ...current,
+            user_date_of_birth: formatPostbirddate(date),
+            user_address: address,
+        }))
+    }, [userAddress, user_apt, user_city, user_state, user_zipCode])
+
+    useEffect(() => {
+        setCheckoutData((current) => ({
+            ...current,
+            user_address: address,
+        }))
+    }, [address])
+
+    useEffect(() => {
+        setCheckoutData((current) => ({
+            ...current,
+            user_date_of_birth: formatPostbirddate(date),
+        }))
+    }, [date])
 
     const [checkoutData, setCheckoutData] = useState({
         user_id: userRedux?.user_id,
@@ -37,33 +62,18 @@ export default function EditProfileScreen({ route, navigation }: any) {
 
     const postEditUser = async () => {
         try {
-            console.log(formatPostbirddate(date))
-            console.log(checkoutData)
-            const res = await AXIOS.post(`user/editUser`, checkoutData, { headers: { "Content-Type": "application/json" } }).then((result) => result.data);
+            console.log('he', checkoutData)
+            const res = await AXIOS.post(`/user/editUser`, checkoutData, { headers: { "Content-Type": "application/json" } }).then((result) => result.data);
             if (res.status == "success") {
-                console.log("success")
+                ToastAndroid.show('Update successfully!', ToastAndroid.SHORT);
+                dispatch(ACT_AUTH.GetUserStart({ token: JSON.parse(token) }))
             } else {
-                console.log("fail")
+                ToastAndroid.show('Update failed!', ToastAndroid.SHORT);
             }
         } catch (error) {
             return error;
         }
     }
-
-
-    useEffect(() => {
-        setAddress(`${userAddress}, ${user_apt}, ${user_city}, ${user_state}, ${user_zipCode}`)
-
-        setCheckoutData((current) => ({
-            ...current,
-            user_date_of_birth: formatPostbirddate(date),
-            user_address: address,
-        }))
-    }, [address, date])
-
-    useEffect(() => {
-        console.log(userRedux?.user_address.split(/[,]/))
-    }, [])
 
     return (
         <View style={tw`relative w-full h-full font-sans`}>
@@ -77,63 +87,61 @@ export default function EditProfileScreen({ route, navigation }: any) {
                 <Text style={tw`flex-1 text-2xl font-medium text-white text-center`}>Edit Profile</Text>
             </View>
             <ScrollView>
-                <View style={tw`relative p-2 bg-white`}>
-                    <View>
-                        <View style={tw`mb-5`}>
-                            <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Full Name</Text>
-                            <TextInput
-                                style={tw`text-base border rounded border-[#b1becb] p-2`}
-                                placeholder={"Full name"}
-                                value={checkoutData.user_fullname}
-                                onChangeText={(val: any) => setCheckoutData((current) => ({
+                <View style={tw`p-2 bg-white`}>
+                    <View style={tw`mb-5`}>
+                        <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Full Name</Text>
+                        <TextInput
+                            style={tw`text-base border rounded border-[#b1becb] p-2`}
+                            placeholder={"Full name"}
+                            value={checkoutData.user_fullname}
+                            onChangeText={(val: any) => setCheckoutData((current) => ({
+                                ...current,
+                                user_fullname: val,
+                            }))}
+                        />
+                    </View>
+                    <View style={tw`mb-5`}>
+                        <Text style={tw`mb-1 text-base font-medium text-slate-800`}>E-mail</Text>
+                        <View
+                            style={tw`border border-[#b1becb] px-2 py-2.5 text-base text-black bg-gray-200 rounded`}
+                        >
+                            <Text style={tw`text-base text-black`}>{checkoutData.user_email}</Text>
+                        </View>
+                    </View>
+                    <View style={tw`mb-5`}>
+                        <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Phone Number</Text>
+                        <View style={tw`border rounded border-[#b1becb] h-11 px-2 justify-center`}>
+                            <PhoneInput
+                                ref={(ref) => { this.phone = ref }}
+                                onPressFlag={this.onPressFlag}
+                                initialCountry={'us'}
+                                initialValue={checkoutData.user_phone_number}
+                                onChangePhoneNumber={val => setCheckoutData((current) => ({
                                     ...current,
-                                    user_fullname: val,
+                                    user_phone_number: val,
                                 }))}
+                                textProps={{
+                                    placeholder: 'Enter a phone number...'
+                                }}
+                                textStyle={{ fontSize: 16 }}
                             />
                         </View>
-                        <View style={tw`mb-5`}>
-                            <Text style={tw`mb-1 text-base font-medium text-slate-800`}>E-mail</Text>
-                            <View
-                                style={tw`border border-[#b1becb] px-2 py-2.5 text-base text-black bg-gray-200 rounded`}
+                    </View>
+                    <View style={tw`mb-5`}>
+                        <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
+                        <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
+                            <Picker
+                                style={tw`-mx-2`}
+                                selectedValue={checkoutData.user_gender}
+                                onValueChange={(itemValue, itemIndex) => setCheckoutData((current) => ({
+                                    ...current,
+                                    user_gender: itemValue,
+                                }))}
                             >
-                                <Text style={tw`text-base text-black`}>{checkoutData.user_email}</Text>
-                            </View>
-                        </View>
-                        <View style={tw`mb-5`}>
-                            <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Phone Number</Text>
-                            <View style={tw`border rounded border-[#b1becb] h-11 px-2 justify-center`}>
-                                <PhoneInput
-                                    ref={(ref) => { this.phone = ref }}
-                                    onPressFlag={this.onPressFlag}
-                                    initialCountry={'us'}
-                                    initialValue={checkoutData.user_phone_number}
-                                    onChangePhoneNumber={val => setCheckoutData((current) => ({
-                                        ...current,
-                                        user_phone_number: val,
-                                    }))}
-                                    textProps={{
-                                        placeholder: 'Enter a phone number...'
-                                    }}
-                                    textStyle={{ fontSize: 16 }}
-                                />
-                            </View>
-                        </View>
-                        <View style={tw`mb-5`}>
-                            <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Gender</Text>
-                            <View style={tw`border rounded border-[#b1becb] h-11 justify-center`}>
-                                <Picker
-                                    style={tw`-mx-2`}
-                                    selectedValue={checkoutData.user_gender}
-                                    onValueChange={(itemValue, itemIndex) => setCheckoutData((current) => ({
-                                        ...current,
-                                        user_gender: itemValue,
-                                    }))}
-                                >
-                                    <Picker.Item label="-- Gender --" />
-                                    <Picker.Item label="Male" value="male" />
-                                    <Picker.Item label="Female" value="female" />
-                                </Picker>
-                            </View>
+                                <Picker.Item label="-- Gender --" />
+                                <Picker.Item label="Male" value="male" />
+                                <Picker.Item label="Female" value="female" />
+                            </Picker>
                         </View>
                     </View>
                     <View style={tw`mb-5`}>
@@ -160,7 +168,7 @@ export default function EditProfileScreen({ route, navigation }: any) {
                     </View>
                     <View style={tw`mb-5`}>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Street address</Text>
-                        <GooglePlacesAutocomplete
+                        {/* <GooglePlacesAutocomplete
                             placeholder='Search'
                             onPress={(data, details) => {
                                 console.log(data);
@@ -185,13 +193,13 @@ export default function EditProfileScreen({ route, navigation }: any) {
                                     color: '#1faadb'
                                 }
                             }}
-                        />
-                        {/* <TextInput
+                        /> */}
+                        <TextInput
                             style={tw`text-base border rounded border-[#b1becb] p-2`}
                             placeholder={"Street address"}
                             value={userAddress}
                             onChangeText={val => setUserAddress(val)}
-                        /> */}
+                        />
                     </View>
                     <View style={tw`mb-5`}>
                         <Text style={tw`mb-1 text-base font-medium text-slate-800`}>Apt., ste., bldg.</Text>

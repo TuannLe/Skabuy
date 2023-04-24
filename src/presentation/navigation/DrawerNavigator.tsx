@@ -39,7 +39,7 @@ const DrawerNavigator = () => {
     const handleGetProductByCategory = (IDCategory: any, NameCategory: any) => {
         dispatch(ACT_PRODUCT.GetProductByCategoryStart(IDCategory))
         dispatch(ACT_PRODUCT.GetAttributeByCategoryStart(IDCategory))
-        navigation.navigate(ROUTER.ALL_PRODUCTS_SCREEN, { IDCategory: IDCategory, NameCategory: NameCategory })
+        navigation.navigate(ROUTER.PRODUCTS_BY_CATEGORY_SCREEN, { IDCategory: IDCategory, NameCategory: NameCategory })
     }
 
     const CustomDrawer = (props: any) => {

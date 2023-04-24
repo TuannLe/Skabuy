@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import tw from 'twrnc'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux";

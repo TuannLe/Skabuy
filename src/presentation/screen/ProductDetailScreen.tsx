@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableOpacity, ToastAndroid, TextInput, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import tw from 'twrnc'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -16,6 +16,7 @@ import * as ACT_FAVORITE from '../../core/redux/actions/favorite'
 import ItemReviews from '../components/ItemReviews';
 import ItemProductRelated from '../components/ItemProductRelated'
 import SkeletonProductDetail from '../components/skeleton/SkeletonProductDetail';
+import Pagination from '../components/Pagination'
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -32,6 +33,8 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const [Product, setProduct] = useState({});
     const [Options, setOptions] = useState([]);
     const [Comment, setComment] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [productsPerPage, setProductsPerPage] = useState(6);
     const [Description, setDescription] = useState("");
     const [Readmore, setReadmore] = useState(false);
     const [RelatedProduct, setRelatedProduct] = useState([]);
@@ -42,6 +45,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     const [valueComment, onChangeText] = React.useState('');
     const [rating, setRating] = useState(5);
     const infoUser = useSelector((state: any) => state.auth.infoUser)
+    const [isHeart, setHeart] = useState(false)
 
     const image_product = [
         Product.product_image,
@@ -84,8 +88,9 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 onChangeText("");
                 getProductBySlug();
                 setRating(5)
+                ToastAndroid.show('Your comment is posted', ToastAndroid.SHORT);
             } else {
-                console.log("fail")
+                ToastAndroid.show('Comment failed', ToastAndroid.SHORT);
             }
         } catch (error) {
             return error;
@@ -111,8 +116,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             return error;
         }
     }
-
-
 
     const handlePlus = () => {
         if (selectedCharacteristics != null) {
@@ -161,6 +164,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         : Product.product_price * quantity,
                 };
                 dispatch(ACT_CART.AddItemCart(product_current));
+                ToastAndroid.show('Add cart successfully!', ToastAndroid.SHORT);
                 navigation.navigate(ROUTER.CART_TAB)
             }
         } else {
@@ -170,8 +174,14 @@ export default function ProductDetailScreen({ route, navigation }: any) {
     }
 
     const handleAddFavorite = () => {
+        setHeart(true)
+        ToastAndroid.show('Add favorite item successful', ToastAndroid.SHORT);
         dispatch(ACT_FAVORITE.AddItemFavorite(Product))
     }
+
+    var lastCommentIndex = currentPage * productsPerPage;
+    var firstCommentIndex = lastCommentIndex - productsPerPage;
+    var currentComments = Comment.slice(firstCommentIndex, lastCommentIndex);
 
     return (
         <ScrollView style={tw`w-full h-full`}>
@@ -213,16 +223,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                 name='shopping-cart'
                 style={tw`text-2xl text-white absolute top-4 right-5.5`}
             />
-            <TouchableOpacity
-                onPress={handleAddFavorite}
-                style={tw`w-12 h-12 rounded-full bg-black opacity-30 absolute top-2 right-16`}
-            >
-            </TouchableOpacity>
-            <Ionicons
-                name='heart-outline'
-                size={27}
-                style={tw`text-white absolute top-4.5 right-18.5`}
-            />
+
             {
                 Product.product_discount != null ? (
                     <View style={tw`p-2 bg-white`}>
@@ -249,13 +250,25 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             </View>
                             <Text style={tw`text-lg font-medium ml-3 text-[${COLOR.GRAY}]`}>(0)</Text>
                         </View>
-                        <View style={tw`my-3 flex`}>
+                        <View style={tw`mt-2 flex`}>
                             {
                                 Product.product_discount > 0
                                     ?
-                                    <View style={tw`flex flex-row`}>
-                                        <Text style={tw`text-5xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
-                                        <Text style={tw`text-3xl text-[${COLOR.GRAY}] line-through ml-2 font-medium mt-1`}>{formatNumber(formatDolla)}</Text>
+                                    <View style={tw`flex flex-row items-center justify-between`}>
+                                        <View style={tw`flex flex-row`}>
+                                            <Text style={tw`text-5xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla - ((Product.product_discount / 100) * formatDolla))}</Text>
+                                            <Text style={tw`text-3xl text-[${COLOR.GRAY}] line-through ml-2 font-medium mt-1`}>{formatNumber(formatDolla)}</Text>
+                                        </View>
+                                        <TouchableOpacity
+                                            onPress={handleAddFavorite}
+                                            style={tw`p-2`}
+                                        >
+                                            <Ionicons
+                                                name={isHeart ? 'heart-sharp' : 'heart-outline'}
+                                                size={40}
+                                                style={tw`${isHeart ? 'text-red-600' : 'text-black'}`}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                     :
                                     <Text style={tw`text-3xl text-[${COLOR.BLACK}] font-bold`}>{formatNumber(formatDolla)}</Text>
@@ -327,7 +340,6 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             </View>
                         </View>
                     </View>
-
                 ) : (
                     <SkeletonProductDetail />
                 )
@@ -342,11 +354,10 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                         horizontal
                     />
                 ) : null}
-                {/* <Carousel_product item={RelatedProduct} /> */}
             </View>
             <View style={tw`mt-2 bg-white p-3`}>
                 <Text style={tw`text-2xl text-black font-medium`}>Description</Text>
-                <Text style={tw`border-b mb-3 border-[${COLOR.PRIMARY}]`}></Text>
+                <Text style={tw`border-b -mt-3 mb-1 border-[${COLOR.PRIMARY}]`}></Text>
                 {Readmore === false ? (
                     <View>
                         <RenderHTML baseStyle={tw`text-base`} contentWidth={WIDTH} source={{ html: Description }} />
@@ -370,16 +381,26 @@ export default function ProductDetailScreen({ route, navigation }: any) {
             <View style={tw`mt-2 bg-white p-3`}>
                 <Text style={tw`text-2xl text-black font-medium mb-2`}>Reviews {`(${Comment.length})`}</Text>
                 <FlatList
-                    data={Comment}
-                    renderItem={({ item, index, separators }) => <ItemReviews item={Comment[index]} />}
+                    data={currentComments}
+                    renderItem={({ item, index }) => <ItemReviews item={item} />}
+                    keyExtractor={item => item.comment_id}
+                />
+                <Pagination
+                    totalProducts={Comment.length}
+                    productsPerPage={productsPerPage}
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
                 />
             </View>
             {infoUser ? (
                 <View style={tw`mt-1 bg-white p-3`}>
                     <Text style={tw`text-2xl text-black font-medium mb-2`}>Leave a review</Text>
-                    <Text style={tw`text-base`}>Your Name: <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text></Text>
                     <View style={tw`flex flex-row items-center`}>
-                        <Text style={tw`text-base`}>Your Rating *: </Text>
+                        <Text style={tw`text-base w-30`}>Your Name:</Text>
+                        <Text style={tw`text-xl text-black font-medium`}>{infoUser.user_fullname}</Text>
+                    </View>
+                    <View style={tw`flex flex-row items-center`}>
+                        <Text style={tw`text-base w-30`}>Your Rating *: </Text>
                         {star()}
                     </View>
                     <View>
@@ -388,15 +409,16 @@ export default function ProductDetailScreen({ route, navigation }: any) {
                             editable
                             multiline={true}
                             numberOfLines={4}
-                            maxLength={40}
+                            textAlignVertical="top"
+                            maxLength={2000}
                             onChangeText={text => onChangeText(text)}
                             value={valueComment}
-                            style={tw`border border-blue-300`}
+                            style={tw`border border-[${COLOR.PRIMARY}] px-2`}
                         />
                     </View>
                     <TouchableOpacity
                         onPress={() => postComment()}
-                        style={tw`p-3 bg-[${COLOR.PRIMARY}] my-3 rounded-md`}
+                        style={tw`p-3 bg-[${COLOR.PRIMARY}] mt-3 rounded-md`}
                     >
                         <Text style={tw`text-white text-xl font-medium text-center`}>Submit</Text>
                     </TouchableOpacity>
